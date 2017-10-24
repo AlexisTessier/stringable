@@ -3,6 +3,7 @@
 function defaultFormater({
 	value,
 	type,
+	isInteger,
 	simpleQuoteStringified,
 	doubleQuoteStringified
 }) {
@@ -20,9 +21,15 @@ function stringable(value, formatter = defaultFormater) {
 		doubleQuoteStringified = `"${doubleQuoteStringified}"`;
 	}
 
+	let isInteger = false;
+	if (type === 'number') {
+		isInteger = parseInt(value, 10) === value;
+	}
+
 	return formatter({
 		value,
 		type,
+		isInteger,
 		simpleQuoteStringified,
 		doubleQuoteStringified,
 		defaultFormater
