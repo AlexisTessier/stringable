@@ -1,4 +1,8 @@
+'use strict';
+
 const test = require('ava');
+
+const randomstring = require("randomstring");
 
 const requireFromIndex = require('../utils/require-from-index');
 
@@ -8,6 +12,73 @@ test('Type and API', t => {
 
 	t.is(stringableFromIndex, stringable);
 	t.is(typeof stringable, 'function');
+});
+
+function defaultFormatterMacro(t, {input, expectedResult}) {
+	const stringable = requireFromIndex('sources/stringable');
+
+	const result = stringable(input);
+
+	t.is(typeof result, 'string');
+	t.is(result, expectedResult)
+}
+
+defaultFormatterMacro.title = providedTitle => providedTitle;
+
+function customFormatterDataMacro(t, input, defaultFormatterExpectedResult, expectedData) {
+	const stringable = requireFromIndex('sources/stringable');
+
+	const customFormatterDataKeys = [
+		'defaultFormatter',
+		'doubleQuoteStringified',
+		'isFloat',
+		'isInteger',
+		'simpleQuoteStringified',
+		'type',
+		'value'
+	];
+
+	const testDataKeys = customFormatterDataKeys.filter(key => ![
+		'defaultFormatter', 'value'
+	].includes(key));
+
+	t.plan(5+(testDataKeys.length*2));
+
+	testDataKeys.forEach(key => {
+		t.true(key in expectedData, `expectedData test missing for key ${key}`);
+	});
+
+	const randomResult = randomstring.generate();
+
+	const result = stringable(input, data => {
+		t.is(typeof data, 'object');
+		t.deepEqual(Object.keys(data).sort(), customFormatterDataKeys.sort());
+
+		t.is(data.value, input);
+		t.is(data.type, expectedData.type);
+		t.is(data.isInteger, expectedData.isInteger);
+		t.is(data.isFloat, expectedData.isFloat);
+		t.is(data.simpleQuoteStringified, expectedData.simpleQuoteStringified);
+		t.is(data.doubleQuoteStringified, expectedData.doubleQuoteStringified);
+
+		t.is(typeof data.defaultFormater, 'function');
+		t.is(data.defaultFormater(data), defaultFormatterExpectedResult);
+
+		return randomResult;
+	});
+
+	t.is(result, randomResult);
+}
+
+customFormatterDataMacro.title = providedTitle => (
+	`${providedTitle} - custom formatter`
+);
+
+/*-------------------*/
+
+test.only('usage with literal string', defaultFormatterMacro, {
+	input: `42 Literal string value 42`,
+	expectedResult: `(string => '42 Literal string value 42')`
 });
 
 /*- literal string -*/
@@ -159,7 +230,39 @@ test('usage with literal Float without decimal', t => {
 	t.is(result, `(number => 30)`);
 });
 
-test.todo('usage with literal Float without decimal - custom formatter');
+test('usage with literal Float without decimal - custom formatter', t => {
+	const stringable = requireFromIndex('sources/stringable');
+
+	const literal = 3.;
+
+	t.plan(10);
+
+	const result = stringable(literal, data => {
+		t.is(typeof data, 'object');
+		t.deepEqual(Object.keys(data).sort(), [
+			'defaultFormater',
+			'doubleQuoteStringified',
+			'isInteger',
+			'simpleQuoteStringified',
+			'type',
+			'value'
+		]);
+
+		t.is(data.value, literal);
+		t.is(data.type, 'number');
+		t.is(data.isInteger, true);
+		t.is(data.simpleQuoteStringified, `3`);
+		t.is(data.doubleQuoteStringified, `3`);
+
+		t.is(typeof data.defaultFormater, 'function');
+
+		t.is(data.defaultFormater(data), '(number => 3)');
+
+		return 'formated literal float without decimal';
+	});
+
+	t.is(result, 'formated literal float without decimal');
+});
 
 test('usage with literal Float', t => {
 	const stringable = requireFromIndex('sources/stringable');
@@ -169,10 +272,36 @@ test('usage with literal Float', t => {
 	const result = stringable(literal);
 
 	t.is(typeof result, 'string');
-	t.is(result, `(number => 30.9)`);
+	t.is(result, `(number: float => 30.9)`);
 });
 
-test.todo('usage with literal Float - custom formatter');
+test('usage with literal Float - custom formatter', t => {
+	const stringable = requireFromIndex('sources/stringable');
+
+	const literal = 47.8;
+
+	t.plan(11);
+
+	const result = stringable(literal, data => {
+		t.is(typeof data, 'object');
+		//t.deepEqual(Object.keys(data).sort(), customFormaterDataKeys);
+
+		t.is(data.value, literal);
+		t.is(data.type, 'number');
+		t.is(data.isFloat, true);
+		t.is(data.isInteger, false);
+		t.is(data.simpleQuoteStringified, `47.8`);
+		t.is(data.doubleQuoteStringified, `47.8`);
+
+		t.is(typeof data.defaultFormater, 'function');
+
+		t.is(data.defaultFormater(data), '(number: float => 47.8)');
+
+		return 'formated literal float';
+	});
+
+	t.is(result, 'formated literal float');
+});
 
 test('usage with literal Float without unit', t => {
 	const stringable = requireFromIndex('sources/stringable');
