@@ -1,5 +1,7 @@
 'use strict';
 
+const assert = require('assert');
+
 const test = require('ava');
 
 const randomstring = require("randomstring");
@@ -15,6 +17,8 @@ test('Type and API', t => {
 });
 
 function defaultFormatterMacro(t, {input, expectedResult}) {
+	assert(typeof expectedResult === 'string');
+
 	const stringable = requireFromIndex('sources/stringable');
 
 	const result = stringable(input);
@@ -25,7 +29,10 @@ function defaultFormatterMacro(t, {input, expectedResult}) {
 
 defaultFormatterMacro.title = providedTitle => providedTitle;
 
-function customFormatterDataMacro(t, input, defaultFormatterExpectedResult, expectedData) {
+function customFormatterDataMacro(t, {input, defaultFormatterExpectedResult, expectedData}) {
+	assert(typeof defaultFormatterExpectedResult === 'string');
+	assert(typeof expectedData === 'object');
+
 	const stringable = requireFromIndex('sources/stringable');
 
 	const customFormatterDataKeys = [
@@ -42,7 +49,7 @@ function customFormatterDataMacro(t, input, defaultFormatterExpectedResult, expe
 		'defaultFormatter', 'value'
 	].includes(key));
 
-	t.plan(5+(testDataKeys.length*2));
+	t.plan(6+(testDataKeys.length*2));
 
 	testDataKeys.forEach(key => {
 		t.true(key in expectedData, `expectedData test missing for key ${key}`);
@@ -61,8 +68,8 @@ function customFormatterDataMacro(t, input, defaultFormatterExpectedResult, expe
 		t.is(data.simpleQuoteStringified, expectedData.simpleQuoteStringified);
 		t.is(data.doubleQuoteStringified, expectedData.doubleQuoteStringified);
 
-		t.is(typeof data.defaultFormater, 'function');
-		t.is(data.defaultFormater(data), defaultFormatterExpectedResult);
+		t.is(typeof data.defaultFormatter, 'function');
+		t.is(data.defaultFormatter(data), defaultFormatterExpectedResult);
 
 		return randomResult;
 	});
@@ -76,55 +83,25 @@ customFormatterDataMacro.title = providedTitle => (
 
 /*-------------------*/
 
+
+
+/*- literal string -*/
+
 test.only('usage with literal string', defaultFormatterMacro, {
 	input: `42 Literal string value 42`,
 	expectedResult: `(string => '42 Literal string value 42')`
 });
 
-/*- literal string -*/
-
-test('usage with literal string', t => {
-	const stringable = requireFromIndex('sources/stringable');
-
-	const literal = '42 Literal string value 42';
-
-	const result = stringable(literal);
-
-	t.is(typeof result, 'string');
-	t.is(result, `(string => '42 Literal string value 42')`)
-});
-
-test('usage with literal string - custom formatter', t => {
-	const stringable = requireFromIndex('sources/stringable');
-
-	const literal = '42 Literal string value 42';
-
-	t.plan(10);
-
-	const result = stringable(literal, data => {
-		t.is(typeof data, 'object');
-		t.deepEqual(Object.keys(data).sort(), [
-			'defaultFormater',
-			'doubleQuoteStringified',
-			'isInteger',
-			'simpleQuoteStringified',
-			'type',
-			'value'
-		]);
-
-		t.is(data.value, literal);
-		t.is(data.type, 'string');
-		t.is(data.isInteger, false);
-		t.is(data.simpleQuoteStringified, `'42 Literal string value 42'`);
-		t.is(data.doubleQuoteStringified, `"42 Literal string value 42"`);
-
-		t.is(typeof data.defaultFormater, 'function');
-		t.is(data.defaultFormater(data), `(string => '42 Literal string value 42')`);
-
-		return 'formated literal string';
-	});
-
-	t.is(result, 'formated literal string');
+test.only('usage with literal string', customFormatterDataMacro, {
+	input: `42 Literal string value 42`,
+	defaultFormatterExpectedResult: `(string => '42 Literal string value 42')`,
+	expectedData: {
+		type: 'string',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteStringified: `'42 Literal string value 42'`,
+		doubleQuoteStringified: `"42 Literal string value 42"`
+	}
 });
 
 /*- literal number -*/

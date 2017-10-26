@@ -1,16 +1,17 @@
 'use strict';
 
-function defaultFormater({
+function defaultFormatter({
 	value,
 	type,
 	isInteger,
+	isFloat,
 	simpleQuoteStringified,
 	doubleQuoteStringified
 }) {
 	return `(${type} => ${simpleQuoteStringified})`;
 }
 
-function stringable(value, formatter = defaultFormater) {
+function stringable(value, formatter = defaultFormatter) {
 	let simpleQuoteStringified = `${value}`;
 	let doubleQuoteStringified = `${value}`;
 
@@ -22,17 +23,20 @@ function stringable(value, formatter = defaultFormater) {
 	}
 
 	let isInteger = false;
+	let isFloat = false;
 	if (type === 'number') {
 		isInteger = parseInt(value, 10) === value;
+		isFloat = !isInteger;
 	}
 
 	return formatter({
 		value,
 		type,
 		isInteger,
+		isFloat,
 		simpleQuoteStringified,
 		doubleQuoteStringified,
-		defaultFormater
+		defaultFormatter
 	});
 }
 
