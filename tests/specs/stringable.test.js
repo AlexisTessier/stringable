@@ -49,10 +49,14 @@ function customFormatterDataMacro(t, {input, defaultFormatterExpectedResult, exp
 		'defaultFormatter', 'value'
 	].includes(key));
 
-	t.plan(6+(testDataKeys.length*2));
+	t.plan(6+(testDataKeys.length*3));
 
 	testDataKeys.forEach(key => {
 		t.true(key in expectedData, `expectedData test missing for key ${key}`);
+	});
+
+	Object.keys(expectedData).forEach(key => {
+		t.true(testDataKeys.includes(key), `expectedData provides unexpected key ${key}`);
 	});
 
 	const randomResult = randomstring.generate();
@@ -87,12 +91,12 @@ customFormatterDataMacro.title = providedTitle => (
 
 /*- literal string -*/
 
-test.only('usage with literal string', defaultFormatterMacro, {
+test('usage with literal string', defaultFormatterMacro, {
 	input: `42 Literal string value 42`,
 	expectedResult: `(string => '42 Literal string value 42')`
 });
 
-test.only('usage with literal string', customFormatterDataMacro, {
+test('usage with literal string', customFormatterDataMacro, {
 	input: `42 Literal string value 42`,
 	defaultFormatterExpectedResult: `(string => '42 Literal string value 42')`,
 	expectedData: {
@@ -106,296 +110,193 @@ test.only('usage with literal string', customFormatterDataMacro, {
 
 /*- literal number -*/
 
-test('usage with literal number', t => {
-	const stringable = requireFromIndex('sources/stringable');
-
-	const literal = 42;
-
-	const result = stringable(literal);
-
-	t.is(typeof result, 'string');
-	t.is(result, `(number => 42)`);
+test('usage with literal Integer', defaultFormatterMacro, {
+	input: 42,
+	expectedResult: `(number: Integer => 42)`
 });
 
-test('usage with literal number - custom formatter', t => {
-	const stringable = requireFromIndex('sources/stringable');
-
-	const literal = 43;
-
-	t.plan(10);
-
-	const result = stringable(literal, data => {
-		t.is(typeof data, 'object');
-		t.deepEqual(Object.keys(data).sort(), [
-			'defaultFormater',
-			'doubleQuoteStringified',
-			'isInteger',
-			'simpleQuoteStringified',
-			'type',
-			'value'
-		]);
-
-		t.is(data.value, literal);
-		t.is(data.type, 'number');
-		t.is(data.isInteger, true);
-		t.is(data.simpleQuoteStringified, `43`);
-		t.is(data.doubleQuoteStringified, `43`);
-
-		t.is(typeof data.defaultFormater, 'function');
-
-		t.is(data.defaultFormater(data), '(number => 43)');
-
-		return 'formated literal number';
-	});
-
-	t.is(result, 'formated literal number');
+test('usage with literal Integer', customFormatterDataMacro, {
+	input: 43,
+	defaultFormatterExpectedResult: `(number: Integer => 43)`,
+	expectedData: {
+		type: 'number',
+		isInteger: true,
+		isFloat: false,
+		simpleQuoteStringified: `43`,
+		doubleQuoteStringified: `43`
+	}
 });
 
-test('usage with literal Integer', t => {
-	const stringable = requireFromIndex('sources/stringable');
-
-	const literal = 30;
-
-	const result = stringable(literal);
-
-	t.is(typeof result, 'string');
-	t.is(result, `(number => 30)`);
+test('usage with literal Float without decimal', defaultFormatterMacro, {
+	input: 30.,
+	expectedResult: `(number: Integer => 30)`
 });
 
-test('usage with literal Integer - custom formatter', t => {
-	const stringable = requireFromIndex('sources/stringable');
-
-	const literal = 26;
-
-	t.plan(10);
-
-	const result = stringable(literal, data => {
-		t.is(typeof data, 'object');
-		t.deepEqual(Object.keys(data).sort(), [
-			'defaultFormater',
-			'doubleQuoteStringified',
-			'isInteger',
-			'simpleQuoteStringified',
-			'type',
-			'value'
-		]);
-
-		t.is(data.value, literal);
-		t.is(data.type, 'number');
-		t.is(data.isInteger, true);
-		t.is(data.simpleQuoteStringified, `26`);
-		t.is(data.doubleQuoteStringified, `26`);
-
-		t.is(typeof data.defaultFormater, 'function');
-
-		t.is(data.defaultFormater(data), '(number => 26)');
-
-		return 'formated literal integer';
-	});
-
-	t.is(result, 'formated literal integer');
+test('usage with literal Float without decimal', customFormatterDataMacro, {
+	input: 3.,
+	defaultFormatterExpectedResult: `(number: Integer => 3)`,
+	expectedData: {
+		type: 'number',
+		isInteger: true,
+		isFloat: false,
+		simpleQuoteStringified: `3`,
+		doubleQuoteStringified: `3`
+	}
 });
 
-test('usage with literal Float without decimal', t => {
-	const stringable = requireFromIndex('sources/stringable');
-
-	const literal = 30.;
-
-	const result = stringable(literal);
-
-	t.is(typeof result, 'string');
-	t.is(result, `(number => 30)`);
+test('usage with literal Float with only zero decimal', defaultFormatterMacro, {
+	input: 21.00000,
+	expectedResult: `(number: Integer => 21)`
 });
 
-test('usage with literal Float without decimal - custom formatter', t => {
-	const stringable = requireFromIndex('sources/stringable');
-
-	const literal = 3.;
-
-	t.plan(10);
-
-	const result = stringable(literal, data => {
-		t.is(typeof data, 'object');
-		t.deepEqual(Object.keys(data).sort(), [
-			'defaultFormater',
-			'doubleQuoteStringified',
-			'isInteger',
-			'simpleQuoteStringified',
-			'type',
-			'value'
-		]);
-
-		t.is(data.value, literal);
-		t.is(data.type, 'number');
-		t.is(data.isInteger, true);
-		t.is(data.simpleQuoteStringified, `3`);
-		t.is(data.doubleQuoteStringified, `3`);
-
-		t.is(typeof data.defaultFormater, 'function');
-
-		t.is(data.defaultFormater(data), '(number => 3)');
-
-		return 'formated literal float without decimal';
-	});
-
-	t.is(result, 'formated literal float without decimal');
+test('usage with literal Float with only zero decimal', customFormatterDataMacro, {
+	input: 8.0000,
+	defaultFormatterExpectedResult: `(number: Integer => 8)`,
+	expectedData: {
+		type: 'number',
+		isInteger: true,
+		isFloat: false,
+		simpleQuoteStringified: `8`,
+		doubleQuoteStringified: `8`
+	}
 });
 
-test('usage with literal Float', t => {
-	const stringable = requireFromIndex('sources/stringable');
-
-	const literal = 30.9;
-
-	const result = stringable(literal);
-
-	t.is(typeof result, 'string');
-	t.is(result, `(number: float => 30.9)`);
+test('usage with literal Float', defaultFormatterMacro, {
+	input: 30.9,
+	expectedResult: `(number: Float => 30.9)`
 });
 
-test('usage with literal Float - custom formatter', t => {
-	const stringable = requireFromIndex('sources/stringable');
-
-	const literal = 47.8;
-
-	t.plan(11);
-
-	const result = stringable(literal, data => {
-		t.is(typeof data, 'object');
-		//t.deepEqual(Object.keys(data).sort(), customFormaterDataKeys);
-
-		t.is(data.value, literal);
-		t.is(data.type, 'number');
-		t.is(data.isFloat, true);
-		t.is(data.isInteger, false);
-		t.is(data.simpleQuoteStringified, `47.8`);
-		t.is(data.doubleQuoteStringified, `47.8`);
-
-		t.is(typeof data.defaultFormater, 'function');
-
-		t.is(data.defaultFormater(data), '(number: float => 47.8)');
-
-		return 'formated literal float';
-	});
-
-	t.is(result, 'formated literal float');
+test('usage with literal Float', customFormatterDataMacro, {
+	input: 47.8,
+	defaultFormatterExpectedResult: `(number: Float => 47.8)`,
+	expectedData: {
+		type: 'number',
+		isInteger: false,
+		isFloat: true,
+		simpleQuoteStringified: `47.8`,
+		doubleQuoteStringified: `47.8`
+	}
 });
 
-test('usage with literal Float without unit', t => {
-	const stringable = requireFromIndex('sources/stringable');
-
-	const literal = .2;
-
-	const result = stringable(literal);
-
-	t.is(typeof result, 'string');
-	t.is(result, `(number => 0.2)`);
+test('usage with literal Float without unit', defaultFormatterMacro, {
+	input: .2,
+	expectedResult: `(number: Float => 0.2)`
 });
 
-test.todo('usage with literal Float without unit - custom formatter');
-
-test('usage with literal Float with lot of decimal', t => {
-	const stringable = requireFromIndex('sources/stringable');
-
-	const literal = 23.99834;
-
-	const result = stringable(literal);
-
-	t.is(typeof result, 'string');
-	t.is(result, `(number => 23.99834)`);
+test('usage with literal Float without unit', customFormatterDataMacro, {
+	input: .8,
+	defaultFormatterExpectedResult: `(number: Float => 0.8)`,
+	expectedData: {
+		type: 'number',
+		isInteger: false,
+		isFloat: true,
+		simpleQuoteStringified: `0.8`,
+		doubleQuoteStringified: `0.8`
+	}
 });
 
-test.todo('usage with literal Float with lot of decimal - custom formatter');
+test('usage with literal Float without unit and zero as decimal', defaultFormatterMacro, {
+	input: .0,
+	expectedResult: `(number: Integer => 0)`
+});
+
+test('usage with literal Float without unit and zero as decimal', customFormatterDataMacro, {
+	input: .0,
+	defaultFormatterExpectedResult: `(number: Integer => 0)`,
+	expectedData: {
+		type: 'number',
+		isInteger: true,
+		isFloat: false,
+		simpleQuoteStringified: `0`,
+		doubleQuoteStringified: `0`
+	}
+});
+
+test('usage with literal Float without unit and lot of zero as decimal', defaultFormatterMacro, {
+	input: .000000,
+	expectedResult: `(number: Integer => 0)`
+});
+
+test('usage with literal Float without unit and lot of zero as decimal', customFormatterDataMacro, {
+	input: .000000,
+	defaultFormatterExpectedResult: `(number: Integer => 0)`,
+	expectedData: {
+		type: 'number',
+		isInteger: true,
+		isFloat: false,
+		simpleQuoteStringified: `0`,
+		doubleQuoteStringified: `0`
+	}
+});
+
+test('usage with literal Float without unit and lot of zero as unit and decimal', defaultFormatterMacro, {
+	input: 0.000000,
+	expectedResult: `(number: Integer => 0)`
+});
+
+test('usage with literal Float without unit and lot of zero as unit and decimal', customFormatterDataMacro, {
+	input: 0.000000,
+	defaultFormatterExpectedResult: `(number: Integer => 0)`,
+	expectedData: {
+		type: 'number',
+		isInteger: true,
+		isFloat: false,
+		simpleQuoteStringified: `0`,
+		doubleQuoteStringified: `0`
+	}
+});
+
+test('usage with literal Float with lot of decimal', defaultFormatterMacro, {
+	input: 23.99834,
+	expectedResult: `(number: Float => 23.99834)`
+});
+
+test('usage with literal Float with lot of decimal', customFormatterDataMacro, {
+	input: 23.9913428839644,
+	defaultFormatterExpectedResult: `(number: Float => 23.9913428839644)`,
+	expectedData: {
+		type: 'number',
+		isInteger: false,
+		isFloat: true,
+		simpleQuoteStringified: `23.9913428839644`,
+		doubleQuoteStringified: `23.9913428839644`
+	}
+});
 
 /*- literal boolean -*/
 
-test('usage with literal boolean true', t => {
-	const stringable = requireFromIndex('sources/stringable');
-
-	const literal = true;
-
-	const result = stringable(literal);
-
-	t.is(typeof result, 'string');
-	t.is(result, `(boolean => true)`)
+test('usage with literal boolean true', defaultFormatterMacro, {
+	input: true,
+	expectedResult: `(boolean => true)`
 });
 
-test('usage with literal boolean true - custom formatter', t => {
-	const stringable = requireFromIndex('sources/stringable');
-
-	const literal = true;
-
-	t.plan(10);
-
-	const result = stringable(literal, data => {
-		t.is(typeof data, 'object');
-		t.deepEqual(Object.keys(data).sort(), [
-			'defaultFormater',
-			'doubleQuoteStringified',
-			'isInteger',
-			'simpleQuoteStringified',
-			'type',
-			'value'
-		]);
-
-		t.is(data.value, literal);
-		t.is(data.type, 'boolean');
-		t.is(data.isInteger, false);
-		t.is(data.simpleQuoteStringified, `true`);
-		t.is(data.doubleQuoteStringified, `true`);
-
-		t.is(typeof data.defaultFormater, 'function');
-
-		t.is(data.defaultFormater(data), '(boolean => true)');
-
-		return 'formated literal true boolean';
-	});
-
-	t.is(result, 'formated literal true boolean');
+test('usage with literal boolean true', customFormatterDataMacro, {
+	input: true,
+	defaultFormatterExpectedResult: `(boolean => true)`,
+	expectedData: {
+		type: 'boolean',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteStringified: `true`,
+		doubleQuoteStringified: `true`
+	}
 });
 
-test('usage with literal boolean false', t => {
-	const stringable = requireFromIndex('sources/stringable');
-
-	const literal = false;
-
-	const result = stringable(literal);
-
-	t.is(typeof result, 'string');
-	t.is(result, `(boolean => false)`)
+test('usage with literal boolean true', defaultFormatterMacro, {
+	input: false,
+	expectedResult: `(boolean => false)`
 });
 
-test('usage with literal boolean false - custom formatter', t => {
-	const stringable = requireFromIndex('sources/stringable');
-
-	const literal = false;
-
-	t.plan(10);
-
-	const result = stringable(literal, data => {
-		t.is(typeof data, 'object');
-		t.deepEqual(Object.keys(data).sort(), [
-			'defaultFormater',
-			'doubleQuoteStringified',
-			'isInteger',
-			'simpleQuoteStringified',
-			'type',
-			'value'
-		]);
-
-		t.is(data.value, literal);
-		t.is(data.type, 'boolean');
-		t.is(data.isInteger, false);
-		t.is(data.simpleQuoteStringified, `false`);
-		t.is(data.doubleQuoteStringified, `false`);
-
-		t.is(typeof data.defaultFormater, 'function');
-
-		t.is(data.defaultFormater(data), '(boolean => false)');
-
-		return 'formated literal false boolean';
-	});
-
-	t.is(result, 'formated literal false boolean');
+test('usage with literal boolean true', customFormatterDataMacro, {
+	input: false,
+	defaultFormatterExpectedResult: `(boolean => false)`,
+	expectedData: {
+		type: 'boolean',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteStringified: `false`,
+		doubleQuoteStringified: `false`
+	}
 });
 
 /*- literal array -*/
@@ -403,11 +304,17 @@ test('usage with literal boolean false - custom formatter', t => {
 test.todo('usage with literal Array');
 test.todo('usage with literal Array - custom formatter');
 
+/*- literal object -*/
+
 test.todo('usage with literal Object');
 test.todo('usage with literal Object - custom formatter');
 
+/*- literal regexp -*/
+
 test.todo('usage with literal RegExp');
 test.todo('usage with literal RegExp - custom formatter');
+
+/*- literal function -*/
 
 test.todo('usage with literal function');
 test.todo('usage with literal function - custom formatter');
@@ -424,25 +331,23 @@ test.todo('usage with literal async arrow function - custom formatter');
 test.todo('usage with literal generator function');
 test.todo('usage with literal generator function - custom formatter');
 
+/*- literal falsy values -*/
+
 test.todo('usage with literal null');
 test.todo('usage with literal null - custom formatter');
 
 test.todo('usage with literal undefined');
 test.todo('usage with literal undefined - custom formatter');
 
-/*- ----- -*/
+/*- Object string -*/
 
 test.todo('usage with instance of String');
 test.todo('usage with instance of String - custom formatter');
 
+/*- Object number -*/
+
 test.todo('usage with instance of Number');
 test.todo('usage with instance of Number - custom formatter');
-
-test.todo('usage with instance of Boolean');
-test.todo('usage with instance of Boolean - custom formatter');
-
-test.todo('usage with instance of Array');
-test.todo('usage with instance of Array - custom formatter');
 
 test.todo('usage with instance of Number (integer)');
 test.todo('usage with instance of Number (integer) - custom formatter');
@@ -450,21 +355,39 @@ test.todo('usage with instance of Number (integer) - custom formatter');
 test.todo('usage with instance of Number (float)');
 test.todo('usage with instance of Number (float) - custom formatter');
 
+/*- Object boolean -*/
+
+test.todo('usage with instance of Boolean');
+test.todo('usage with instance of Boolean - custom formatter');
+
+/*- Object array -*/
+
+test.todo('usage with instance of Array');
+test.todo('usage with instance of Array - custom formatter');
+
+/*- Object -*/
+
 test.todo('usage with instance of Object');
 test.todo('usage with instance of Object - custom formatter');
 
 test.todo('usage with instance of custom class');
 test.todo('usage with instance of custom class - custom formatter');
 
+/*- Object RegExp -*/
+
 test.todo('usage with instance of RegExp');
 test.todo('usage with instance of RegExp - custom formatter');
+
+/*- Object function -*/
 
 test.todo('usage with instance of Function');
 test.todo('usage with instance of Function - custom formatter');
 
+/*- Object symbol -*/
+
 test.todo('usage with instance of Symbol');
 test.todo('usage with instance of Symbol - custom formatter');
 
-/*- ----- -*/
+/*- errors handling -*/
 
 test.todo('usage with no parameters - throws error');

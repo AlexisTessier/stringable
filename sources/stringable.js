@@ -8,7 +8,11 @@ function defaultFormatter({
 	simpleQuoteStringified,
 	doubleQuoteStringified
 }) {
-	return `(${type} => ${simpleQuoteStringified})`;
+	const typeComplement = type === 'number' ? (
+		isInteger ? ': Integer' : ': Float'
+	) : '';
+
+	return `(${type}${typeComplement} => ${simpleQuoteStringified})`;
 }
 
 function stringable(value, formatter = defaultFormatter) {
