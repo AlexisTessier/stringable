@@ -36,10 +36,12 @@ function customFormatterDataMacro(t, {input, defaultFormatterExpectedResult, exp
 	const stringable = requireFromIndex('sources/stringable');
 
 	const customFormatterDataKeys = [
+		'constructorName',
 		'defaultFormatter',
 		'doubleQuoteStringified',
 		'isFloat',
 		'isInteger',
+		'name',
 		'simpleQuoteStringified',
 		'type',
 		'value'
@@ -71,6 +73,8 @@ function customFormatterDataMacro(t, {input, defaultFormatterExpectedResult, exp
 		t.is(data.isFloat, expectedData.isFloat);
 		t.is(data.simpleQuoteStringified, expectedData.simpleQuoteStringified);
 		t.is(data.doubleQuoteStringified, expectedData.doubleQuoteStringified);
+		t.is(data.constructorName, expectedData.constructorName);
+		t.is(data.name, expectedData.name);
 
 		t.is(typeof data.defaultFormatter, 'function');
 		t.is(data.defaultFormatter(data), defaultFormatterExpectedResult);
@@ -104,7 +108,47 @@ test('usage with literal string', customFormatterDataMacro, {
 		isInteger: false,
 		isFloat: false,
 		simpleQuoteStringified: `'42 Literal string value 42'`,
-		doubleQuoteStringified: `"42 Literal string value 42"`
+		doubleQuoteStringified: `"42 Literal string value 42"`,
+		constructorName: 'String',
+		name: null
+	}
+});
+
+test('usage with literal empty string', defaultFormatterMacro, {
+	input: ``,
+	expectedResult: `(string => '')`
+});
+
+test('usage with literal empty string', customFormatterDataMacro, {
+	input: ``,
+	defaultFormatterExpectedResult: `(string => '')`,
+	expectedData: {
+		type: 'string',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteStringified: `''`,
+		doubleQuoteStringified: `""`,
+		constructorName: 'String',
+		name: null
+	}
+});
+
+test('usage with literal blank string', defaultFormatterMacro, {
+	input: `	 `,
+	expectedResult: `(string => '	 ')`
+});
+
+test('usage with literal blank string', customFormatterDataMacro, {
+	input: ` 	  `,
+	defaultFormatterExpectedResult: `(string => ' 	  ')`,
+	expectedData: {
+		type: 'string',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteStringified: `' 	  '`,
+		doubleQuoteStringified: `" 	  "`,
+		constructorName: 'String',
+		name: null
 	}
 });
 
@@ -123,7 +167,9 @@ test('usage with literal Integer', customFormatterDataMacro, {
 		isInteger: true,
 		isFloat: false,
 		simpleQuoteStringified: `43`,
-		doubleQuoteStringified: `43`
+		doubleQuoteStringified: `43`,
+		constructorName: 'Number',
+		name: null
 	}
 });
 
@@ -140,7 +186,9 @@ test('usage with literal Float without decimal', customFormatterDataMacro, {
 		isInteger: true,
 		isFloat: false,
 		simpleQuoteStringified: `3`,
-		doubleQuoteStringified: `3`
+		doubleQuoteStringified: `3`,
+		constructorName: 'Number',
+		name: null
 	}
 });
 
@@ -157,7 +205,9 @@ test('usage with literal Float with only zero decimal', customFormatterDataMacro
 		isInteger: true,
 		isFloat: false,
 		simpleQuoteStringified: `8`,
-		doubleQuoteStringified: `8`
+		doubleQuoteStringified: `8`,
+		constructorName: 'Number',
+		name: null
 	}
 });
 
@@ -174,7 +224,9 @@ test('usage with literal Float', customFormatterDataMacro, {
 		isInteger: false,
 		isFloat: true,
 		simpleQuoteStringified: `47.8`,
-		doubleQuoteStringified: `47.8`
+		doubleQuoteStringified: `47.8`,
+		constructorName: 'Number',
+		name: null
 	}
 });
 
@@ -191,7 +243,9 @@ test('usage with literal Float without unit', customFormatterDataMacro, {
 		isInteger: false,
 		isFloat: true,
 		simpleQuoteStringified: `0.8`,
-		doubleQuoteStringified: `0.8`
+		doubleQuoteStringified: `0.8`,
+		constructorName: 'Number',
+		name: null
 	}
 });
 
@@ -208,7 +262,9 @@ test('usage with literal Float without unit and zero as decimal', customFormatte
 		isInteger: true,
 		isFloat: false,
 		simpleQuoteStringified: `0`,
-		doubleQuoteStringified: `0`
+		doubleQuoteStringified: `0`,
+		constructorName: 'Number',
+		name: null
 	}
 });
 
@@ -225,7 +281,9 @@ test('usage with literal Float without unit and lot of zero as decimal', customF
 		isInteger: true,
 		isFloat: false,
 		simpleQuoteStringified: `0`,
-		doubleQuoteStringified: `0`
+		doubleQuoteStringified: `0`,
+		constructorName: 'Number',
+		name: null
 	}
 });
 
@@ -242,7 +300,9 @@ test('usage with literal Float without unit and lot of zero as unit and decimal'
 		isInteger: true,
 		isFloat: false,
 		simpleQuoteStringified: `0`,
-		doubleQuoteStringified: `0`
+		doubleQuoteStringified: `0`,
+		constructorName: 'Number',
+		name: null
 	}
 });
 
@@ -259,7 +319,123 @@ test('usage with literal Float with lot of decimal', customFormatterDataMacro, {
 		isInteger: false,
 		isFloat: true,
 		simpleQuoteStringified: `23.9913428839644`,
-		doubleQuoteStringified: `23.9913428839644`
+		doubleQuoteStringified: `23.9913428839644`,
+		constructorName: 'Number',
+		name: null
+	}
+});
+
+test('usage with literal NaN', defaultFormatterMacro, {
+	input: NaN,
+	expectedResult: `(number => NaN)`
+});
+
+test('usage with literal NaN', customFormatterDataMacro, {
+	input: NaN,
+	defaultFormatterExpectedResult: `(number => NaN)`,
+	expectedData: {
+		type: 'number',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteStringified: `NaN`,
+		doubleQuoteStringified: `NaN`,
+		constructorName: 'Number',
+		name: null
+	}
+});
+
+test('usage with computed NaN', defaultFormatterMacro, {
+	input: 0/0,
+	expectedResult: `(number => NaN)`
+});
+
+test('usage with computed NaN', customFormatterDataMacro, {
+	input: 0/0,
+	defaultFormatterExpectedResult: `(number => NaN)`,
+	expectedData: {
+		type: 'number',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteStringified: `NaN`,
+		doubleQuoteStringified: `NaN`,
+		constructorName: 'Number',
+		name: null
+	}
+});
+
+test('usage with literal Infinity', defaultFormatterMacro, {
+	input: Infinity,
+	expectedResult: `(number => Infinity)`
+});
+
+test('usage with literal Infinity', customFormatterDataMacro, {
+	input: Infinity,
+	defaultFormatterExpectedResult: `(number => Infinity)`,
+	expectedData: {
+		type: 'number',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteStringified: `Infinity`,
+		doubleQuoteStringified: `Infinity`,
+		constructorName: 'Number',
+		name: null
+	}
+});
+
+test('usage with computed Infinity', defaultFormatterMacro, {
+	input: 1/0,
+	expectedResult: `(number => Infinity)`
+});
+
+test('usage with computed Infinity', customFormatterDataMacro, {
+	input: 2/0,
+	defaultFormatterExpectedResult: `(number => Infinity)`,
+	expectedData: {
+		type: 'number',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteStringified: `Infinity`,
+		doubleQuoteStringified: `Infinity`,
+		constructorName: 'Number',
+		name: null
+	}
+});
+
+test('usage with literal negative Infinity', defaultFormatterMacro, {
+	input: -Infinity,
+	expectedResult: `(number => -Infinity)`
+});
+
+test('usage with literal negative Infinity', customFormatterDataMacro, {
+	input: -Infinity,
+	defaultFormatterExpectedResult: `(number => -Infinity)`,
+	expectedData: {
+		type: 'number',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteStringified: `-Infinity`,
+		doubleQuoteStringified: `-Infinity`,
+		constructorName: 'Number',
+		name: null
+	}
+});
+
+test('usage with computed negative Infinity', defaultFormatterMacro, {
+	input: -1/0,
+	expectedResult: `(number => -Infinity)`
+});
+
+test('usage with computed negative Infinity', customFormatterDataMacro, {
+	input: -4/0,
+	defaultFormatterExpectedResult: `(number => -Infinity)`,
+	expectedData: {
+		type: 'number',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteStringified: `-Infinity`,
+		doubleQuoteStringified: `-Infinity`,
+		constructorName: 'Number',
+		name: null
 	}
 });
 
@@ -278,7 +454,9 @@ test('usage with literal boolean true', customFormatterDataMacro, {
 		isInteger: false,
 		isFloat: false,
 		simpleQuoteStringified: `true`,
-		doubleQuoteStringified: `true`
+		doubleQuoteStringified: `true`,
+		constructorName: 'Boolean',
+		name: null
 	}
 });
 
@@ -295,29 +473,180 @@ test('usage with literal boolean true', customFormatterDataMacro, {
 		isInteger: false,
 		isFloat: false,
 		simpleQuoteStringified: `false`,
-		doubleQuoteStringified: `false`
+		doubleQuoteStringified: `false`,
+		constructorName: 'Boolean',
+		name: null
 	}
 });
 
-/*- literal array -*/
-
-test.todo('usage with literal Array');
-test.todo('usage with literal Array - custom formatter');
-
-/*- literal object -*/
-
-test.todo('usage with literal Object');
-test.todo('usage with literal Object - custom formatter');
-
 /*- literal regexp -*/
 
-test.todo('usage with literal RegExp');
-test.todo('usage with literal RegExp - custom formatter');
+test('usage with literal empty RegExp', defaultFormatterMacro, {
+	input: /$^/,
+	expectedResult: `(object: RegExp => /$^/)`
+});
+test('usage with literal empty RegExp', customFormatterDataMacro, {
+	input: /$^/,
+	defaultFormatterExpectedResult: `(object: RegExp => /$^/)`,
+	expectedData: {
+		type: 'object',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteStringified: `/$^/`,
+		doubleQuoteStringified: `/$^/`,
+		constructorName: `RegExp`,
+		name: null
+	}
+});
+
+test('usage with literal not empty RegExp', defaultFormatterMacro, {
+	input: /regex\.content/,
+	expectedResult: `(object: RegExp => /regex\\.content/)`
+});
+test('usage with literal not empty RegExp', customFormatterDataMacro, {
+	input: /regex\.content-test/,
+	defaultFormatterExpectedResult: `(object: RegExp => /regex\\.content-test/)`,
+	expectedData: {
+		type: 'object',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteStringified: `/regex\\.content-test/`,
+		doubleQuoteStringified: `/regex\\.content-test/`,
+		constructorName: `RegExp`,
+		name: null
+	}
+});
 
 /*- literal function -*/
 
-test.todo('usage with literal function');
-test.todo('usage with literal function - custom formatter');
+test('usage with literal named function without parameters', defaultFormatterMacro, {
+	input: function funcNameTest() {
+		const t = 42;
+		return t;
+	},
+	expectedResult: `(function => funcNameTest() { ... })`
+});
+test('usage with literal named function without parameters', customFormatterDataMacro, {
+	input: function funcNameTestFormatter() {
+		const t = 45;
+		return t+42;
+	},
+	defaultFormatterExpectedResult: `(function => funcNameTestFormatter() { ... })`,
+	expectedData: {
+		type: 'function',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteStringified: `funcNameTestFormatter() { ... }`,
+		doubleQuoteStringified: `funcNameTestFormatter() { ... }`,
+		constructorName: `Function`,
+		name: 'funcNameTestFormatter'
+	}
+});
+
+test('usage with literal named function with one parameter', defaultFormatterMacro, {
+	input: function funcNameTestParamOne(arg) {
+		const t = 42;
+		return t+arg;
+	},
+	expectedResult: `(function => funcNameTestParamOne(arg) { ... })`
+});
+test('usage with literal named function with one parameter', customFormatterDataMacro, {
+	input: function funcNameTestFormatter(arg) {
+		const t = 15;
+		return arg+t+42;
+	},
+	defaultFormatterExpectedResult: `(function => funcNameTestFormatter(arg) { ... })`,
+	expectedData: {
+		type: 'function',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteStringified: `funcNameTestFormatter(arg) { ... }`,
+		doubleQuoteStringified: `funcNameTestFormatter(arg) { ... }`,
+		constructorName: `Function`,
+		name: 'funcNameTestFormatter'
+	}
+});
+
+test.skip('usage with literal named function with one parameter and default value', defaultFormatterMacro, {
+	input: function funcNameTestParamOne(arg) {
+		const t = 42;
+		return t+arg;
+	},
+	expectedResult: `(function => funcNameTestParamOne(arg) { ... })`
+});
+test.skip('usage with literal named function with one parameter and default value', customFormatterDataMacro, {
+	input: function funcNameTestFormatter() {
+		const t = 45;
+		return t+42;
+	},
+	defaultFormatterExpectedResult: `(function => funcNameTestFormatter() { ... })`,
+	expectedData: {
+		type: 'function',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteStringified: `funcNameTestFormatter() { ... }`,
+		doubleQuoteStringified: `funcNameTestFormatter() { ... }`,
+		constructorName: `Function`,
+		name: 'funcNameTestFormatter'
+	}
+});
+
+test.skip('usage with literal named function with parameters', defaultFormatterMacro, {
+	input: function funcNameTest() {
+		const t = 42;
+		return t;
+	},
+	expectedResult: `(function => funcNameTest() { ... })`
+});
+test.skip('usage with literal named function with parameters', customFormatterDataMacro, {
+	input: function funcNameTestFormatter() {
+		const t = 45;
+		return t+42;
+	},
+	defaultFormatterExpectedResult: `(function => funcNameTestFormatter() { ... })`,
+	expectedData: {
+		type: 'function',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteStringified: `funcNameTestFormatter() { ... }`,
+		doubleQuoteStringified: `funcNameTestFormatter() { ... }`,
+		constructorName: `Function`,
+		name: 'funcNameTestFormatter'
+	}
+});
+
+test.skip('usage with literal named function with parameters and default values', defaultFormatterMacro, {
+	input: function funcNameTest() {
+		const t = 42;
+		return t;
+	},
+	expectedResult: `(function => funcNameTest() { ... })`
+});
+test.skip('usage with literal named function with parameters and default values', customFormatterDataMacro, {
+	input: function funcNameTestFormatter() {
+		const t = 45;
+		return t+42;
+	},
+	defaultFormatterExpectedResult: `(function => funcNameTestFormatter() { ... })`,
+	expectedData: {
+		type: 'function',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteStringified: `funcNameTestFormatter() { ... }`,
+		doubleQuoteStringified: `funcNameTestFormatter() { ... }`,
+		constructorName: `Function`,
+		name: 'funcNameTestFormatter'
+	}
+});
+
+test.skip('usage with literal anonymous function', defaultFormatterMacro, {
+	input: function funcNameTest2() {
+		const t = 44;
+		return t*t;
+	},
+	expectedResult: `(object: RegExp => /regex\\.content/)`
+});
+test.todo('usage with literal anonymous function - custom formatter');
 
 test.todo('usage with literal arrow function');
 test.todo('usage with literal arrow function - custom formatter');
@@ -331,13 +660,45 @@ test.todo('usage with literal async arrow function - custom formatter');
 test.todo('usage with literal generator function');
 test.todo('usage with literal generator function - custom formatter');
 
+test.todo('FOR FUNCTION TYPE, ADD THE WITH AND WITHOUT PARAMETERS VARIANTS');
+
 /*- literal falsy values -*/
 
-test.todo('usage with literal null');
-test.todo('usage with literal null - custom formatter');
+test('usage with literal null', defaultFormatterMacro, {
+	input: null,
+	expectedResult: `(object => null)`
+});
+test('usage with literal null', customFormatterDataMacro, {
+	input: null,
+	defaultFormatterExpectedResult: `(object => null)`,
+	expectedData: {
+		type: 'object',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteStringified: `null`,
+		doubleQuoteStringified: `null`,
+		constructorName: null,
+		name: null
+	}
+});
 
-test.todo('usage with literal undefined');
-test.todo('usage with literal undefined - custom formatter');
+test('usage with literal undefined', defaultFormatterMacro, {
+	input: undefined,
+	expectedResult: `(undefined)`
+});
+test('usage with literal undefined', customFormatterDataMacro, {
+	input: undefined,
+	defaultFormatterExpectedResult: `(undefined)`,
+	expectedData: {
+		type: 'undefined',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteStringified: `undefined`,
+		doubleQuoteStringified: `undefined`,
+		constructorName: null,
+		name: null
+	}
+});
 
 /*- Object string -*/
 
@@ -360,19 +721,6 @@ test.todo('usage with instance of Number (float) - custom formatter');
 test.todo('usage with instance of Boolean');
 test.todo('usage with instance of Boolean - custom formatter');
 
-/*- Object array -*/
-
-test.todo('usage with instance of Array');
-test.todo('usage with instance of Array - custom formatter');
-
-/*- Object -*/
-
-test.todo('usage with instance of Object');
-test.todo('usage with instance of Object - custom formatter');
-
-test.todo('usage with instance of custom class');
-test.todo('usage with instance of custom class - custom formatter');
-
 /*- Object RegExp -*/
 
 test.todo('usage with instance of RegExp');
@@ -387,6 +735,52 @@ test.todo('usage with instance of Function - custom formatter');
 
 test.todo('usage with instance of Symbol');
 test.todo('usage with instance of Symbol - custom formatter');
+
+/*- literal array -*/
+
+test.todo('usage with literal empty Array');
+test.todo('usage with literal empty Array - custom formatter');
+
+test.todo('usage with literal Array containing literal string');
+test.todo('usage with literal Array containing literal string - custom formatter');
+
+test.todo('usage with literal Array containing literal strings');
+test.todo('usage with literal Array containing literal strings - custom formatter');
+
+test.todo('usage with literal Array containing literal number');
+test.todo('usage with literal Array containing literal number - custom formatter');
+
+test.todo('usage with literal Array containing literal numbers');
+test.todo('usage with literal Array containing literal numbers - custom formatter');
+
+test.todo('usage with literal Array containing literal boolean true');
+test.todo('usage with literal Array containing literal booleans true - custom formatter');
+
+test.todo('usage with literal Array containing literal boolean false');
+test.todo('usage with literal Array containing literal booleans false - custom formatter');
+
+test.todo('LIST ALL ARRAY POSSIBLE CONTENT');
+
+test.todo('usage with literal Array containing various type of content');
+test.todo('usage with literal Array containing various type of content- custom formatter');
+
+/*- literal object -*/
+
+test.todo('usage with literal Object');
+test.todo('usage with literal Object - custom formatter');
+
+/*- Object array -*/
+
+test.todo('usage with instance of Array');
+test.todo('usage with instance of Array - custom formatter');
+
+/*- Object -*/
+
+test.todo('usage with instance of Object');
+test.todo('usage with instance of Object - custom formatter');
+
+test.todo('usage with instance of custom class');
+test.todo('usage with instance of custom class - custom formatter');
 
 /*- errors handling -*/
 
