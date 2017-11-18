@@ -4,7 +4,9 @@ const assert = require('assert');
 
 const test = require('ava');
 
-const randomstring = require("randomstring");
+const randomstring = require(`randomstring`);
+
+const msg = require('@alexistessier/msg');
 
 const requireFromIndex = require('../utils/require-from-index');
 
@@ -567,14 +569,38 @@ test('usage with literal named function with one parameter', customFormatterData
 	}
 });
 
-test.skip('usage with literal named function with one parameter and default value', defaultFormatterMacro, {
-	input: function funcNameTestParamOne(arg) {
-		const t = 42;
+test('usage with literal named function with one parameter and default value', defaultFormatterMacro, {
+	input: function funcNameTestParamOne(arg = 'default value') {
+		const t = '42';
 		return t+arg;
 	},
-	expectedResult: `(function => funcNameTestParamOne(arg) { ... })`
+	expectedResult: `(function => funcNameTestParamOne(arg = 'default value') { ... })`
 });
-test.skip('usage with literal named function with one parameter and default value', customFormatterDataMacro, {
+test('usage with literal named function with one parameter and default value', customFormatterDataMacro, {
+	input: function funcNameTestFormatter(argOne = 78) {
+		const t = 45;
+		return t+42;
+	},
+	defaultFormatterExpectedResult: `(function => funcNameTestFormatter(argOne = 78) { ... })`,
+	expectedData: {
+		type: 'function',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteStringified: `funcNameTestFormatter(argOne = 78) { ... }`,
+		doubleQuoteStringified: `funcNameTestFormatter(argOne = 78) { ... }`,
+		constructorName: `Function`,
+		name: 'funcNameTestFormatter'
+	}
+});
+
+test.skip('usage with literal named function with multiple parameters', defaultFormatterMacro, {
+	input: function funcNameTest() {
+		const t = 42;
+		return t;
+	},
+	expectedResult: `(function => funcNameTest() { ... })`
+});
+test.skip('usage with literal named function with multiple parameters', customFormatterDataMacro, {
 	input: function funcNameTestFormatter() {
 		const t = 45;
 		return t+42;
@@ -591,38 +617,14 @@ test.skip('usage with literal named function with one parameter and default valu
 	}
 });
 
-test.skip('usage with literal named function with parameters', defaultFormatterMacro, {
+test.skip('usage with literal named function with multiple parameters and default values', defaultFormatterMacro, {
 	input: function funcNameTest() {
 		const t = 42;
 		return t;
 	},
 	expectedResult: `(function => funcNameTest() { ... })`
 });
-test.skip('usage with literal named function with parameters', customFormatterDataMacro, {
-	input: function funcNameTestFormatter() {
-		const t = 45;
-		return t+42;
-	},
-	defaultFormatterExpectedResult: `(function => funcNameTestFormatter() { ... })`,
-	expectedData: {
-		type: 'function',
-		isInteger: false,
-		isFloat: false,
-		simpleQuoteStringified: `funcNameTestFormatter() { ... }`,
-		doubleQuoteStringified: `funcNameTestFormatter() { ... }`,
-		constructorName: `Function`,
-		name: 'funcNameTestFormatter'
-	}
-});
-
-test.skip('usage with literal named function with parameters and default values', defaultFormatterMacro, {
-	input: function funcNameTest() {
-		const t = 42;
-		return t;
-	},
-	expectedResult: `(function => funcNameTest() { ... })`
-});
-test.skip('usage with literal named function with parameters and default values', customFormatterDataMacro, {
+test.skip('usage with literal named function with multiple parameters and default values', customFormatterDataMacro, {
 	input: function funcNameTestFormatter() {
 		const t = 45;
 		return t+42;
@@ -702,8 +704,59 @@ test('usage with literal undefined', customFormatterDataMacro, {
 
 /*- Object string -*/
 
-test.todo('usage with instance of String');
-test.todo('usage with instance of String - custom formatter');
+test('usage with instance of String', defaultFormatterMacro, {
+	input: new String('a string from object'),
+	expectedResult: `(object: String => 'a string from object')`
+});
+test('usage with instance of String', customFormatterDataMacro, {
+	input: new String('	a string from object with custom formatter '),
+	defaultFormatterExpectedResult: `(object: String => '	a string from object with custom formatter ')`,
+	expectedData: {
+		type: 'object',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteStringified: `'	a string from object with custom formatter '`,
+		doubleQuoteStringified: `"	a string from object with custom formatter "`,
+		constructorName: 'String',
+		name: null
+	}
+});
+
+test('usage with instance of empty String', defaultFormatterMacro, {
+	input: new String(''),
+	expectedResult: `(object: String => '')`
+});
+test('usage with instance of empty String', customFormatterDataMacro, {
+	input: new String(''),
+	defaultFormatterExpectedResult: `(object: String => '')`,
+	expectedData: {
+		type: 'object',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteStringified: `''`,
+		doubleQuoteStringified: `""`,
+		constructorName: 'String',
+		name: null
+	}
+});
+
+test('usage with instance of blank String', defaultFormatterMacro, {
+	input: new String(' 	'),
+	expectedResult: `(object: String => ' 	')`
+});
+test('usage with instance of blank String', customFormatterDataMacro, {
+	input: new String('	  '),
+	defaultFormatterExpectedResult: `(object: String => '	  ')`,
+	expectedData: {
+		type: 'object',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteStringified: `'	  '`,
+		doubleQuoteStringified: `"	  "`,
+		constructorName: 'String',
+		name: null
+	}
+});
 
 /*- Object number -*/
 
@@ -718,8 +771,17 @@ test.todo('usage with instance of Number (float) - custom formatter');
 
 /*- Object boolean -*/
 
-test.todo('usage with instance of Boolean');
-test.todo('usage with instance of Boolean - custom formatter');
+test('usage with instance of true Boolean', defaultFormatterMacro, {
+	input: new Boolean(true),
+	expectedResult: `(object: Boolean => true)`
+});
+test.todo('usage with instance of true Boolean - custom formatter');
+
+test('usage with instance of false Boolean', defaultFormatterMacro, {
+	input: new Boolean(false),
+	expectedResult: `(object: Boolean => false)`
+});
+test.todo('usage with instance of false Boolean - custom formatter');
 
 /*- Object RegExp -*/
 
@@ -733,8 +795,17 @@ test.todo('usage with instance of Function - custom formatter');
 
 /*- Object symbol -*/
 
-test.todo('usage with instance of Symbol');
-test.todo('usage with instance of Symbol - custom formatter');
+test('usage with instance of empty Symbol', defaultFormatterMacro, {
+	input: Symbol(),
+	expectedResult: `(symbol => Symbol())`
+});
+test.todo('usage with instance of empty Symbol - custom formatter');
+
+test('usage with instance of Symbol', defaultFormatterMacro, {
+	input: Symbol('symbol value'),
+	expectedResult: `(symbol => Symbol(symbol value))`
+});
+test.todo('usage with instance of empty Symbol - custom formatter');
 
 /*- literal array -*/
 
@@ -784,4 +855,57 @@ test.todo('usage with instance of custom class - custom formatter');
 
 /*- errors handling -*/
 
-test.todo('usage with no parameters - throws error');
+test('usage with no parameters - throws error', t => {
+	const stringable = requireFromIndex('sources/stringable');
+
+	const noParametersError = t.throws(() => {
+		stringable();
+	});
+
+	t.true(noParametersError instanceof TypeError);
+	t.is(noParametersError.message, msg(
+		`You are trying to use the stringable function without any arguments.`,
+		`You must provide at least one value as first parameter.`
+	));
+});
+
+test('usage with unused parameters - throws error', t => {
+	const stringable = requireFromIndex('sources/stringable');
+
+	const tooManyParametersError = t.throws(() => {
+		stringable('value', ()=>{return;}, 'unexpected value');
+	});
+
+	t.true(tooManyParametersError instanceof TypeError);
+	t.is(tooManyParametersError.message, msg(
+		`You are trying to use the stringable function with more than 2 arguments.`,
+		`The stringable function only accept 2 arguments. A value to format and a formatter function.`
+	));
+});
+
+function unvalidFormatterErrorMacro(t, unvalidFormatter) {
+	const stringable = requireFromIndex('sources/stringable');
+
+	const unvalidFormatterError = t.throws(() => {
+		stringable('value', unvalidFormatter);
+	});
+
+	t.true(unvalidFormatterError instanceof TypeError);
+	t.is(unvalidFormatterError.message, msg(
+		`${stringable(unvalidFormatter)} is not a valid stringable formatter.`,
+		`The stringable formatter argument passed as the second parameter must be a function.`
+	));
+}
+
+unvalidFormatterErrorMacro.title = providedTitle => (
+	`usage with unvalid formatter - throws error - ${providedTitle}`
+);
+
+test('number', unvalidFormatterErrorMacro, 46);
+test('null', unvalidFormatterErrorMacro, null);
+test('true', unvalidFormatterErrorMacro, true);
+test('false', unvalidFormatterErrorMacro, false);
+test('symbol', unvalidFormatterErrorMacro, Symbol());
+test('object', unvalidFormatterErrorMacro, {});
+test('array', unvalidFormatterErrorMacro, []);
+test('string', unvalidFormatterErrorMacro, 'a string');
