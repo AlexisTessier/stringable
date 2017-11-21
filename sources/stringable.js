@@ -1,15 +1,19 @@
 'use strict';
 
+const escapeQuotes = require('escape-quotes');
+
 const msg = require('@alexistessier/msg');
 
 function defaultFormatter({
 	value,
 	type,
+	stringifiedValue,
 	isInteger,
 	isFloat,
-	simpleQuoteStringified,
-	doubleQuoteStringified,
-	constructorName
+	simpleQuoteString,
+	doubleQuoteString,
+	constructorName,
+	functionName
 }) {
 	if (value === undefined) {
 		return '(undefined)';
@@ -26,7 +30,7 @@ function defaultFormatter({
 			break;
 	}
 
-	return `(${type}${typeComplement} => ${simpleQuoteStringified})`;
+	return `(${type}${typeComplement} => ${simpleQuoteString})`;
 }
 
 // This function is inspired from a promisify util
@@ -59,23 +63,28 @@ function stringable(value, formatter = defaultFormatter) {
 	}
 
 	const type = typeof value;
+	const stringifiedValue = JSON.stringify(value);
 
-	let simpleQuoteStringified = ``;
-	let doubleQuoteStringified = ``;
+	let simpleQuoteString = null;
+	let doubleQuoteString = null;
+	if (type === 'string' || value instanceof String) {
+		simpleQuoteString = `'${escapeQuotes(value)}'`;
+		doubleQuoteString = `"${escapeQuotes(value, '"')}"`;
+	}
 
-	let name = null;
+	let functionName = null;
 	if (type === 'function') {
-		name = value.name;
+		functionName = value.name;
 		const signature = getFunctionSignature(value);
-
-		simpleQuoteStringified = doubleQuoteStringified = `${name}(${signature}) { ... }`;
 	}
-	else if (type === 'symbol'){
-		simpleQuoteStringified = doubleQuoteStringified = `${value.toString()}`;
-	}
-	else{
-		simpleQuoteStringified = doubleQuoteStringified = `${value}`;
-	}
+		//simpleQuoteString = doubleQuoteString = `${functionName}(${signature}) { ... }`;
+	// }
+	// else if (type === 'symbol'){
+	// 	//simpleQuoteString = doubleQuoteString = `${value.toString()}`;
+	// }
+	// else{
+	// 	//simpleQuoteString = doubleQuoteString = `${value}`;
+	// }
 
 	let isInteger = false;
 	let isFloat = false;
@@ -89,21 +98,17 @@ function stringable(value, formatter = defaultFormatter) {
 		constructorName = value.constructor.name;
 	}
 
-	if (type === 'string' || value instanceof String) {
-		simpleQuoteStringified = `'${simpleQuoteStringified}'`;
-		doubleQuoteStringified = `"${doubleQuoteStringified}"`;
-	}
-
 	return formatter({
 		value,
 		type,
+		stringifiedValue,
 		isInteger,
 		isFloat,
-		simpleQuoteStringified,
-		doubleQuoteStringified,
+		simpleQuoteString,
+		doubleQuoteString,
 		defaultFormatter,
 		constructorName,
-		name
+		functionName
 	});
 }
 
