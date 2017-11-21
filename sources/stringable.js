@@ -30,7 +30,7 @@ function defaultFormatter({
 			break;
 	}
 
-	return `(${type}${typeComplement} => ${simpleQuoteString})`;
+	return `(${type}${typeComplement} => ${simpleQuoteString || stringifiedValue})`;
 }
 
 // This function is inspired from a promisify util

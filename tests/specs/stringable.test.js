@@ -152,20 +152,59 @@ test('usage with literal blank string', customFormatterDataMacro, {
 	}
 });
 
-test.todo('string with quotes in it (simple and double quotes)');
+test('usage with literal string containing simple quotes', defaultFormatterMacro, {
+	input: `42 'quoted string' valu'e`,
+	expectedResult: `(string => '42 \\'quoted string\\' valu\\'e')`
+});
+
+test('usage with literal string containing simple quotes', customFormatterDataMacro, {
+	input: `42 'quoted string' value`,
+	defaultFormatterExpectedResult: `(string => '42 \\'quoted string\\' value')`,
+	expectedData: {
+		type: 'string',
+		stringifiedValue: `"42 'quoted string' value"`,
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: `'42 \\'quoted string\\' value'`,
+		doubleQuoteString: `"42 'quoted string' value"`,
+		constructorName: 'String',
+		functionName: null
+	}
+});
+
+test.skip('usage with literal string containing double quotes', defaultFormatterMacro, {
+	input: `42 'quoted string' valu'e`,
+	expectedResult: `(string => '42 \\'quoted string\\' valu\\'e')`
+});
+
+test.skip('usage with literal string containing double quotes', customFormatterDataMacro, {
+	input: `42 'quoted string' value`,
+	defaultFormatterExpectedResult: `(string => '42 \\'quoted string\\' value')`,
+	expectedData: {
+		type: 'string',
+		stringifiedValue: `"42 'quoted string' value"`,
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: `'42 \\'quoted string\\' value'`,
+		doubleQuoteString: `"42 'quoted string' value"`,
+		constructorName: 'String',
+		functionName: null
+	}
+});
 
 /*- literal number -*/
 
-test.skip('usage with literal Integer', defaultFormatterMacro, {
+test('usage with literal Integer', defaultFormatterMacro, {
 	input: 42,
 	expectedResult: `(number: Integer => 42)`
 });
 
-test.skip('usage with literal Integer', customFormatterDataMacro, {
+test('usage with literal Integer', customFormatterDataMacro, {
 	input: 43,
 	defaultFormatterExpectedResult: `(number: Integer => 43)`,
 	expectedData: {
 		type: 'number',
+		stringifiedValue: '43',
 		isInteger: true,
 		isFloat: false,
 		simpleQuoteString: null,
@@ -175,22 +214,23 @@ test.skip('usage with literal Integer', customFormatterDataMacro, {
 	}
 });
 
-test.skip('usage with literal Float without decimal', defaultFormatterMacro, {
+test('usage with literal Float without decimal', defaultFormatterMacro, {
 	input: 30.,
 	expectedResult: `(number: Integer => 30)`
 });
 
-test.skip('usage with literal Float without decimal', customFormatterDataMacro, {
+test('usage with literal Float without decimal', customFormatterDataMacro, {
 	input: 3.,
 	defaultFormatterExpectedResult: `(number: Integer => 3)`,
 	expectedData: {
 		type: 'number',
+		stringifiedValue: '3',
 		isInteger: true,
 		isFloat: false,
-		simpleQuoteStringified: `3`,
-		doubleQuoteStringified: `3`,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
 		constructorName: 'Number',
-		name: null
+		functionName: null
 	}
 });
 
