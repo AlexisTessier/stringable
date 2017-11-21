@@ -172,21 +172,21 @@ test('usage with literal string containing simple quotes', customFormatterDataMa
 	}
 });
 
-test.skip('usage with literal string containing double quotes', defaultFormatterMacro, {
-	input: `42 'quoted string' valu'e`,
-	expectedResult: `(string => '42 \\'quoted string\\' valu\\'e')`
+test('usage with literal string containing double quotes', defaultFormatterMacro, {
+	input: `42 "quoted string" valu"e`,
+	expectedResult: `(string => '42 "quoted string" valu"e')`
 });
 
-test.skip('usage with literal string containing double quotes', customFormatterDataMacro, {
-	input: `42 'quoted string' value`,
-	defaultFormatterExpectedResult: `(string => '42 \\'quoted string\\' value')`,
+test('usage with literal string containing double quotes', customFormatterDataMacro, {
+	input: `42 "quoted string" value`,
+	defaultFormatterExpectedResult: `(string => '42 "quoted string" value')`,
 	expectedData: {
 		type: 'string',
-		stringifiedValue: `"42 'quoted string' value"`,
+		stringifiedValue: `"42 \\"quoted string\\" value"`,
 		isInteger: false,
 		isFloat: false,
-		simpleQuoteString: `'42 \\'quoted string\\' value'`,
-		doubleQuoteString: `"42 'quoted string' value"`,
+		simpleQuoteString: `'42 "quoted string" value'`,
+		doubleQuoteString: `"42 \\"quoted string\\" value"`,
 		constructorName: 'String',
 		functionName: null
 	}
@@ -234,290 +234,305 @@ test('usage with literal Float without decimal', customFormatterDataMacro, {
 	}
 });
 
-test.skip('usage with literal Float with only zero decimal', defaultFormatterMacro, {
+test('usage with literal Float with only zero decimal', defaultFormatterMacro, {
 	input: 21.00000,
 	expectedResult: `(number: Integer => 21)`
 });
 
-test.skip('usage with literal Float with only zero decimal', customFormatterDataMacro, {
+test('usage with literal Float with only zero decimal', customFormatterDataMacro, {
 	input: 8.0000,
 	defaultFormatterExpectedResult: `(number: Integer => 8)`,
 	expectedData: {
 		type: 'number',
+		stringifiedValue: '8',
 		isInteger: true,
 		isFloat: false,
-		simpleQuoteStringified: `8`,
-		doubleQuoteStringified: `8`,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
 		constructorName: 'Number',
-		name: null
+		functionName: null
 	}
 });
 
-test.skip('usage with literal Float', defaultFormatterMacro, {
+test('usage with literal Float', defaultFormatterMacro, {
 	input: 30.9,
 	expectedResult: `(number: Float => 30.9)`
 });
 
-test.skip('usage with literal Float', customFormatterDataMacro, {
+test('usage with literal Float', customFormatterDataMacro, {
 	input: 47.8,
 	defaultFormatterExpectedResult: `(number: Float => 47.8)`,
 	expectedData: {
 		type: 'number',
+		stringifiedValue: '47.8',
 		isInteger: false,
 		isFloat: true,
-		simpleQuoteStringified: `47.8`,
-		doubleQuoteStringified: `47.8`,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
 		constructorName: 'Number',
-		name: null
+		functionName: null
 	}
 });
 
-test.skip('usage with literal Float without unit', defaultFormatterMacro, {
+test('usage with literal Float without unit', defaultFormatterMacro, {
 	input: .2,
 	expectedResult: `(number: Float => 0.2)`
 });
 
-test.skip('usage with literal Float without unit', customFormatterDataMacro, {
+test('usage with literal Float without unit', customFormatterDataMacro, {
 	input: .8,
 	defaultFormatterExpectedResult: `(number: Float => 0.8)`,
 	expectedData: {
 		type: 'number',
+		stringifiedValue: '0.8',
 		isInteger: false,
 		isFloat: true,
-		simpleQuoteStringified: `0.8`,
-		doubleQuoteStringified: `0.8`,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
 		constructorName: 'Number',
-		name: null
+		functionName: null
 	}
 });
 
-test.skip('usage with literal Float without unit and zero as decimal', defaultFormatterMacro, {
+test('usage with literal Float without unit and zero as decimal', defaultFormatterMacro, {
 	input: .0,
 	expectedResult: `(number: Integer => 0)`
 });
 
-test.skip('usage with literal Float without unit and zero as decimal', customFormatterDataMacro, {
+test('usage with literal Float without unit and zero as decimal', customFormatterDataMacro, {
 	input: .0,
 	defaultFormatterExpectedResult: `(number: Integer => 0)`,
 	expectedData: {
 		type: 'number',
+		stringifiedValue: '0',
 		isInteger: true,
 		isFloat: false,
-		simpleQuoteStringified: `0`,
-		doubleQuoteStringified: `0`,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
 		constructorName: 'Number',
-		name: null
+		functionName: null
 	}
 });
 
-test.skip('usage with literal Float without unit and lot of zero as decimal', defaultFormatterMacro, {
+test('usage with literal Float without unit and lot of zero as decimal', defaultFormatterMacro, {
 	input: .000000,
 	expectedResult: `(number: Integer => 0)`
 });
 
-test.skip('usage with literal Float without unit and lot of zero as decimal', customFormatterDataMacro, {
+test('usage with literal Float without unit and lot of zero as decimal', customFormatterDataMacro, {
 	input: .000000,
 	defaultFormatterExpectedResult: `(number: Integer => 0)`,
 	expectedData: {
 		type: 'number',
+		stringifiedValue: '0',
 		isInteger: true,
 		isFloat: false,
-		simpleQuoteStringified: `0`,
-		doubleQuoteStringified: `0`,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
 		constructorName: 'Number',
-		name: null
+		functionName: null
 	}
 });
 
-test.skip('usage with literal Float without unit and lot of zero as unit and decimal', defaultFormatterMacro, {
+test('usage with literal Float with unit and lot of zero as unit and decimal', defaultFormatterMacro, {
 	input: 0.000000,
 	expectedResult: `(number: Integer => 0)`
 });
 
-test.skip('usage with literal Float without unit and lot of zero as unit and decimal', customFormatterDataMacro, {
+test('usage with literal Float with unit and lot of zero as unit and decimal', customFormatterDataMacro, {
 	input: 0.000000,
 	defaultFormatterExpectedResult: `(number: Integer => 0)`,
 	expectedData: {
 		type: 'number',
+		stringifiedValue: '0',
 		isInteger: true,
 		isFloat: false,
-		simpleQuoteStringified: `0`,
-		doubleQuoteStringified: `0`,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
 		constructorName: 'Number',
-		name: null
+		functionName: null
 	}
 });
 
-test.skip('usage with literal Float with lot of decimal', defaultFormatterMacro, {
+test('usage with literal Float with lot of decimal', defaultFormatterMacro, {
 	input: 23.99834,
 	expectedResult: `(number: Float => 23.99834)`
 });
 
-test.skip('usage with literal Float with lot of decimal', customFormatterDataMacro, {
+test('usage with literal Float with lot of decimal', customFormatterDataMacro, {
 	input: 23.9913428839644,
 	defaultFormatterExpectedResult: `(number: Float => 23.9913428839644)`,
 	expectedData: {
 		type: 'number',
+		stringifiedValue: '23.9913428839644',
 		isInteger: false,
 		isFloat: true,
-		simpleQuoteStringified: `23.9913428839644`,
-		doubleQuoteStringified: `23.9913428839644`,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
 		constructorName: 'Number',
-		name: null
+		functionName: null
 	}
 });
 
-test.skip('usage with literal NaN', defaultFormatterMacro, {
+test('usage with literal NaN', defaultFormatterMacro, {
 	input: NaN,
 	expectedResult: `(number => NaN)`
 });
 
-test.skip('usage with literal NaN', customFormatterDataMacro, {
+test('usage with literal NaN', customFormatterDataMacro, {
 	input: NaN,
 	defaultFormatterExpectedResult: `(number => NaN)`,
 	expectedData: {
 		type: 'number',
+		stringifiedValue: 'NaN',
 		isInteger: false,
 		isFloat: false,
-		simpleQuoteStringified: `NaN`,
-		doubleQuoteStringified: `NaN`,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
 		constructorName: 'Number',
-		name: null
+		functionName: null
 	}
 });
 
-test.skip('usage with computed NaN', defaultFormatterMacro, {
+test('usage with computed NaN', defaultFormatterMacro, {
 	input: 0/0,
 	expectedResult: `(number => NaN)`
 });
 
-test.skip('usage with computed NaN', customFormatterDataMacro, {
+test('usage with computed NaN', customFormatterDataMacro, {
 	input: 0/0,
 	defaultFormatterExpectedResult: `(number => NaN)`,
 	expectedData: {
 		type: 'number',
+		stringifiedValue: 'NaN',
 		isInteger: false,
 		isFloat: false,
-		simpleQuoteStringified: `NaN`,
-		doubleQuoteStringified: `NaN`,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
 		constructorName: 'Number',
-		name: null
+		functionName: null
 	}
 });
 
-test.skip('usage with literal Infinity', defaultFormatterMacro, {
+test('usage with literal Infinity', defaultFormatterMacro, {
 	input: Infinity,
 	expectedResult: `(number => Infinity)`
 });
 
-test.skip('usage with literal Infinity', customFormatterDataMacro, {
+test('usage with literal Infinity', customFormatterDataMacro, {
 	input: Infinity,
 	defaultFormatterExpectedResult: `(number => Infinity)`,
 	expectedData: {
 		type: 'number',
+		stringifiedValue: 'Infinity',
 		isInteger: false,
 		isFloat: false,
-		simpleQuoteStringified: `Infinity`,
-		doubleQuoteStringified: `Infinity`,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
 		constructorName: 'Number',
-		name: null
+		functionName: null
 	}
 });
 
-test.skip('usage with computed Infinity', defaultFormatterMacro, {
+test('usage with computed Infinity', defaultFormatterMacro, {
 	input: 1/0,
 	expectedResult: `(number => Infinity)`
 });
 
-test.skip('usage with computed Infinity', customFormatterDataMacro, {
+test('usage with computed Infinity', customFormatterDataMacro, {
 	input: 2/0,
 	defaultFormatterExpectedResult: `(number => Infinity)`,
 	expectedData: {
 		type: 'number',
+		stringifiedValue: 'Infinity',
 		isInteger: false,
 		isFloat: false,
-		simpleQuoteStringified: `Infinity`,
-		doubleQuoteStringified: `Infinity`,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
 		constructorName: 'Number',
-		name: null
+		functionName: null
 	}
 });
 
-test.skip('usage with literal negative Infinity', defaultFormatterMacro, {
+test('usage with literal negative Infinity', defaultFormatterMacro, {
 	input: -Infinity,
 	expectedResult: `(number => -Infinity)`
 });
 
-test.skip('usage with literal negative Infinity', customFormatterDataMacro, {
+test('usage with literal negative Infinity', customFormatterDataMacro, {
 	input: -Infinity,
 	defaultFormatterExpectedResult: `(number => -Infinity)`,
 	expectedData: {
 		type: 'number',
+		stringifiedValue: '-Infinity',
 		isInteger: false,
 		isFloat: false,
-		simpleQuoteStringified: `-Infinity`,
-		doubleQuoteStringified: `-Infinity`,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
 		constructorName: 'Number',
-		name: null
+		functionName: null
 	}
 });
 
-test.skip('usage with computed negative Infinity', defaultFormatterMacro, {
+test('usage with computed negative Infinity', defaultFormatterMacro, {
 	input: -1/0,
 	expectedResult: `(number => -Infinity)`
 });
 
-test.skip('usage with computed negative Infinity', customFormatterDataMacro, {
+test('usage with computed negative Infinity', customFormatterDataMacro, {
 	input: -4/0,
 	defaultFormatterExpectedResult: `(number => -Infinity)`,
 	expectedData: {
 		type: 'number',
+		stringifiedValue: '-Infinity',
 		isInteger: false,
 		isFloat: false,
-		simpleQuoteStringified: `-Infinity`,
-		doubleQuoteStringified: `-Infinity`,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
 		constructorName: 'Number',
-		name: null
+		functionName: null
 	}
 });
 
 /*- literal boolean -*/
 
-test.skip('usage with literal boolean true', defaultFormatterMacro, {
+test('usage with literal boolean true', defaultFormatterMacro, {
 	input: true,
 	expectedResult: `(boolean => true)`
 });
 
-test.skip('usage with literal boolean true', customFormatterDataMacro, {
+test('usage with literal boolean true', customFormatterDataMacro, {
 	input: true,
 	defaultFormatterExpectedResult: `(boolean => true)`,
 	expectedData: {
 		type: 'boolean',
+		stringifiedValue: 'true',
 		isInteger: false,
 		isFloat: false,
-		simpleQuoteStringified: `true`,
-		doubleQuoteStringified: `true`,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
 		constructorName: 'Boolean',
-		name: null
+		functionName: null
 	}
 });
 
-test.skip('usage with literal boolean true', defaultFormatterMacro, {
+test('usage with literal boolean true', defaultFormatterMacro, {
 	input: false,
 	expectedResult: `(boolean => false)`
 });
 
-test.skip('usage with literal boolean true', customFormatterDataMacro, {
+test('usage with literal boolean true', customFormatterDataMacro, {
 	input: false,
 	defaultFormatterExpectedResult: `(boolean => false)`,
 	expectedData: {
 		type: 'boolean',
+		stringifiedValue: 'false',
 		isInteger: false,
 		isFloat: false,
-		simpleQuoteStringified: `false`,
-		doubleQuoteStringified: `false`,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
 		constructorName: 'Boolean',
-		name: null
+		functionName: null
 	}
 });
 

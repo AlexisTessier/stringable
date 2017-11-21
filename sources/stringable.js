@@ -63,7 +63,7 @@ function stringable(value, formatter = defaultFormatter) {
 	}
 
 	const type = typeof value;
-	const stringifiedValue = JSON.stringify(value);
+	let stringifiedValue = null;
 
 	let simpleQuoteString = null;
 	let doubleQuoteString = null;
@@ -88,15 +88,21 @@ function stringable(value, formatter = defaultFormatter) {
 
 	let isInteger = false;
 	let isFloat = false;
-	if (type === 'number' && !Number.isNaN(value) && Math.abs(value) !== Infinity) {
-		isInteger = parseInt(value, 10) === value;
-		isFloat = !isInteger;
+	if (type === 'number'){
+		stringifiedValue = `${value}`;
+
+		if(!Number.isNaN(value) && Math.abs(value) !== Infinity) {
+			isInteger = parseInt(value, 10) === value;
+			isFloat = !isInteger;
+		}
 	}
 
 	let constructorName = null;
 	if(value !== null && value !== undefined && value.constructor){
 		constructorName = value.constructor.name;
 	}
+
+	stringifiedValue = stringifiedValue || JSON.stringify(value);
 
 	return formatter({
 		value,
