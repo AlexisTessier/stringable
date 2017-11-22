@@ -651,27 +651,27 @@ test('usage with literal named function with multiple parameters', defaultFormat
 });
 
 test('usage with literal named function with multiple parameters and default values', defaultFormatterMacro, {
-	input: function funcNameTestComplex(argOne, defArg = 37, argObj = {
+	input: function funcNameTestComplex(defArg = 37, argObj = {
 		name(){return t+12},
 		objKey: 'object value'
-	}, { inner = 8,  a = 'test'} = {a: 8}, ...restParams) {
+	}, { inner = 8, a = 'test'} = {a: 8}, ...restParams) {
 		const t = 42;
 		return t;
 	},
 	expectedResult: `(function => funcNameTestComplex)`
 });
 test('usage with literal named function with multiple parameters and default values', customFormatterDataMacro, {
-	input: function funcNameTestComplex(argOne, defArg = 37, argObj = {
+	input: function funcNameTestComplex(argOne, argObj = {
 		name(){return t+12},
 		objKey: 'object value'
-	}, { inner = 8,  a = 'test'} = {a: 8}, ...restParams) {
+	}, { inner = 8, a = 'test'} = {a: 8}, ...restParams) {
 		const t = 42;
 		return t;
 	},
 	defaultFormatterExpectedResult: `(function => funcNameTestComplex)`,
 	expectedData: {
 		type: 'function',
-		stringifiedValue: `function funcNameTestComplex(argOne, defArg = 37, argObj = {
+		stringifiedValue: `function funcNameTestComplex(argOne, argObj = {
 		name() {
 			return t + 12;
 		},
@@ -690,6 +690,7 @@ test('usage with literal named function with multiple parameters and default val
 });
 
 test('usage with literal anonymous function', defaultFormatterMacro, {
+	// eslint-disable-next-line func-names
 	input: function () {
 		const t = 44;
 		return t*t;
@@ -697,6 +698,7 @@ test('usage with literal anonymous function', defaultFormatterMacro, {
 	expectedResult: `(function)`
 });
 test('usage with literal anonymous function', customFormatterDataMacro, {
+	// eslint-disable-next-line func-names
 	input: function () {
 		const t = 48;
 		return t*t;
