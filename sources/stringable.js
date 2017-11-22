@@ -19,9 +19,18 @@ function defaultFormatter({
 		return '(undefined)';
 	}
 
+	if (type === 'function' && functionName === null) {
+		return '(function)';
+	}
+
 	let typeComplement = type === 'object' && constructorName ? `: ${constructorName}` : '';
 
-	switch(type){
+	let _type = type;
+	if (value instanceof Number) {
+		_type = 'number';
+	}
+
+	switch(_type){
 		case 'number':
 			typeComplement += isInteger ? ': Integer' : (isFloat ? ': Float' : '');
 			break;
@@ -30,14 +39,7 @@ function defaultFormatter({
 			break;
 	}
 
-	return `(${type}${typeComplement} => ${simpleQuoteString || stringifiedValue})`;
-}
-
-// This function is inspired from a promisify util
-// https://github.com/nodegit/promisify-node/blob/368682489bb630977f6732c7df95562f6afa7102/utils/args.js
-// Some magic happens in it so may be a source of errors
-function getFunctionSignature(func) {
-	return func.toString().match(/function\s.*?\(([^)]*)\)/)[1];
+	return `(${type}${typeComplement} => ${functionName || simpleQuoteString || stringifiedValue})`;
 }
 
 function stringable(value, formatter = defaultFormatter) {
@@ -70,29 +72,31 @@ function stringable(value, formatter = defaultFormatter) {
 	if (type === 'string' || value instanceof String) {
 		simpleQuoteString = `'${escapeQuotes(value)}'`;
 		doubleQuoteString = `"${escapeQuotes(value, '"')}"`;
+		stringifiedValue = JSON.stringify(value);
 	}
 
 	let functionName = null;
 	if (type === 'function') {
 		functionName = value.name;
-		const signature = getFunctionSignature(value);
+		stringifiedValue = `${value}`;
+
+		const useName = stringifiedValue.indexOf(`function ${functionName}`) === 0;
+		if (!useName) {
+			functionName = null;
+		}
 	}
-		//simpleQuoteString = doubleQuoteString = `${functionName}(${signature}) { ... }`;
-	// }
-	// else if (type === 'symbol'){
-	// 	//simpleQuoteString = doubleQuoteString = `${value.toString()}`;
-	// }
-	// else{
-	// 	//simpleQuoteString = doubleQuoteString = `${value}`;
-	// }
+
+	if (type === 'symbol'){
+		stringifiedValue = `${value.toString()}`;
+	}
 
 	let isInteger = false;
 	let isFloat = false;
-	if (type === 'number'){
-		stringifiedValue = `${value}`;
+	if (type === 'number' || value instanceof Number){
+		const literal = value instanceof Number ? (0+value) : value;
 
-		if(!Number.isNaN(value) && Math.abs(value) !== Infinity) {
-			isInteger = parseInt(value, 10) === value;
+		if(!Number.isNaN(literal) && Math.abs(literal) !== Infinity) {
+			isInteger = parseInt(literal, 10) === literal;
 			isFloat = !isInteger;
 		}
 	}
@@ -102,7 +106,9 @@ function stringable(value, formatter = defaultFormatter) {
 		constructorName = value.constructor.name;
 	}
 
-	stringifiedValue = stringifiedValue || JSON.stringify(value);
+	if (stringifiedValue === null){
+		stringifiedValue = `${value}`;
+	}
 
 	return formatter({
 		value,

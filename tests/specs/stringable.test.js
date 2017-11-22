@@ -538,172 +538,184 @@ test('usage with literal boolean true', customFormatterDataMacro, {
 
 /*- literal regexp -*/
 
-test.skip('usage with literal empty RegExp', defaultFormatterMacro, {
+test('usage with literal empty RegExp', defaultFormatterMacro, {
 	input: /$^/,
 	expectedResult: `(object: RegExp => /$^/)`
 });
-test.skip('usage with literal empty RegExp', customFormatterDataMacro, {
+test('usage with literal empty RegExp', customFormatterDataMacro, {
 	input: /$^/,
 	defaultFormatterExpectedResult: `(object: RegExp => /$^/)`,
 	expectedData: {
 		type: 'object',
+		stringifiedValue: '/$^/',
 		isInteger: false,
 		isFloat: false,
-		simpleQuoteStringified: `/$^/`,
-		doubleQuoteStringified: `/$^/`,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
 		constructorName: `RegExp`,
-		name: null
+		functionName: null
 	}
 });
 
-test.skip('usage with literal not empty RegExp', defaultFormatterMacro, {
+test('usage with literal not empty RegExp', defaultFormatterMacro, {
 	input: /regex\.content/,
 	expectedResult: `(object: RegExp => /regex\\.content/)`
 });
-test.skip('usage with literal not empty RegExp', customFormatterDataMacro, {
+test('usage with literal not empty RegExp', customFormatterDataMacro, {
 	input: /regex\.content-test/,
 	defaultFormatterExpectedResult: `(object: RegExp => /regex\\.content-test/)`,
 	expectedData: {
 		type: 'object',
+		stringifiedValue: '/regex\\.content-test/',
 		isInteger: false,
 		isFloat: false,
-		simpleQuoteStringified: `/regex\\.content-test/`,
-		doubleQuoteStringified: `/regex\\.content-test/`,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
 		constructorName: `RegExp`,
-		name: null
+		functionName: null
 	}
 });
 
 /*- literal function -*/
 
-test.skip('usage with literal named function without parameters', defaultFormatterMacro, {
+test('usage with literal named function without parameters', defaultFormatterMacro, {
 	input: function funcNameTest() {
 		const t = 42;
 		return t;
 	},
-	expectedResult: `(function => funcNameTest() { ... })`
+	expectedResult: `(function => funcNameTest)`
 });
-test.skip('usage with literal named function without parameters', customFormatterDataMacro, {
+test('usage with literal named function without parameters', customFormatterDataMacro, {
 	input: function funcNameTestFormatter() {
 		const t = 45;
 		return t+42;
 	},
-	defaultFormatterExpectedResult: `(function => funcNameTestFormatter() { ... })`,
+	defaultFormatterExpectedResult: `(function => funcNameTestFormatter)`,
 	expectedData: {
 		type: 'function',
+		stringifiedValue: `function funcNameTestFormatter() {
+		const t = 45;
+		return t + 42;
+	}`,
 		isInteger: false,
 		isFloat: false,
-		simpleQuoteStringified: `funcNameTestFormatter() { ... }`,
-		doubleQuoteStringified: `funcNameTestFormatter() { ... }`,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
 		constructorName: `Function`,
-		name: 'funcNameTestFormatter'
+		functionName: 'funcNameTestFormatter'
 	}
 });
 
-test.skip('usage with literal named function with one parameter', defaultFormatterMacro, {
+test('usage with literal named function with one parameter', defaultFormatterMacro, {
 	input: function funcNameTestParamOne(arg) {
 		const t = 42;
 		return t+arg;
 	},
-	expectedResult: `(function => funcNameTestParamOne(arg) { ... })`
+	expectedResult: `(function => funcNameTestParamOne)`
 });
-test.skip('usage with literal named function with one parameter', customFormatterDataMacro, {
+test('usage with literal named function with one parameter', customFormatterDataMacro, {
 	input: function funcNameTestFormatter(arg) {
 		const t = 15;
 		return arg+t+42;
 	},
-	defaultFormatterExpectedResult: `(function => funcNameTestFormatter(arg) { ... })`,
+	defaultFormatterExpectedResult: `(function => funcNameTestFormatter)`,
 	expectedData: {
 		type: 'function',
+		stringifiedValue: `function funcNameTestFormatter(arg) {
+		const t = 15;
+		return arg + t + 42;
+	}`,
 		isInteger: false,
 		isFloat: false,
-		simpleQuoteStringified: `funcNameTestFormatter(arg) { ... }`,
-		doubleQuoteStringified: `funcNameTestFormatter(arg) { ... }`,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
 		constructorName: `Function`,
-		name: 'funcNameTestFormatter'
+		functionName: 'funcNameTestFormatter'
 	}
 });
 
-test.skip('usage with literal named function with one parameter and default value', defaultFormatterMacro, {
+test('usage with literal named function with one parameter and default value', defaultFormatterMacro, {
 	input: function funcNameTestParamOne(arg = 'default value') {
 		const t = '42';
 		return t+arg;
 	},
-	expectedResult: `(function => funcNameTestParamOne(arg = 'default value') { ... })`
-});
-test.skip('usage with literal named function with one parameter and default value', customFormatterDataMacro, {
-	input: function funcNameTestFormatter(argOne = 78) {
-		const t = 45;
-		return t+42;
-	},
-	defaultFormatterExpectedResult: `(function => funcNameTestFormatter(argOne = 78) { ... })`,
-	expectedData: {
-		type: 'function',
-		isInteger: false,
-		isFloat: false,
-		simpleQuoteString: `funcNameTestFormatter(argOne = 78) { ... }`,
-		doubleQuoteStringified: `funcNameTestFormatter(argOne = 78) { ... }`,
-		constructorName: `Function`,
-		name: 'funcNameTestFormatter'
-	}
+	expectedResult: `(function => funcNameTestParamOne)`
 });
 
-test.skip('usage with literal named function with multiple parameters', defaultFormatterMacro, {
-	input: function funcNameTest() {
+test('usage with literal named function with multiple parameters', defaultFormatterMacro, {
+	input: function funcNameTestOther(argOne, param, otherParam) {
 		const t = 42;
 		return t;
 	},
-	expectedResult: `(function => funcNameTest() { ... })`
-});
-test.skip('usage with literal named function with multiple parameters', customFormatterDataMacro, {
-	input: function funcNameTestFormatter() {
-		const t = 45;
-		return t+42;
-	},
-	defaultFormatterExpectedResult: `(function => funcNameTestFormatter() { ... })`,
-	expectedData: {
-		type: 'function',
-		isInteger: false,
-		isFloat: false,
-		simpleQuoteStringified: `funcNameTestFormatter() { ... }`,
-		doubleQuoteStringified: `funcNameTestFormatter() { ... }`,
-		constructorName: `Function`,
-		name: 'funcNameTestFormatter'
-	}
+	expectedResult: `(function => funcNameTestOther)`
 });
 
-test.skip('usage with literal named function with multiple parameters and default values', defaultFormatterMacro, {
-	input: function funcNameTest() {
+test('usage with literal named function with multiple parameters and default values', defaultFormatterMacro, {
+	input: function funcNameTestComplex(argOne, defArg = 37, argObj = {
+		name(){return t+12},
+		objKey: 'object value'
+	}, { inner = 8,  a = 'test'} = {a: 8}, ...restParams) {
 		const t = 42;
 		return t;
 	},
-	expectedResult: `(function => funcNameTest() { ... })`
+	expectedResult: `(function => funcNameTestComplex)`
 });
-test.skip('usage with literal named function with multiple parameters and default values', customFormatterDataMacro, {
-	input: function funcNameTestFormatter() {
-		const t = 45;
-		return t+42;
+test('usage with literal named function with multiple parameters and default values', customFormatterDataMacro, {
+	input: function funcNameTestComplex(argOne, defArg = 37, argObj = {
+		name(){return t+12},
+		objKey: 'object value'
+	}, { inner = 8,  a = 'test'} = {a: 8}, ...restParams) {
+		const t = 42;
+		return t;
 	},
-	defaultFormatterExpectedResult: `(function => funcNameTestFormatter() { ... })`,
+	defaultFormatterExpectedResult: `(function => funcNameTestComplex)`,
 	expectedData: {
 		type: 'function',
+		stringifiedValue: `function funcNameTestComplex(argOne, defArg = 37, argObj = {
+		name() {
+			return t + 12;
+		},
+		objKey: 'object value'
+	}, { inner = 8, a = 'test' } = { a: 8 }, ...restParams) {
+		const t = 42;
+		return t;
+	}`,
 		isInteger: false,
 		isFloat: false,
-		simpleQuoteStringified: `funcNameTestFormatter() { ... }`,
-		doubleQuoteStringified: `funcNameTestFormatter() { ... }`,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
 		constructorName: `Function`,
-		name: 'funcNameTestFormatter'
+		functionName: 'funcNameTestComplex'
 	}
 });
 
-test.skip('usage with literal anonymous function', defaultFormatterMacro, {
-	input: function funcNameTest2() {
+test('usage with literal anonymous function', defaultFormatterMacro, {
+	input: function () {
 		const t = 44;
 		return t*t;
 	},
-	expectedResult: `(object: RegExp => /regex\\.content/)`
+	expectedResult: `(function)`
 });
-test.todo('usage with literal anonymous function - custom formatter');
+test('usage with literal anonymous function', customFormatterDataMacro, {
+	input: function () {
+		const t = 48;
+		return t*t;
+	},
+	defaultFormatterExpectedResult: `(function)`,
+	expectedData: {
+		type: 'function',
+		stringifiedValue: `function () {
+		const t = 48;
+		return t * t;
+	}`,
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
+		constructorName: `Function`,
+		functionName: null
+	}
+});
 
 test.todo('usage with literal arrow function');
 test.todo('usage with literal arrow function - custom formatter');
@@ -721,118 +733,132 @@ test.todo('FOR FUNCTION TYPE, ADD THE WITH AND WITHOUT PARAMETERS VARIANTS');
 
 /*- literal falsy values -*/
 
-test.skip('usage with literal null', defaultFormatterMacro, {
+test('usage with literal null', defaultFormatterMacro, {
 	input: null,
 	expectedResult: `(object => null)`
 });
-test.skip('usage with literal null', customFormatterDataMacro, {
+test('usage with literal null', customFormatterDataMacro, {
 	input: null,
 	defaultFormatterExpectedResult: `(object => null)`,
 	expectedData: {
 		type: 'object',
+		stringifiedValue: 'null',
 		isInteger: false,
 		isFloat: false,
-		simpleQuoteStringified: `null`,
-		doubleQuoteStringified: `null`,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
 		constructorName: null,
-		name: null
+		functionName: null
 	}
 });
 
-test.skip('usage with literal undefined', defaultFormatterMacro, {
+test('usage with literal undefined', defaultFormatterMacro, {
 	input: undefined,
 	expectedResult: `(undefined)`
 });
-test.skip('usage with literal undefined', customFormatterDataMacro, {
+test('usage with literal undefined', customFormatterDataMacro, {
 	input: undefined,
 	defaultFormatterExpectedResult: `(undefined)`,
 	expectedData: {
 		type: 'undefined',
+		stringifiedValue: 'undefined',
 		isInteger: false,
 		isFloat: false,
-		simpleQuoteStringified: `undefined`,
-		doubleQuoteStringified: `undefined`,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
 		constructorName: null,
-		name: null
+		functionName: null
 	}
 });
 
 /*- Object string -*/
 
-test.skip('usage with instance of String', defaultFormatterMacro, {
+test('usage with instance of String', defaultFormatterMacro, {
 	input: new String('a string from object'),
 	expectedResult: `(object: String => 'a string from object')`
 });
-test.skip('usage with instance of String', customFormatterDataMacro, {
+test('usage with instance of String', customFormatterDataMacro, {
 	input: new String('	a string from object with custom formatter '),
 	defaultFormatterExpectedResult: `(object: String => '	a string from object with custom formatter ')`,
 	expectedData: {
 		type: 'object',
+		stringifiedValue: '"\\ta string from object with custom formatter "',
 		isInteger: false,
 		isFloat: false,
-		simpleQuoteStringified: `'	a string from object with custom formatter '`,
-		doubleQuoteStringified: `"	a string from object with custom formatter "`,
+		simpleQuoteString: `'	a string from object with custom formatter '`,
+		doubleQuoteString: `"	a string from object with custom formatter "`,
 		constructorName: 'String',
-		name: null
+		functionName: null
 	}
 });
 
-test.skip('usage with instance of empty String', defaultFormatterMacro, {
+test('usage with instance of empty String', defaultFormatterMacro, {
 	input: new String(''),
 	expectedResult: `(object: String => '')`
 });
-test.skip('usage with instance of empty String', customFormatterDataMacro, {
+test('usage with instance of empty String', customFormatterDataMacro, {
 	input: new String(''),
 	defaultFormatterExpectedResult: `(object: String => '')`,
 	expectedData: {
 		type: 'object',
+		stringifiedValue: '""',
 		isInteger: false,
 		isFloat: false,
-		simpleQuoteStringified: `''`,
-		doubleQuoteStringified: `""`,
+		simpleQuoteString: `''`,
+		doubleQuoteString: `""`,
 		constructorName: 'String',
-		name: null
+		functionName: null
 	}
 });
 
-test.skip('usage with instance of blank String', defaultFormatterMacro, {
+test('usage with instance of blank String', defaultFormatterMacro, {
 	input: new String(' 	'),
 	expectedResult: `(object: String => ' 	')`
 });
-test.skip('usage with instance of blank String', customFormatterDataMacro, {
+test('usage with instance of blank String', customFormatterDataMacro, {
 	input: new String('	  '),
 	defaultFormatterExpectedResult: `(object: String => '	  ')`,
 	expectedData: {
 		type: 'object',
+		stringifiedValue: '"\\t  "',
 		isInteger: false,
 		isFloat: false,
-		simpleQuoteStringified: `'	  '`,
-		doubleQuoteStringified: `"	  "`,
+		simpleQuoteString: `'	  '`,
+		doubleQuoteString: `"	  "`,
 		constructorName: 'String',
-		name: null
+		functionName: null
 	}
 });
 
 /*- Object number -*/
 
-test.todo('usage with instance of Number');
+test('usage with instance of Number', defaultFormatterMacro, {
+	input: new Number(),
+	expectedResult: `(object: Number: Integer => 0)`
+});
 test.todo('usage with instance of Number - custom formatter');
 
-test.todo('usage with instance of Number (integer)');
+test('usage with instance of Number (integer)', defaultFormatterMacro, {
+	input: new Number(89),
+	expectedResult: `(object: Number: Integer => 89)`
+});
 test.todo('usage with instance of Number (integer) - custom formatter');
 
-test.todo('usage with instance of Number (float)');
+test('usage with instance of Number (float)', defaultFormatterMacro, {
+	input: new Number(42.765),
+	expectedResult: `(object: Number: Float => 42.765)`
+});
 test.todo('usage with instance of Number (float) - custom formatter');
 
 /*- Object boolean -*/
 
-test.skip('usage with instance of true Boolean', defaultFormatterMacro, {
+test('usage with instance of true Boolean', defaultFormatterMacro, {
 	input: new Boolean(true),
 	expectedResult: `(object: Boolean => true)`
 });
 test.todo('usage with instance of true Boolean - custom formatter');
 
-test.skip('usage with instance of false Boolean', defaultFormatterMacro, {
+test('usage with instance of false Boolean', defaultFormatterMacro, {
 	input: new Boolean(false),
 	expectedResult: `(object: Boolean => false)`
 });
@@ -850,13 +876,13 @@ test.todo('usage with instance of Function - custom formatter');
 
 /*- Object symbol -*/
 
-test.skip('usage with instance of empty Symbol', defaultFormatterMacro, {
+test('usage with instance of empty Symbol', defaultFormatterMacro, {
 	input: Symbol(),
 	expectedResult: `(symbol => Symbol())`
 });
 test.todo('usage with instance of empty Symbol - custom formatter');
 
-test.skip('usage with instance of Symbol', defaultFormatterMacro, {
+test('usage with instance of Symbol', defaultFormatterMacro, {
 	input: Symbol('symbol value'),
 	expectedResult: `(symbol => Symbol(symbol value))`
 });
@@ -910,7 +936,7 @@ test.todo('usage with instance of custom class - custom formatter');
 
 /*- errors handling -*/
 
-test.skip('usage with no parameters - throws error', t => {
+test('usage with no parameters - throws error', t => {
 	const stringable = requireFromIndex('sources/stringable');
 
 	const noParametersError = t.throws(() => {
@@ -924,7 +950,7 @@ test.skip('usage with no parameters - throws error', t => {
 	));
 });
 
-test.skip('usage with unused parameters - throws error', t => {
+test('usage with unused parameters - throws error', t => {
 	const stringable = requireFromIndex('sources/stringable');
 
 	const tooManyParametersError = t.throws(() => {
@@ -956,11 +982,11 @@ unvalidFormatterErrorMacro.title = providedTitle => (
 	`usage with unvalid formatter - throws error - ${providedTitle}`
 );
 
-test.skip('number', unvalidFormatterErrorMacro, 46);
-test.skip('null', unvalidFormatterErrorMacro, null);
-test.skip('true', unvalidFormatterErrorMacro, true);
-test.skip('false', unvalidFormatterErrorMacro, false);
-test.skip('symbol', unvalidFormatterErrorMacro, Symbol());
-test.skip('object', unvalidFormatterErrorMacro, {});
-test.skip('array', unvalidFormatterErrorMacro, []);
-test.skip('string', unvalidFormatterErrorMacro, 'a string');
+test('number', unvalidFormatterErrorMacro, 46);
+test('null', unvalidFormatterErrorMacro, null);
+test('true', unvalidFormatterErrorMacro, true);
+test('false', unvalidFormatterErrorMacro, false);
+test('symbol', unvalidFormatterErrorMacro, Symbol());
+test('object', unvalidFormatterErrorMacro, {});
+test('array', unvalidFormatterErrorMacro, []);
+test('string', unvalidFormatterErrorMacro, 'a string');
