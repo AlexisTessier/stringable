@@ -839,6 +839,7 @@ test('usage with literal anonymous function', customFormatterDataMacro, {
 	}
 });
 
+// eslint-disable-next-line func-names
 const anonymousFunctionFromOutside = () => function () {
 	const t = 44;
 	return t*t;
@@ -899,6 +900,7 @@ test('usage with literal method', customFormatterDataMacro, {
 });
 
 test('usage with literal computed name method', defaultFormatterMacro, {
+	// eslint-disable-next-line no-useless-computed-key
 	['input'](){
 		const t = 44;
 		return t*t;
@@ -906,6 +908,7 @@ test('usage with literal computed name method', defaultFormatterMacro, {
 	expectedResult: `(function => input)`
 });
 test('usage with literal computed name method', customFormatterDataMacro, {
+	// eslint-disable-next-line no-useless-computed-key
 	['input'](){
 		const t = 49;
 		return t*t;
@@ -928,6 +931,7 @@ test('usage with literal computed name method', customFormatterDataMacro, {
 });
 
 const emptyNameMethodContainer = {
+	// eslint-disable-next-line no-useless-computed-key
 	[' 	  '](){
 		return 'yo';
 	}
@@ -938,6 +942,7 @@ test('usage with empty computed name method', defaultFormatterMacro, {
 	expectedResult: `(function)`
 });
 test('usage with empty computed name method', customFormatterDataMacro, {
+	// eslint-disable-next-line no-useless-computed-key
 	['input']: emptyNameMethodContainer[' 	  '],
 	defaultFormatterExpectedResult: `(function)`,
 	expectedData: {
