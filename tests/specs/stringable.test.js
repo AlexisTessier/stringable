@@ -1044,21 +1044,45 @@ test('usage with literal async function with parameters and default', defaultFor
 });
 test.todo('usage with literal async function - custom formatter');
 
-test.skip('usage with literal async anonymous function', defaultFormatterMacro, {
-	input: async function anAsyncFunctionTest(){
+test('usage with literal async anonymous function', defaultFormatterMacro, {
+	input: async function(){
 		const t = 44;
 		await 5;
 		return t*t;
 	},
-	expectedResult: `(function: async => anAsyncFunctionTest)`
+	expectedResult: `(function: async)`
 });
 test.todo('usage with literal async anonymous function - custom formatter');
 
-test.todo('usage with literal async arrow function');
+test('usage with literal async arrow function', defaultFormatterMacro, {
+	input: async () => {
+		const t = 44;
+		await 5;
+		return t*t;
+	},
+	expectedResult: `(function: async: arrow)`
+});
 test.todo('usage with literal async arrow function - custom formatter');
 
-test.todo('usage with literal async method function');
+test('usage with literal async method function', defaultFormatterMacro, {
+	async input(){
+		const t = 44;
+		await 5;
+		return t*t;
+	},
+	expectedResult: `(function: async: method => input)`
+});
 test.todo('usage with literal async method function - custom formatter');
+
+test('usage with literal async method function and computed name', defaultFormatterMacro, {
+	async ['input'](){
+		const t = 44;
+		await 5;
+		return t*t;
+	},
+	expectedResult: `(function: async: method => input)`
+});
+test.todo('usage with literal async method function and computed name - custom formatter');
 
 test.todo('usage with literal generator function');
 test.todo('usage with literal generator function - custom formatter');

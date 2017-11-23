@@ -18,13 +18,11 @@ function defaultFormatter({
 	isMethod,
 	isArrowFunction
 }) {
-	if (value === undefined) {
-		return '(undefined)';
-	}
-
-	if (type === 'function' && functionName === null) {
-		return isArrowFunction ? '(function: arrow)' : '(function)';
-	}
+	const displayValue = !(
+		value === undefined
+		||
+		(type === 'function' && functionName === null)
+	);
 
 	let typeComplement = type === 'object' && constructorName ? `: ${constructorName}` : '';
 
@@ -41,13 +39,15 @@ function defaultFormatter({
 		case 'function':
 			typeComplement += isAsync ? ': async' : '';
 			typeComplement += isMethod ? ': method' : '';
+			typeComplement += isArrowFunction ? ': arrow' : '';
 			break;
 
 		default:
 			break;
 	}
 
-	return `(${type}${typeComplement} => ${functionName || simpleQuoteString || stringifiedValue})`;
+	const displayedValue = displayValue ? ` => ${functionName || simpleQuoteString || stringifiedValue}` : '';
+	return `(${type}${typeComplement}${displayedValue})`;
 }
 
 function stringable(value, formatter = defaultFormatter) {
@@ -91,11 +91,15 @@ function stringable(value, formatter = defaultFormatter) {
 		functionName = value.name;
 		stringifiedValue = `${value}`;
 
-		isAsync = stringifiedValue.indexOf(`async`) === 0;
-		isMethod = stringifiedValue.indexOf(`${functionName}(`) === 0;
-		isArrowFunction = stringifiedValue.indexOf(`(`) === 0 || stringifiedValue.split(' ')[1] === '=>';
+		console.log(stringifiedValue)
 
-		const useName = stringifiedValue.indexOf(`${isAsync ? 'async ' : ''}function ${functionName}`) === 0;
+		isAsync = stringifiedValue.indexOf(`async`) === 0;
+		const functionPrefix = isAsync ? 'async ' : '';
+
+		isMethod = stringifiedValue.indexOf(`${functionPrefix}${functionName}(`) === 0;
+		isArrowFunction = stringifiedValue.indexOf(`${functionPrefix}(`) === 0 || stringifiedValue.split(' ')[1] === '=>';
+
+		const useName = stringifiedValue.indexOf(`${functionPrefix}function ${functionName}`) === 0;
 		if (!useName && !isMethod) {
 			functionName = null;
 		}
