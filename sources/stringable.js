@@ -13,14 +13,17 @@ function defaultFormatter({
 	simpleQuoteString,
 	doubleQuoteString,
 	constructorName,
-	functionName
+	functionName,
+	isAsync,
+	isMethod,
+	isArrowFunction
 }) {
 	if (value === undefined) {
 		return '(undefined)';
 	}
 
 	if (type === 'function' && functionName === null) {
-		return '(function)';
+		return isArrowFunction ? '(function: arrow)' : '(function)';
 	}
 
 	let typeComplement = type === 'object' && constructorName ? `: ${constructorName}` : '';
@@ -32,7 +35,12 @@ function defaultFormatter({
 
 	switch(_type){
 		case 'number':
-			typeComplement += isInteger ? ': Integer' : (isFloat ? ': Float' : '');
+			typeComplement += isInteger ? ': integer' : (isFloat ? ': float' : '');
+			break;
+
+		case 'function':
+			typeComplement += isAsync ? ': async' : '';
+			typeComplement += isMethod ? ': method' : '';
 			break;
 
 		default:
@@ -76,12 +84,19 @@ function stringable(value, formatter = defaultFormatter) {
 	}
 
 	let functionName = null;
+	let isAsync = false;
+	let isMethod = false;
+	let isArrowFunction = false;
 	if (type === 'function') {
 		functionName = value.name;
 		stringifiedValue = `${value}`;
 
-		const useName = stringifiedValue.indexOf(`function ${functionName}`) === 0;
-		if (!useName) {
+		isAsync = stringifiedValue.indexOf(`async`) === 0;
+		isMethod = stringifiedValue.indexOf(`${functionName}(`) === 0;
+		isArrowFunction = stringifiedValue.indexOf(`(`) === 0 || stringifiedValue.split(' ')[1] === '=>';
+
+		const useName = stringifiedValue.indexOf(`${isAsync ? 'async ' : ''}function ${functionName}`) === 0;
+		if (!useName && !isMethod) {
 			functionName = null;
 		}
 	}
@@ -120,7 +135,10 @@ function stringable(value, formatter = defaultFormatter) {
 		doubleQuoteString,
 		defaultFormatter,
 		constructorName,
-		functionName
+		functionName,
+		isAsync,
+		isMethod,
+		isArrowFunction
 	});
 }
 
