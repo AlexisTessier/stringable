@@ -966,7 +966,29 @@ test('usage with literal arrow function with parameters', defaultFormatterMacro,
 	},
 	expectedResult: `(function: arrow)`
 });
-test.todo('usage with literal arrow function with parameters - custom formatter');
+test('usage with literal arrow function with parameters', customFormatterDataMacro, {
+	input: (argOne = 43) => {
+		const t = 44;
+		return t*t;
+	},
+	defaultFormatterExpectedResult: `(function: arrow)`,
+	expectedData: {
+		type: 'function',
+		stringifiedValue: `(argOne = 43) => {
+		const t = 44;
+		return t * t;
+	}`,
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
+		constructorName: `Function`,
+		functionName: null,
+		isAsync: false,
+		isMethod: false,
+		isArrowFunction: true
+	}
+});
 
 test('usage with literal arrow function with one parameter without braces', defaultFormatterMacro, {
 	input: argOne => {
@@ -998,23 +1020,27 @@ test('usage with literal async function', defaultFormatterMacro, {
 });
 test.todo('usage with literal async function - custom formatter');
 
-test.skip('usage with literal async function with one parameter', defaultFormatterMacro, {
-	input: async function anAsyncFunctionTest(){
+test('usage with literal async function with one parameter', defaultFormatterMacro, {
+	input: async function anAsyncFunctionTest3(argOneT){
 		const t = 44;
 		await 5;
-		return t*t;
+		return t*t+argOneT;
 	},
-	expectedResult: `(function: async => anAsyncFunctionTest)`
+	expectedResult: asyncSupport
+		? `(function: async => anAsyncFunctionTest3)`
+		: `(function => anAsyncFunctionTest3)`
 });
 test.todo('usage with literal async function - custom formatter');
 
-test.skip('usage with literal async function with parameters and default', defaultFormatterMacro, {
-	input: async function anAsyncFunctionTest(){
+test('usage with literal async function with parameters and default', defaultFormatterMacro, {
+	input: async function anAsyncFunctionTestWithParams(argOne, argTwo = 78){
 		const t = 44;
-		await 5;
-		return t*t;
+		await 9;
+		return t*t+argOne*argTwo;
 	},
-	expectedResult: `(function: async => anAsyncFunctionTest)`
+	expectedResult: asyncSupport
+		? `(function: async => anAsyncFunctionTestWithParams)`
+		: `(function => anAsyncFunctionTestWithParams)`
 });
 test.todo('usage with literal async function - custom formatter');
 
@@ -1030,6 +1056,9 @@ test.todo('usage with literal async anonymous function - custom formatter');
 
 test.todo('usage with literal async arrow function');
 test.todo('usage with literal async arrow function - custom formatter');
+
+test.todo('usage with literal async method function');
+test.todo('usage with literal async method function - custom formatter');
 
 test.todo('usage with literal generator function');
 test.todo('usage with literal generator function - custom formatter');
