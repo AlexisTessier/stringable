@@ -14,9 +14,7 @@ function defaultFormatter({
 	doubleQuoteString,
 	constructorName,
 	functionName,
-	isAsync,
-	isMethod,
-	isArrowFunction
+	isAsync
 }) {
 	const displayValue = !(
 		value === undefined
@@ -38,8 +36,6 @@ function defaultFormatter({
 
 		case 'function':
 			typeComplement += isAsync ? ': async' : '';
-			typeComplement += isMethod ? ': method' : '';
-			typeComplement += isArrowFunction ? ': arrow' : '';
 			break;
 
 		default:
@@ -85,22 +81,13 @@ function stringable(value, formatter = defaultFormatter) {
 
 	let functionName = null;
 	let isAsync = false;
-	let isMethod = false;
-	let isArrowFunction = false;
 	if (type === 'function') {
 		functionName = value.name;
 		stringifiedValue = `${value}`;
 
-		console.log(stringifiedValue)
-
 		isAsync = stringifiedValue.indexOf(`async`) === 0;
-		const functionPrefix = isAsync ? 'async ' : '';
 
-		isMethod = stringifiedValue.indexOf(`${functionPrefix}${functionName}(`) === 0;
-		isArrowFunction = stringifiedValue.indexOf(`${functionPrefix}(`) === 0 || stringifiedValue.split(' ')[1] === '=>';
-
-		const useName = stringifiedValue.indexOf(`${functionPrefix}function ${functionName}`) === 0;
-		if (!useName && !isMethod) {
+		if (functionName.trim().length === 0) {
 			functionName = null;
 		}
 	}
@@ -140,9 +127,7 @@ function stringable(value, formatter = defaultFormatter) {
 		defaultFormatter,
 		constructorName,
 		functionName,
-		isAsync,
-		isMethod,
-		isArrowFunction
+		isAsync
 	});
 }
 

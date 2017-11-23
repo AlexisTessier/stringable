@@ -50,9 +50,7 @@ function customFormatterDataMacro(t, {input, defaultFormatterExpectedResult, exp
 		'doubleQuoteString',
 		'constructorName',
 		'functionName',
-		'isAsync',
-		'isMethod',
-		'isArrowFunction'
+		'isAsync'
 	];
 
 	const testDataKeys = customFormatterDataKeys.filter(key => ![
@@ -83,8 +81,6 @@ function customFormatterDataMacro(t, {input, defaultFormatterExpectedResult, exp
 		t.is(data.constructorName, expectedData.constructorName);
 		t.is(data.functionName, expectedData.functionName);
 		t.is(data.isAsync, expectedData.isAsync);
-		t.is(data.isMethod, expectedData.isMethod);
-		t.is(data.isArrowFunction, expectedData.isArrowFunction);
 
 		return randomResult;
 	});
@@ -117,9 +113,7 @@ test('usage with literal string', customFormatterDataMacro, {
 		doubleQuoteString: `"42 Literal string value 42"`,
 		constructorName: 'String',
 		functionName: null,
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: false
+		isAsync: false
 	}
 });
 
@@ -140,9 +134,7 @@ test('usage with literal empty string', customFormatterDataMacro, {
 		doubleQuoteString: `""`,
 		constructorName: 'String',
 		functionName: null,
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: false
+		isAsync: false
 	}
 });
 
@@ -163,9 +155,7 @@ test('usage with literal blank string', customFormatterDataMacro, {
 		doubleQuoteString: `" 	  "`,
 		constructorName: 'String',
 		functionName: null,
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: false
+		isAsync: false
 	}
 });
 
@@ -186,9 +176,7 @@ test('usage with literal string containing simple quotes', customFormatterDataMa
 		doubleQuoteString: `"42 'quoted string' value"`,
 		constructorName: 'String',
 		functionName: null,
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: false
+		isAsync: false
 	}
 });
 
@@ -209,9 +197,7 @@ test('usage with literal string containing double quotes', customFormatterDataMa
 		doubleQuoteString: `"42 \\"quoted string\\" value"`,
 		constructorName: 'String',
 		functionName: null,
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: false
+		isAsync: false
 	}
 });
 
@@ -233,9 +219,7 @@ test('usage with literal Integer', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Number',
 		functionName: null,
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: false
+		isAsync: false
 	}
 });
 
@@ -255,9 +239,7 @@ test('usage with literal negative Integer', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Number',
 		functionName: null,
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: false
+		isAsync: false
 	}
 });
 
@@ -277,9 +259,7 @@ test('usage with literal positive Integer', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Number',
 		functionName: null,
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: false
+		isAsync: false
 	}
 });
 
@@ -300,9 +280,7 @@ test('usage with literal Float without decimal', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Number',
 		functionName: null,
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: false
+		isAsync: false
 	}
 });
 
@@ -323,9 +301,7 @@ test('usage with literal Float with only zero decimal', customFormatterDataMacro
 		doubleQuoteString: null,
 		constructorName: 'Number',
 		functionName: null,
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: false
+		isAsync: false
 	}
 });
 
@@ -345,9 +321,7 @@ test('usage with literal Float', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Number',
 		functionName: null,
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: false
+		isAsync: false
 	}
 });
 
@@ -367,9 +341,7 @@ test('usage with literal negative Float', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Number',
 		functionName: null,
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: false
+		isAsync: false
 	}
 });
 
@@ -389,9 +361,7 @@ test('usage with literal positive Float', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Number',
 		functionName: null,
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: false
+		isAsync: false
 	}
 });
 
@@ -412,9 +382,7 @@ test('usage with literal Float without unit', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Number',
 		functionName: null,
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: false
+		isAsync: false
 	}
 });
 
@@ -435,9 +403,7 @@ test('usage with literal Float without unit and zero as decimal', customFormatte
 		doubleQuoteString: null,
 		constructorName: 'Number',
 		functionName: null,
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: false
+		isAsync: false
 	}
 });
 
@@ -458,9 +424,7 @@ test('usage with literal Float without unit and lot of zero as decimal', customF
 		doubleQuoteString: null,
 		constructorName: 'Number',
 		functionName: null,
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: false
+		isAsync: false
 	}
 });
 
@@ -481,9 +445,7 @@ test('usage with literal Float with unit and lot of zero as unit and decimal', c
 		doubleQuoteString: null,
 		constructorName: 'Number',
 		functionName: null,
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: false
+		isAsync: false
 	}
 });
 
@@ -504,9 +466,7 @@ test('usage with literal Float with lot of decimal', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Number',
 		functionName: null,
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: false
+		isAsync: false
 	}
 });
 
@@ -527,9 +487,7 @@ test('usage with literal NaN', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Number',
 		functionName: null,
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: false
+		isAsync: false
 	}
 });
 
@@ -550,9 +508,7 @@ test('usage with computed NaN', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Number',
 		functionName: null,
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: false
+		isAsync: false
 	}
 });
 
@@ -573,9 +529,7 @@ test('usage with literal Infinity', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Number',
 		functionName: null,
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: false
+		isAsync: false
 	}
 });
 
@@ -596,9 +550,7 @@ test('usage with computed Infinity', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Number',
 		functionName: null,
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: false
+		isAsync: false
 	}
 });
 
@@ -619,9 +571,7 @@ test('usage with literal negative Infinity', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Number',
 		functionName: null,
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: false
+		isAsync: false
 	}
 });
 
@@ -642,9 +592,7 @@ test('usage with computed negative Infinity', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Number',
 		functionName: null,
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: false
+		isAsync: false
 	}
 });
 
@@ -667,9 +615,7 @@ test('usage with literal boolean true', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Boolean',
 		functionName: null,
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: false
+		isAsync: false
 	}
 });
 
@@ -690,9 +636,7 @@ test('usage with literal boolean true', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Boolean',
 		functionName: null,
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: false
+		isAsync: false
 	}
 });
 
@@ -714,9 +658,7 @@ test('usage with literal empty RegExp', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: `RegExp`,
 		functionName: null,
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: false
+		isAsync: false
 	}
 });
 
@@ -736,9 +678,7 @@ test('usage with literal not empty RegExp', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: `RegExp`,
 		functionName: null,
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: false
+		isAsync: false
 	}
 });
 
@@ -769,10 +709,18 @@ test('usage with literal named function without parameters', customFormatterData
 		doubleQuoteString: null,
 		constructorName: `Function`,
 		functionName: 'funcNameTestFormatter',
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: false
+		isAsync: false
 	}
+});
+
+function funcNameTestFromOutside() {
+	const t = 42;
+	return t;
+}
+
+test('usage with literal named function without parameters from outside', defaultFormatterMacro, {
+	input: funcNameTestFromOutside,
+	expectedResult: `(function => funcNameTestFromOutside)`
 });
 
 test('usage with literal named function with one parameter', defaultFormatterMacro, {
@@ -800,9 +748,7 @@ test('usage with literal named function with one parameter', customFormatterData
 		doubleQuoteString: null,
 		constructorName: `Function`,
 		functionName: 'funcNameTestFormatter',
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: false
+		isAsync: false
 	}
 });
 
@@ -858,9 +804,7 @@ test('usage with literal named function with multiple parameters and default val
 		doubleQuoteString: null,
 		constructorName: `Function`,
 		functionName: 'funcNameTestComplex',
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: false
+		isAsync: false
 	}
 });
 
@@ -870,7 +814,7 @@ test('usage with literal anonymous function', defaultFormatterMacro, {
 		const t = 44;
 		return t*t;
 	},
-	expectedResult: `(function)`
+	expectedResult: `(function => input)`
 });
 test('usage with literal anonymous function', customFormatterDataMacro, {
 	// eslint-disable-next-line func-names
@@ -878,7 +822,7 @@ test('usage with literal anonymous function', customFormatterDataMacro, {
 		const t = 48;
 		return t*t;
 	},
-	defaultFormatterExpectedResult: `(function)`,
+	defaultFormatterExpectedResult: `(function => input)`,
 	expectedData: {
 		type: 'function',
 		stringifiedValue: `function () {
@@ -890,10 +834,38 @@ test('usage with literal anonymous function', customFormatterDataMacro, {
 		simpleQuoteString: null,
 		doubleQuoteString: null,
 		constructorName: `Function`,
+		functionName: 'input',
+		isAsync: false
+	}
+});
+
+const anonymousFunctionFromOutside = () => function () {
+	const t = 44;
+	return t*t;
+}
+
+test('usage with literal anonymous function from outside', defaultFormatterMacro, {
+	// eslint-disable-next-line func-names
+	input: anonymousFunctionFromOutside(),
+	expectedResult: `(function)`
+});
+test('usage with literal anonymous function from outside', customFormatterDataMacro, {
+	// eslint-disable-next-line func-names
+	input: anonymousFunctionFromOutside(),
+	defaultFormatterExpectedResult: `(function)`,
+	expectedData: {
+		type: 'function',
+		stringifiedValue: `function () {
+	const t = 44;
+	return t * t;
+}`,
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
+		constructorName: `Function`,
 		functionName: null,
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: false
+		isAsync: false
 	}
 });
 
@@ -902,14 +874,14 @@ test('usage with literal method', defaultFormatterMacro, {
 		const t = 44;
 		return t*t;
 	},
-	expectedResult: `(function: method => input)`
+	expectedResult: `(function => input)`
 });
 test('usage with literal method', customFormatterDataMacro, {
 	input(){
 		const t = 49;
 		return t*t;
 	},
-	defaultFormatterExpectedResult: `(function: method => input)`,
+	defaultFormatterExpectedResult: `(function => input)`,
 	expectedData: {
 		type: 'function',
 		stringifiedValue: `input() {
@@ -922,9 +894,64 @@ test('usage with literal method', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: `Function`,
 		functionName: 'input',
-		isAsync: false,
-		isMethod: true,
-		isArrowFunction: false
+		isAsync: false
+	}
+});
+
+test('usage with literal computed name method', defaultFormatterMacro, {
+	['input'](){
+		const t = 44;
+		return t*t;
+	},
+	expectedResult: `(function => input)`
+});
+test('usage with literal computed name method', customFormatterDataMacro, {
+	['input'](){
+		const t = 49;
+		return t*t;
+	},
+	defaultFormatterExpectedResult: `(function => input)`,
+	expectedData: {
+		type: 'function',
+		stringifiedValue: `() {
+		const t = 49;
+		return t * t;
+	}`,
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
+		constructorName: `Function`,
+		functionName: 'input',
+		isAsync: false
+	}
+});
+
+const emptyNameMethodContainer = {
+	[' 	  '](){
+		return 'yo';
+	}
+}
+
+test('usage with empty computed name method', defaultFormatterMacro, {
+	input: emptyNameMethodContainer[' 	  '],
+	expectedResult: `(function)`
+});
+test('usage with empty computed name method', customFormatterDataMacro, {
+	['input']: emptyNameMethodContainer[' 	  '],
+	defaultFormatterExpectedResult: `(function)`,
+	expectedData: {
+		type: 'function',
+		stringifiedValue: `() {
+		return 'yo';
+	}`,
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
+		constructorName: `Function`,
+		functionName: null,
+		isAsync: false
 	}
 });
 
@@ -933,14 +960,14 @@ test('usage with literal arrow function', defaultFormatterMacro, {
 		const t = 44;
 		return t*t;
 	},
-	expectedResult: `(function: arrow)`
+	expectedResult: `(function => input)`
 });
 test('usage with literal arrow function', customFormatterDataMacro, {
 	input: () => {
 		const t = 44;
 		return t*t;
 	},
-	defaultFormatterExpectedResult: `(function: arrow)`,
+	defaultFormatterExpectedResult: `(function => input)`,
 	expectedData: {
 		type: 'function',
 		stringifiedValue: `() => {
@@ -952,10 +979,8 @@ test('usage with literal arrow function', customFormatterDataMacro, {
 		simpleQuoteString: null,
 		doubleQuoteString: null,
 		constructorName: `Function`,
-		functionName: null,
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: true
+		functionName: 'input',
+		isAsync: false
 	}
 });
 
@@ -964,14 +989,14 @@ test('usage with literal arrow function with parameters', defaultFormatterMacro,
 		const t = 44;
 		return t*t;
 	},
-	expectedResult: `(function: arrow)`
+	expectedResult: `(function => input)`
 });
 test('usage with literal arrow function with parameters', customFormatterDataMacro, {
 	input: (argOne = 43) => {
 		const t = 44;
 		return t*t;
 	},
-	defaultFormatterExpectedResult: `(function: arrow)`,
+	defaultFormatterExpectedResult: `(function => input)`,
 	expectedData: {
 		type: 'function',
 		stringifiedValue: `(argOne = 43) => {
@@ -983,10 +1008,8 @@ test('usage with literal arrow function with parameters', customFormatterDataMac
 		simpleQuoteString: null,
 		doubleQuoteString: null,
 		constructorName: `Function`,
-		functionName: null,
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: true
+		functionName: 'input',
+		isAsync: false
 	}
 });
 
@@ -995,7 +1018,7 @@ test('usage with literal arrow function with one parameter without braces', defa
 		const t = 44;
 		return t*t;
 	},
-	expectedResult: `(function: arrow)`
+	expectedResult: `(function => input)`
 });
 test.todo('usage with literal arrow function with parameters - custom formatter');
 
@@ -1004,7 +1027,7 @@ test('usage with literal arrow function with one parameter without braces nor sp
 		const t = 44;
 		return t*t;
 	},
-	expectedResult: `(function: arrow)`
+	expectedResult: `(function => input)`
 });
 test.todo('usage with literal arrow function with parameters - custom formatter');
 
@@ -1045,12 +1068,15 @@ test('usage with literal async function with parameters and default', defaultFor
 test.todo('usage with literal async function - custom formatter');
 
 test('usage with literal async anonymous function', defaultFormatterMacro, {
+	// eslint-disable-next-line func-names
 	input: async function(){
 		const t = 44;
 		await 5;
 		return t*t;
 	},
-	expectedResult: `(function: async)`
+	expectedResult: asyncSupport
+		? `(function: async => input)`
+		: `(function => input)`
 });
 test.todo('usage with literal async anonymous function - custom formatter');
 
@@ -1060,7 +1086,9 @@ test('usage with literal async arrow function', defaultFormatterMacro, {
 		await 5;
 		return t*t;
 	},
-	expectedResult: `(function: async: arrow)`
+	expectedResult: asyncSupport
+		? `(function: async => input)`
+		: `(function => input)`
 });
 test.todo('usage with literal async arrow function - custom formatter');
 
@@ -1070,24 +1098,27 @@ test('usage with literal async method function', defaultFormatterMacro, {
 		await 5;
 		return t*t;
 	},
-	expectedResult: `(function: async: method => input)`
+	expectedResult: asyncSupport
+		? `(function: async => input)`
+		: `(function => input)`
 });
 test.todo('usage with literal async method function - custom formatter');
 
 test('usage with literal async method function and computed name', defaultFormatterMacro, {
+	// eslint-disable-next-line no-useless-computed-key
 	async ['input'](){
 		const t = 44;
 		await 5;
 		return t*t;
 	},
-	expectedResult: `(function: async: method => input)`
+	expectedResult: asyncSupport
+		? `(function: async => input)`
+		: `(function => input)`
 });
 test.todo('usage with literal async method function and computed name - custom formatter');
 
 test.todo('usage with literal generator function');
 test.todo('usage with literal generator function - custom formatter');
-
-test.todo('FOR FUNCTION TYPE, ADD THE WITH AND WITHOUT PARAMETERS VARIANTS');
 
 /*- literal falsy values -*/
 
@@ -1107,9 +1138,7 @@ test('usage with literal null', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: null,
 		functionName: null,
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: false
+		isAsync: false
 	}
 });
 
@@ -1129,9 +1158,7 @@ test('usage with literal undefined', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: null,
 		functionName: null,
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: false
+		isAsync: false
 	}
 });
 
@@ -1153,9 +1180,7 @@ test('usage with instance of String', customFormatterDataMacro, {
 		doubleQuoteString: `"	a string from object with custom formatter "`,
 		constructorName: 'String',
 		functionName: null,
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: false
+		isAsync: false
 	}
 });
 
@@ -1175,9 +1200,7 @@ test('usage with instance of empty String', customFormatterDataMacro, {
 		doubleQuoteString: `""`,
 		constructorName: 'String',
 		functionName: null,
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: false
+		isAsync: false
 	}
 });
 
@@ -1197,9 +1220,7 @@ test('usage with instance of blank String', customFormatterDataMacro, {
 		doubleQuoteString: `"	  "`,
 		constructorName: 'String',
 		functionName: null,
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: false
+		isAsync: false
 	}
 });
 
@@ -1221,9 +1242,7 @@ test('usage with instance of Number', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Number',
 		functionName: null,
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: false
+		isAsync: false
 	}
 });
 
@@ -1243,9 +1262,7 @@ test('usage with instance of Number (integer)', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Number',
 		functionName: null,
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: false
+		isAsync: false
 	}
 });
 
@@ -1265,9 +1282,7 @@ test('usage with instance of Number (float)', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Number',
 		functionName: null,
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: false
+		isAsync: false
 	}
 });
 
@@ -1289,9 +1304,7 @@ test('usage with instance of true Boolean', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Boolean',
 		functionName: null,
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: false
+		isAsync: false
 	}
 });
 
@@ -1311,9 +1324,7 @@ test('usage with instance of false Boolean', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Boolean',
 		functionName: null,
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: false
+		isAsync: false
 	}
 });
 
@@ -1345,9 +1356,7 @@ test('usage with instance of empty Symbol', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Symbol',
 		functionName: null,
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: false
+		isAsync: false
 	}
 });
 
@@ -1367,9 +1376,7 @@ test('usage with instance of empty Symbol', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Symbol',
 		functionName: null,
-		isAsync: false,
-		isMethod: false,
-		isArrowFunction: false
+		isAsync: false
 	}
 });
 
