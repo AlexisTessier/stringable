@@ -23,7 +23,7 @@ function defaultFormatter({
 		(type === 'function' && functionName === null)
 	);
 
-	let typeComplement = type === 'object' && constructorName ? `: ${constructorName}` : '';
+	let typeComplement = type === 'object' && constructorName && value.constructor !== Object ? `: ${constructorName}` : '';
 
 	let _type = type;
 	if (value instanceof Number) {

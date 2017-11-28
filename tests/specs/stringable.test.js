@@ -1520,10 +1520,82 @@ test('usage with literal Array containing literal nested Array', defaultFormatte
 });
 test.todo('usage with literal Array containing literal strings - custom formatter');
 
+test.skip('usage with literal Array containing literal nested object', defaultFormatterMacro, {
+	input: [2, [3, 4], 'string'],
+	expectedResult: [
+		`(object: Array => [`,
+		`\n\t(number: integer => 2),`,
+		`\n\t(object: Array => [`,
+		`\n\t\t(number: integer => 3),`,
+		`\n\t\t(number: integer => 4)`,
+		`\n\t]),`,
+		`\n\t(string => 'string')`,
+		`\n])`
+	].join('')
+});
+test.todo('usage with literal Array containing literal strings - custom formatter');
+
 /*- literal object -*/
 
-test.todo('usage with literal Object');
-test.todo('usage with literal Object - custom formatter');
+test('usage with literal empty Object', defaultFormatterMacro, {
+	input: {},
+	expectedResult: `(object => {})`
+});
+test.todo('usage with literal empty Object - custom formatter');
+
+test.skip('usage with literal Object containing string as value', defaultFormatterMacro, {
+	input: {},
+	expectedResult: `(object => {})`
+});
+test.todo('usage with literal Object containing string as value - custom formatter');
+
+test.skip('usage with literal Object containing strings as value', defaultFormatterMacro, {
+	input: {},
+	expectedResult: `(object => {})`
+});
+test.todo('usage with literal Object containing strings as value - custom formatter');
+
+test.skip('usage with literal Object containing numbers as key', defaultFormatterMacro, {
+	input: {},
+	expectedResult: `(object => {})`
+});
+test.todo('usage with literal Object containing numbers as key - custom formatter');
+
+test.skip('usage with literal Object containing computed key', defaultFormatterMacro, {
+	input: {},
+	expectedResult: `(object => {})`
+});
+test.todo('usage with literal Object containing computed key - custom formatter');
+
+test.skip('usage with literal Object containing Symbol as key', defaultFormatterMacro, {
+	input: {},
+	expectedResult: `(object => {})`
+});
+test.todo('usage with literal Object containing Symbol as key - custom formatter');
+
+test.skip('usage with literal Object containing get properties', defaultFormatterMacro, {
+	input: {},
+	expectedResult: `(object => {})`
+});
+test.todo('usage with literal Object containing get properties - custom formatter');
+
+test.skip('usage with literal Object containing set properties', defaultFormatterMacro, {
+	input: {},
+	expectedResult: `(object => {})`
+});
+test.todo('usage with literal Object containing set properties - custom formatter');
+
+test.skip('usage with literal Object containing nested object', defaultFormatterMacro, {
+	input: {},
+	expectedResult: `(object => {})`
+});
+test.todo('usage with literal Object containing nested object - custom formatter');
+
+test.skip('usage with literal Object containing nested arrays', defaultFormatterMacro, {
+	input: {},
+	expectedResult: `(object => {})`
+});
+test.todo('usage with literal Object containing nested arrays - custom formatter');
 
 /*- Object array -*/
 
