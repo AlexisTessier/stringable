@@ -1,11 +1,19 @@
 'use strict';
 
-const escapeQuotes = require('escape-quotes');
+const _global = require("global");
 
+const escapeQuotes = require('escape-quotes');
 const msg = require('@alexistessier/msg');
 
-const nl = `\n`
-const tab = `\t`;
+const nl = `\n`;
+const comma = ',';
+const tab = `  `;
+
+const _NodeList = _global.NodeList || null;
+
+function noFormatter(data) {
+	return data;
+}
 
 function defaultFormatter({
 	value,
@@ -16,10 +24,13 @@ function defaultFormatter({
 	simpleQuoteString,
 	doubleQuoteString,
 	constructorName,
+	keys,
 	functionName,
 	isAsync,
 	isGenerator
-}) {
+}, deepness = 0) {
+	const rootTab = repeat(tab, deepness);
+
 	const displayValue = !(
 		value === undefined
 		||
@@ -47,8 +58,77 @@ function defaultFormatter({
 			break;
 	}
 
-	const displayedValue = displayValue ? ` => ${functionName || simpleQuoteString || stringifiedValue}` : '';
-	return `(${type}${typeComplement}${displayedValue})`;
+	// if (
+	// 	  stringifiedValue === null &&
+	// 	  value instanceof Object &&
+	// 	!(value instanceof Boolean) &&
+	// 	!(value instanceof Number) &&
+	// 	!(value instanceof String) &&
+	// 	!(value instanceof Function) &&
+	// 	!(value instanceof RegExp)
+	// ) {
+	// 	
+	// 	const nestedTab = `${rootTab}${tab}`;
+
+	// 	if (value instanceof Array) {
+	// 		const manyElements = value.length > 1;
+	// 		
+	// 	}
+	// 	else{
+	// 		const keys = Object.keys(value);
+	// 		const manyElements = keys.length > 1;
+	// 		const startSpace = manyElements ? `${nl}${nestedTab}` : repeat(' ', keys.length);
+	// 		const endSpace = manyElements ? nl : startSpace;
+
+	// 		for(const key in value){
+
+	// 		}
+	// 		stringifiedValue = `{${startSpace}${keys
+	// 			.map(el => ({
+	// 				key: stringable(el, formatter, deepness+1),
+	// 				value: stringable(value[el], formatter, deepness+1)
+	// 			}))
+	// 			.map(el => `[${el.key}]: ${el.value}`)
+	// 			.join(`,${nl}${nestedTab}`)
+	// 		}${endSpace}${rootTab}}`;
+	// 	}
+	// }
+
+	// if (value instanceof Array) {
+	// 	const rootTab = repeat(tab, deepness);
+	// 	const nestedTab = `${rootTab}${tab}`;
+	// 	const manyElements = value.length > 1;
+	// 	const startSpace = manyElements ? `${nl}${nestedTab}` : repeat(' ', value.length);
+	// 	const endSpace = manyElements ? nl : startSpace;
+
+	// 	stringifiedValue = `[${startSpace}${value
+	// 		.map(el => stringable(el, formatter, deepness+1))
+	// 		.join(`,${nl}${nestedTab}`)
+	// 	}${endSpace}${rootTab}]`;
+	// }
+
+	let nestedDiplay = null;
+	if (keys) {
+		const manyElements = keys.length > 1;
+		const bracesInnerSpace = manyElements ? nl : repeat(' ', keys.length);
+		const bracesBeforeClose = bracesInnerSpace + (manyElements ? rootTab : '');
+
+		function renderNestedValue(val) {
+			return `[${bracesInnerSpace}${keys
+				.map(key => val[key])
+				.map(el => stringable(el, noFormatter))
+				.map(data => defaultFormatter(data, manyElements ? deepness+1 : 0))
+				.join(comma+nl)
+			}${bracesBeforeClose}]`;
+		}
+
+		if (value instanceof Array || (_NodeList && value instanceof _NodeList)) {
+			nestedDiplay = renderNestedValue(value);
+		}
+	}
+
+	const displayedValue = displayValue ? ` => ${nestedDiplay || functionName || simpleQuoteString || stringifiedValue}` : '';
+	return `${rootTab}(${type}${typeComplement}${displayedValue})`;
 }
 
 function repeat(chars, count) {
@@ -59,7 +139,7 @@ function repeat(chars, count) {
 	return repeated;
 }
 
-function stringable(value, formatter = defaultFormatter, deepness = 0) {
+function stringable(value, formatter = defaultFormatter) {
 	if (arguments.length === 0) {
 		throw new TypeError(msg(
 			`You are trying to use the stringable function without any arguments.`,
@@ -67,10 +147,10 @@ function stringable(value, formatter = defaultFormatter, deepness = 0) {
 		));
 	}
 
-	if (arguments.length > 3) {
+	if (arguments.length > 2) {
 		throw new TypeError(msg(
-			`You are trying to use the stringable function with more than 3 arguments.`,
-			`The stringable function only accept 3 arguments. A value to format, a formatter function and a deepness parameter.`
+			`You are trying to use the stringable function with more than 2 arguments.`,
+			`The stringable function only accept 2 arguments. A value to format and a formatter function.`
 		));
 	}
 
@@ -127,50 +207,20 @@ function stringable(value, formatter = defaultFormatter, deepness = 0) {
 		constructorName = value.constructor.name;
 	}
 
+	if (stringifiedValue === null){
+		stringifiedValue = `${value}`;
+	}
+
+	let keys = null;
 	if (
-		  stringifiedValue === null &&
 		  value instanceof Object &&
 		!(value instanceof Boolean) &&
 		!(value instanceof Number) &&
 		!(value instanceof String) &&
-		!(value instanceof Function) &&
-		!(value instanceof RegExp)
+		!(value instanceof RegExp) &&
+		!(value instanceof Function)
 	) {
-		const rootTab = repeat(tab, deepness);
-		const nestedTab = `${rootTab}${tab}`;
-
-		if (value instanceof Array) {
-			const manyElements = value.length > 1;
-			const startSpace = manyElements ? `${nl}${nestedTab}` : repeat(' ', value.length);
-			const endSpace = manyElements ? nl : startSpace;
-
-			stringifiedValue = `[${startSpace}${value
-				.map(el => stringable(el, formatter, deepness+1))
-				.join(`,${nl}${nestedTab}`)
-			}${endSpace}${rootTab}]`;
-		}
-		else{
-			const keys = Object.keys(value);
-			const manyElements = keys.length > 1;
-			const startSpace = manyElements ? `${nl}${nestedTab}` : repeat(' ', keys.length);
-			const endSpace = manyElements ? nl : startSpace;
-
-			for(const key in value){
-
-			}
-			stringifiedValue = `{${startSpace}${keys
-				.map(el => ({
-					key: stringable(el, formatter, deepness+1),
-					value: stringable(value[el], formatter, deepness+1)
-				}))
-				.map(el => `[${el.key}]: ${el.value}`)
-				.join(`,${nl}${nestedTab}`)
-			}${endSpace}${rootTab}}`;
-		}
-	}
-
-	if (stringifiedValue === null){
-		stringifiedValue = `${value}`;
+		keys = Object.keys(value);
 	}
 
 	return formatter({
@@ -183,6 +233,7 @@ function stringable(value, formatter = defaultFormatter, deepness = 0) {
 		doubleQuoteString,
 		defaultFormatter,
 		constructorName,
+		keys,
 		functionName,
 		isAsync,
 		isGenerator
