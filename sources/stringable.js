@@ -14,7 +14,8 @@ function defaultFormatter({
 	doubleQuoteString,
 	constructorName,
 	functionName,
-	isAsync
+	isAsync,
+	isGenerator
 }) {
 	const displayValue = !(
 		value === undefined
@@ -28,7 +29,7 @@ function defaultFormatter({
 	if (value instanceof Number) {
 		_type = 'number';
 	}
-
+ 
 	switch(_type){
 		case 'number':
 			typeComplement += isInteger ? ': integer' : (isFloat ? ': float' : '');
@@ -36,6 +37,7 @@ function defaultFormatter({
 
 		case 'function':
 			typeComplement += isAsync ? ': async' : '';
+			typeComplement += isGenerator ? ': generator' : '';
 			break;
 
 		default:
@@ -46,7 +48,15 @@ function defaultFormatter({
 	return `(${type}${typeComplement}${displayedValue})`;
 }
 
-function stringable(value, formatter = defaultFormatter) {
+function repeat(char, count) {
+	let repeated = '';
+	for(let i = 0; i < count;i++){
+		repeated+=char;
+	}
+	return repeated;
+}
+
+function stringable(value, formatter = defaultFormatter, deepness = 0) {
 	if (arguments.length === 0) {
 		throw new TypeError(msg(
 			`You are trying to use the stringable function without any arguments.`,
@@ -54,10 +64,10 @@ function stringable(value, formatter = defaultFormatter) {
 		));
 	}
 
-	if (arguments.length > 2) {
+	if (arguments.length > 3) {
 		throw new TypeError(msg(
-			`You are trying to use the stringable function with more than 2 arguments.`,
-			`The stringable function only accept 2 arguments. A value to format and a formatter function.`
+			`You are trying to use the stringable function with more than 3 arguments.`,
+			`The stringable function only accept 3 arguments. A value to format, a formatter function and a deepness parameter.`
 		));
 	}
 
@@ -81,11 +91,13 @@ function stringable(value, formatter = defaultFormatter) {
 
 	let functionName = null;
 	let isAsync = false;
+	let isGenerator = false;
 	if (type === 'function') {
 		functionName = value.name;
 		stringifiedValue = `${value}`;
 
 		isAsync = stringifiedValue.indexOf(`async`) === 0;
+		isGenerator = stringifiedValue.indexOf(`function*`) === 0;
 
 		if (functionName.trim().length === 0) {
 			functionName = null;
@@ -112,6 +124,14 @@ function stringable(value, formatter = defaultFormatter) {
 		constructorName = value.constructor.name;
 	}
 
+	if (value instanceof Array) {
+		const tab = repeat('\t', deepness+1);
+		stringifiedValue = `[${value.length > 1 ? `\n${tab}` : ''}${value
+			.map(el => stringable(el, formatter, deepness+1))
+			.join(`,\n${tab}`)
+		}${value.length > 1 ? `\n` : ''}${repeat('\t', deepness)}]`;
+	}
+
 	if (stringifiedValue === null){
 		stringifiedValue = `${value}`;
 	}
@@ -127,7 +147,8 @@ function stringable(value, formatter = defaultFormatter) {
 		defaultFormatter,
 		constructorName,
 		functionName,
-		isAsync
+		isAsync,
+		isGenerator
 	});
 }
 

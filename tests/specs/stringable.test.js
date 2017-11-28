@@ -50,7 +50,8 @@ function customFormatterDataMacro(t, {input, defaultFormatterExpectedResult, exp
 		'doubleQuoteString',
 		'constructorName',
 		'functionName',
-		'isAsync'
+		'isAsync',
+		'isGenerator'
 	];
 
 	const testDataKeys = customFormatterDataKeys.filter(key => ![
@@ -81,6 +82,7 @@ function customFormatterDataMacro(t, {input, defaultFormatterExpectedResult, exp
 		t.is(data.constructorName, expectedData.constructorName);
 		t.is(data.functionName, expectedData.functionName);
 		t.is(data.isAsync, expectedData.isAsync);
+		t.is(data.isGenerator, expectedData.isGenerator);
 
 		return randomResult;
 	});
@@ -113,7 +115,8 @@ test('usage with literal string', customFormatterDataMacro, {
 		doubleQuoteString: `"42 Literal string value 42"`,
 		constructorName: 'String',
 		functionName: null,
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -134,7 +137,8 @@ test('usage with literal empty string', customFormatterDataMacro, {
 		doubleQuoteString: `""`,
 		constructorName: 'String',
 		functionName: null,
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -155,7 +159,8 @@ test('usage with literal blank string', customFormatterDataMacro, {
 		doubleQuoteString: `" 	  "`,
 		constructorName: 'String',
 		functionName: null,
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -176,7 +181,8 @@ test('usage with literal string containing simple quotes', customFormatterDataMa
 		doubleQuoteString: `"42 'quoted string' value"`,
 		constructorName: 'String',
 		functionName: null,
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -197,7 +203,8 @@ test('usage with literal string containing double quotes', customFormatterDataMa
 		doubleQuoteString: `"42 \\"quoted string\\" value"`,
 		constructorName: 'String',
 		functionName: null,
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -219,7 +226,8 @@ test('usage with literal Integer', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Number',
 		functionName: null,
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -239,7 +247,8 @@ test('usage with literal negative Integer', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Number',
 		functionName: null,
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -259,7 +268,8 @@ test('usage with literal positive Integer', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Number',
 		functionName: null,
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -280,7 +290,8 @@ test('usage with literal Float without decimal', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Number',
 		functionName: null,
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -301,7 +312,8 @@ test('usage with literal Float with only zero decimal', customFormatterDataMacro
 		doubleQuoteString: null,
 		constructorName: 'Number',
 		functionName: null,
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -321,7 +333,8 @@ test('usage with literal Float', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Number',
 		functionName: null,
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -341,7 +354,8 @@ test('usage with literal negative Float', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Number',
 		functionName: null,
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -361,7 +375,8 @@ test('usage with literal positive Float', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Number',
 		functionName: null,
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -382,7 +397,8 @@ test('usage with literal Float without unit', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Number',
 		functionName: null,
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -403,7 +419,8 @@ test('usage with literal Float without unit and zero as decimal', customFormatte
 		doubleQuoteString: null,
 		constructorName: 'Number',
 		functionName: null,
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -424,7 +441,8 @@ test('usage with literal Float without unit and lot of zero as decimal', customF
 		doubleQuoteString: null,
 		constructorName: 'Number',
 		functionName: null,
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -445,7 +463,8 @@ test('usage with literal Float with unit and lot of zero as unit and decimal', c
 		doubleQuoteString: null,
 		constructorName: 'Number',
 		functionName: null,
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -466,7 +485,8 @@ test('usage with literal Float with lot of decimal', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Number',
 		functionName: null,
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -487,7 +507,8 @@ test('usage with literal NaN', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Number',
 		functionName: null,
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -508,7 +529,8 @@ test('usage with computed NaN', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Number',
 		functionName: null,
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -529,7 +551,8 @@ test('usage with literal Infinity', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Number',
 		functionName: null,
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -550,7 +573,8 @@ test('usage with computed Infinity', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Number',
 		functionName: null,
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -571,7 +595,8 @@ test('usage with literal negative Infinity', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Number',
 		functionName: null,
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -592,7 +617,8 @@ test('usage with computed negative Infinity', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Number',
 		functionName: null,
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -615,7 +641,8 @@ test('usage with literal boolean true', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Boolean',
 		functionName: null,
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -636,7 +663,8 @@ test('usage with literal boolean true', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Boolean',
 		functionName: null,
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -658,7 +686,8 @@ test('usage with literal empty RegExp', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: `RegExp`,
 		functionName: null,
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -678,7 +707,8 @@ test('usage with literal not empty RegExp', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: `RegExp`,
 		functionName: null,
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -709,7 +739,8 @@ test('usage with literal named function without parameters', customFormatterData
 		doubleQuoteString: null,
 		constructorName: `Function`,
 		functionName: 'funcNameTestFormatter',
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -748,7 +779,8 @@ test('usage with literal named function with one parameter', customFormatterData
 		doubleQuoteString: null,
 		constructorName: `Function`,
 		functionName: 'funcNameTestFormatter',
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -804,7 +836,8 @@ test('usage with literal named function with multiple parameters and default val
 		doubleQuoteString: null,
 		constructorName: `Function`,
 		functionName: 'funcNameTestComplex',
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -835,7 +868,8 @@ test('usage with literal anonymous function', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: `Function`,
 		functionName: 'input',
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -866,7 +900,8 @@ test('usage with literal anonymous function from outside', customFormatterDataMa
 		doubleQuoteString: null,
 		constructorName: `Function`,
 		functionName: null,
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -895,7 +930,8 @@ test('usage with literal method', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: `Function`,
 		functionName: 'input',
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -926,7 +962,8 @@ test('usage with literal computed name method', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: `Function`,
 		functionName: 'input',
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -956,7 +993,8 @@ test('usage with empty computed name method', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: `Function`,
 		functionName: null,
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -985,7 +1023,8 @@ test('usage with literal arrow function', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: `Function`,
 		functionName: 'input',
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -1014,7 +1053,8 @@ test('usage with literal arrow function with parameters', customFormatterDataMac
 		doubleQuoteString: null,
 		constructorName: `Function`,
 		functionName: 'input',
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -1122,8 +1162,31 @@ test('usage with literal async method function and computed name', defaultFormat
 });
 test.todo('usage with literal async method function and computed name - custom formatter');
 
-test.todo('usage with literal generator function');
+test('usage with literal generator function', defaultFormatterMacro, {
+	input: function* aGenerator(){
+		return 'hello';
+	},
+	expectedResult: '(function: generator => aGenerator)'
+});
 test.todo('usage with literal generator function - custom formatter');
+
+test('usage with literal generator anonymous function (object key as name)', defaultFormatterMacro, {
+	input: function* (){
+		return 'hello';
+	},
+	expectedResult: '(function: generator => input)'
+});
+test.todo('usage with literal generator anonymous function (object key as name) - custom formatter');
+
+
+const anonymousGenerator = () => function* (){
+	return 'hello';
+}
+test('usage with literal generator anonymous function', defaultFormatterMacro, {
+	input: anonymousGenerator(),
+	expectedResult: '(function: generator)'
+});
+test.todo('usage with literal generator anonymous function - custom formatter');
 
 /*- literal falsy values -*/
 
@@ -1143,7 +1206,8 @@ test('usage with literal null', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: null,
 		functionName: null,
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -1163,7 +1227,8 @@ test('usage with literal undefined', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: null,
 		functionName: null,
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -1185,7 +1250,8 @@ test('usage with instance of String', customFormatterDataMacro, {
 		doubleQuoteString: `"	a string from object with custom formatter "`,
 		constructorName: 'String',
 		functionName: null,
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -1205,7 +1271,8 @@ test('usage with instance of empty String', customFormatterDataMacro, {
 		doubleQuoteString: `""`,
 		constructorName: 'String',
 		functionName: null,
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -1225,7 +1292,8 @@ test('usage with instance of blank String', customFormatterDataMacro, {
 		doubleQuoteString: `"	  "`,
 		constructorName: 'String',
 		functionName: null,
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -1247,7 +1315,8 @@ test('usage with instance of Number', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Number',
 		functionName: null,
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -1267,7 +1336,8 @@ test('usage with instance of Number (integer)', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Number',
 		functionName: null,
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -1287,7 +1357,8 @@ test('usage with instance of Number (float)', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Number',
 		functionName: null,
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -1309,7 +1380,8 @@ test('usage with instance of true Boolean', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Boolean',
 		functionName: null,
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -1329,18 +1401,25 @@ test('usage with instance of false Boolean', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Boolean',
 		functionName: null,
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
 /*- Object RegExp -*/
 
-test.todo('usage with instance of RegExp');
+test('usage with instance of RegExp', defaultFormatterMacro, {
+	input: new RegExp('$^'),
+	expectedResult: `(object: RegExp => /$^/)`
+});
 test.todo('usage with instance of RegExp - custom formatter');
 
 /*- Object function -*/
 
-test.todo('usage with instance of Function');
+test('usage with instance of Function', defaultFormatterMacro, {
+	input: new Function('argOne', 'return argOne'),
+	expectedResult: `(function => anonymous)`
+});
 test.todo('usage with instance of Function - custom formatter');
 
 /*- Object symbol -*/
@@ -1361,7 +1440,8 @@ test('usage with instance of empty Symbol', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Symbol',
 		functionName: null,
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
@@ -1381,20 +1461,30 @@ test('usage with instance of empty Symbol', customFormatterDataMacro, {
 		doubleQuoteString: null,
 		constructorName: 'Symbol',
 		functionName: null,
-		isAsync: false
+		isAsync: false,
+		isGenerator: false
 	}
 });
 
 
 /*- literal array -*/
 
-test.todo('usage with literal empty Array');
+test('usage with literal empty Array', defaultFormatterMacro, {
+	input: [],
+	expectedResult: `(object: Array => [])`
+});
 test.todo('usage with literal empty Array - custom formatter');
 
-test.todo('usage with literal Array containing literal string');
+test('usage with literal Array containing literal string', defaultFormatterMacro, {
+	input: ['a string'],
+	expectedResult: `(object: Array => [(string => 'a string')])`
+});
 test.todo('usage with literal Array containing literal string - custom formatter');
 
-test.todo('usage with literal Array containing literal strings');
+test('usage with literal Array containing literal strings', defaultFormatterMacro, {
+	input: ['a string test', 'an other string'],
+	expectedResult: `(object: Array => [\n\t(string => 'a string test'),\n\t(string => 'an other string')\n])`
+});
 test.todo('usage with literal Array containing literal strings - custom formatter');
 
 test.todo('usage with literal Array containing literal number');
@@ -1413,6 +1503,21 @@ test.todo('LIST ALL ARRAY POSSIBLE CONTENT');
 
 test.todo('usage with literal Array containing various type of content');
 test.todo('usage with literal Array containing various type of content- custom formatter');
+
+test('usage with literal Array containing literal nested Array', defaultFormatterMacro, {
+	input: [2, [3, 4], 'string'],
+	expectedResult: [
+		`(object: Array => [`,
+		`\n\t(number: integer => 2),`,
+		`\n\t(object: Array => [`,
+		`\n\t\t(number: integer => 3),`,
+		`\n\t\t(number: integer => 4)`,
+		`\n\t]),`,
+		`\n\t(string => 'string')`,
+		`\n])`
+	].join('')
+});
+test.todo('usage with literal Array containing literal strings - custom formatter');
 
 /*- literal object -*/
 
@@ -1452,13 +1557,13 @@ test('usage with unused parameters - throws error', t => {
 	const stringable = requireFromIndex('sources/stringable');
 
 	const tooManyParametersError = t.throws(() => {
-		stringable('value', ()=>{return;}, 'unexpected value');
+		stringable('value', ()=>{return;}, 0, 'unexpected value');
 	});
 
 	t.true(tooManyParametersError instanceof TypeError);
 	t.is(tooManyParametersError.message, msg(
-		`You are trying to use the stringable function with more than 2 arguments.`,
-		`The stringable function only accept 2 arguments. A value to format and a formatter function.`
+		`You are trying to use the stringable function with more than 3 arguments.`,
+		`The stringable function only accept 3 arguments. A value to format, a formatter function and a deepness parameter.`
 	));
 });
 
