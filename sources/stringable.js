@@ -29,7 +29,7 @@ function defaultFormatter({
 	if (value instanceof Number) {
 		_type = 'number';
 	}
- 
+
 	switch(_type){
 		case 'number':
 			typeComplement += isInteger ? ': integer' : (isFloat ? ': float' : '');

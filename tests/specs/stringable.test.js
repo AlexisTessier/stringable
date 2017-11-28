@@ -1171,6 +1171,7 @@ test('usage with literal generator function', defaultFormatterMacro, {
 test.todo('usage with literal generator function - custom formatter');
 
 test('usage with literal generator anonymous function (object key as name)', defaultFormatterMacro, {
+	// eslint-disable-next-line func-names
 	input: function* (){
 		return 'hello';
 	},
@@ -1178,7 +1179,7 @@ test('usage with literal generator anonymous function (object key as name)', def
 });
 test.todo('usage with literal generator anonymous function (object key as name) - custom formatter');
 
-
+// eslint-disable-next-line func-names
 const anonymousGenerator = () => function* (){
 	return 'hello';
 }
