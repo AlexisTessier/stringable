@@ -1478,7 +1478,7 @@ test.todo('usage with literal empty Array - custom formatter');
 
 test('usage with literal Array containing literal string', defaultFormatterMacro, {
 	input: ['a string'],
-	expectedResult: `(object: Array => [(string => 'a string')])`
+	expectedResult: `(object: Array => [ (string => 'a string') ])`
 });
 test.todo('usage with literal Array containing literal string - custom formatter');
 
@@ -1543,9 +1543,9 @@ test('usage with literal empty Object', defaultFormatterMacro, {
 });
 test.todo('usage with literal empty Object - custom formatter');
 
-test.skip('usage with literal Object containing string as value', defaultFormatterMacro, {
-	input: {},
-	expectedResult: `(object => {})`
+test('usage with literal Object containing string as value', defaultFormatterMacro, {
+	input: {keyName: 'key value string'},
+	expectedResult: `(object => { [(string => 'keyName')]: (string => 'key value string') })`
 });
 test.todo('usage with literal Object containing string as value - custom formatter');
 

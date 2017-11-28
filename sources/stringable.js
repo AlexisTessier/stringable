@@ -4,6 +4,9 @@ const escapeQuotes = require('escape-quotes');
 
 const msg = require('@alexistessier/msg');
 
+const nl = `\n`
+const tab = `\t`;
+
 function defaultFormatter({
 	value,
 	type,
@@ -48,10 +51,10 @@ function defaultFormatter({
 	return `(${type}${typeComplement}${displayedValue})`;
 }
 
-function repeat(char, count) {
+function repeat(chars, count) {
 	let repeated = '';
 	for(let i = 0; i < count;i++){
-		repeated+=char;
+		repeated+=chars;
 	}
 	return repeated;
 }
@@ -124,12 +127,46 @@ function stringable(value, formatter = defaultFormatter, deepness = 0) {
 		constructorName = value.constructor.name;
 	}
 
-	if (value instanceof Array) {
-		const tab = repeat('\t', deepness+1);
-		stringifiedValue = `[${value.length > 1 ? `\n${tab}` : ''}${value
-			.map(el => stringable(el, formatter, deepness+1))
-			.join(`,\n${tab}`)
-		}${value.length > 1 ? `\n` : ''}${repeat('\t', deepness)}]`;
+	if (
+		  stringifiedValue === null &&
+		  value instanceof Object &&
+		!(value instanceof Boolean) &&
+		!(value instanceof Number) &&
+		!(value instanceof String) &&
+		!(value instanceof Function) &&
+		!(value instanceof RegExp)
+	) {
+		const rootTab = repeat(tab, deepness);
+		const nestedTab = `${rootTab}${tab}`;
+
+		if (value instanceof Array) {
+			const manyElements = value.length > 1;
+			const startSpace = manyElements ? `${nl}${nestedTab}` : repeat(' ', value.length);
+			const endSpace = manyElements ? nl : startSpace;
+
+			stringifiedValue = `[${startSpace}${value
+				.map(el => stringable(el, formatter, deepness+1))
+				.join(`,${nl}${nestedTab}`)
+			}${endSpace}${rootTab}]`;
+		}
+		else{
+			const keys = Object.keys(value);
+			const manyElements = keys.length > 1;
+			const startSpace = manyElements ? `${nl}${nestedTab}` : repeat(' ', keys.length);
+			const endSpace = manyElements ? nl : startSpace;
+
+			for(const key in value){
+
+			}
+			stringifiedValue = `{${startSpace}${keys
+				.map(el => ({
+					key: stringable(el, formatter, deepness+1),
+					value: stringable(value[el], formatter, deepness+1)
+				}))
+				.map(el => `[${el.key}]: ${el.value}`)
+				.join(`,${nl}${nestedTab}`)
+			}${endSpace}${rootTab}}`;
+		}
 	}
 
 	if (stringifiedValue === null){
