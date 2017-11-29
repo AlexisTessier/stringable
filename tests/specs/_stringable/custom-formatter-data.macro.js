@@ -4,7 +4,7 @@ const assert = require('assert');
 
 const randomstring = require(`randomstring`);
 
-const requireFromIndex = require('../utils/require-from-index');
+const requireFromIndex = require('../../utils/require-from-index');
 
 function customFormatterDataMacro(t, {input, defaultFormatterExpectedResult, expectedData}) {
 	assert(typeof defaultFormatterExpectedResult === 'string');

@@ -6,7 +6,7 @@ const test = require('ava');
 
 const { JSDOM } = require("jsdom");
 
-const requireFromIndex = require('../utils/require-from-index');
+const requireFromIndex = require('../../utils/require-from-index');
 
 const defaultFormatterMacro = require('./default-formatter.macro');
 const customFormatterDataMacro = require('./custom-formatter-data.macro');
@@ -20,6 +20,7 @@ const testDom = new JSDOM(`<!DOCTYPE html>
 		<div class="test"></div>
 		<a class="test"></a>
 		<span></span>
+		<h6></h6>
 	</body>
 </html>`);
 
@@ -27,7 +28,11 @@ global.window = testDom.window;
 
 /*---------------------------*/
 
-test.todo('Usage with a Node without attribute')
+test('Usage with a Node without attribute', defaultFormatterMacro, {
+	input: testDom.window.document.querySelector('h6'),
+	expectedResult: '(object: HTMLHeadingElement => <h6>)'
+});
+
 test.todo('Usage with a Node with one attribute')
 test.todo('Usage with a Node with attributes')
 

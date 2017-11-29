@@ -16,6 +16,18 @@ function noFormatter(data) {
 	return data;
 }
 
+function getterOrSetterMarker(obj, prop, val) {
+	const descriptor = Object.getOwnPropertyDescriptor(obj, prop);
+	if (typeof descriptor.get === 'function') {
+		return `getter${val}`;
+	}
+
+	if (typeof descriptor.set === 'function') {
+		return 'setter';
+	}
+	return val;
+}
+
 function defaultFormatter({
 	value,
 	type,
@@ -81,9 +93,9 @@ function defaultFormatter({
 			return showKeys
 				? `${bracesInnerSpace}${keys
 					.map(key => ({k: key, v: val[key]}))
-					.map(el => ({k: stringable(el.k, noFormatter), v: stringable(el.v, noFormatter)}))
-					.map(data => ({k: defaultFormatter(data.k, nestedParents, manyElements), v: defaultFormatter(data.v, nestedParents, false)}))
-					.map(f => `${f.k.replace('(','[').replace(/\)$/,']')}: ${f.v}`)
+					.map(el => ({key: el.k, k: stringable(el.k, noFormatter), v: stringable(el.v, noFormatter)}))
+					.map(data => ({key: data.key, k: defaultFormatter(data.k, nestedParents, manyElements), v: defaultFormatter(data.v, nestedParents, false)}))
+					.map(f => `${f.k.replace('(','[').replace(/\)$/,']')}: ${getterOrSetterMarker(value, f.key, f.v)}`)
 					.join(comma+nl)
 				}${bracesBeforeClose}`
 				: `${bracesInnerSpace}${keys
@@ -199,6 +211,9 @@ function stringable(value, formatter = defaultFormatter) {
 		!(value instanceof Function)
 	) {
 		keys = Object.keys(value);
+		if (!_NodeList || !(value instanceof _NodeList)) {
+			keys.push(...Object.getOwnPropertySymbols(value))
+		}
 	}
 
 	return formatter({

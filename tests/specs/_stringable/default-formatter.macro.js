@@ -2,7 +2,7 @@
 
 const assert = require('assert');
 
-const requireFromIndex = require('../utils/require-from-index');
+const requireFromIndex = require('../../utils/require-from-index');
 
 function defaultFormatterMacro(t, {input, expectedResult}) {
 	assert(typeof expectedResult === 'string');
