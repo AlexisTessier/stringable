@@ -1,14 +1,13 @@
 'use strict';
 
-const assert = require('assert');
-
 const test = require('ava');
-
-const randomstring = require(`randomstring`);
 
 const msg = require('@alexistessier/msg');
 
 const requireFromIndex = require('../utils/require-from-index');
+
+const defaultFormatterMacro = require('./default-formatter.macro');
+const customFormatterDataMacro = require('./custom-formatter-data.macro');
 
 const asyncSupport = process.version.indexOf('v8') === 0;
 
@@ -19,84 +18,6 @@ test('Type and API', t => {
 	t.is(stringableFromIndex, stringable);
 	t.is(typeof stringable, 'function');
 });
-
-function defaultFormatterMacro(t, {input, expectedResult}) {
-	assert(typeof expectedResult === 'string');
-
-	const stringable = requireFromIndex('sources/stringable');
-
-	const result = stringable(input);
-
-	t.is(typeof result, 'string');
-	t.is(result, expectedResult);
-}
-
-defaultFormatterMacro.title = providedTitle => providedTitle;
-
-function customFormatterDataMacro(t, {input, defaultFormatterExpectedResult, expectedData}) {
-	assert(typeof defaultFormatterExpectedResult === 'string');
-	assert(typeof expectedData === 'object');
-
-	const stringable = requireFromIndex('sources/stringable');
-
-	const customFormatterDataKeys = [
-		'defaultFormatter',
-		'value',
-		'type',
-		'stringifiedValue',
-		'isInteger',
-		'isFloat',
-		'simpleQuoteString',
-		'doubleQuoteString',
-		'constructorName',
-		'keys',
-		'functionName',
-		'isAsync',
-		'isGenerator'
-	];
-
-	const testDataKeys = customFormatterDataKeys.filter(key => ![
-		'defaultFormatter', 'value'
-	].includes(key));
-
-	t.plan(7+testDataKeys.length);
-
-	t.deepEqual(Object.keys(expectedData), testDataKeys);
-
-	const randomResult = randomstring.generate();
-
-	const result = stringable(input, data => {
-		t.is(typeof data, 'object');
-		t.deepEqual(Object.keys(data).sort(), customFormatterDataKeys.sort());
-
-		t.is(typeof data.defaultFormatter, 'function');
-		t.is(data.defaultFormatter(data), defaultFormatterExpectedResult);
-
-		t.is(data.value, input);
-
-		t.is(data.type, expectedData.type);
-		t.is(data.stringifiedValue, expectedData.stringifiedValue);
-		t.is(data.isInteger, expectedData.isInteger);
-		t.is(data.isFloat, expectedData.isFloat);
-		t.is(data.simpleQuoteString, expectedData.simpleQuoteString);
-		t.is(data.doubleQuoteString, expectedData.doubleQuoteString);
-		t.is(data.constructorName, expectedData.constructorName);
-		t.deepEqual(data.keys, expectedData.keys);
-		t.is(data.functionName, expectedData.functionName);
-		t.is(data.isAsync, expectedData.isAsync);
-		t.is(data.isGenerator, expectedData.isGenerator);
-
-		return randomResult;
-	});
-
-	t.is(result, randomResult);
-}
-
-customFormatterDataMacro.title = providedTitle => (
-	`${providedTitle} - custom formatter`
-);
-
-/*-------------------*/
 
 /*- literal string -*/
 
@@ -1514,8 +1435,8 @@ test('usage with instance of Function', customFormatterDataMacro, {
 	defaultFormatterExpectedResult: `(function => anonymous)`,
 	expectedData: {
 		type: 'function',
-		stringifiedValue: `function anonymous(argOne
-/**/) {
+		// eslint-disable-next-line no-useless-escape
+		stringifiedValue: `function anonymous(argOne\n/*${asyncSupport ? '\`\`' : ''}*/) {
 return argOne
 }`,
 		isInteger: false,
@@ -1644,23 +1565,6 @@ test('usage with literal Array containing literal strings', customFormatterDataM
 		isGenerator: false
 	}
 });
-
-// test.todo('usage with literal Array containing literal number');
-// test.todo('usage with literal Array containing literal number - custom formatter');
-
-// test.todo('usage with literal Array containing literal numbers');
-// test.todo('usage with literal Array containing literal numbers - custom formatter');
-
-// test.todo('usage with literal Array containing literal boolean true');
-// test.todo('usage with literal Array containing literal booleans true - custom formatter');
-
-// test.todo('usage with literal Array containing literal boolean false');
-// test.todo('usage with literal Array containing literal booleans false - custom formatter');
-
-// test.todo('LIST ALL ARRAY POSSIBLE CONTENT');
-
-// test.todo('usage with literal Array containing various type of content');
-// test.todo('usage with literal Array containing various type of content- custom formatter');
 
 test('usage with literal Array containing literal nested Array', defaultFormatterMacro, {
 	input: [2, [3, 4], 'string'],

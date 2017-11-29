@@ -10,6 +10,7 @@ const comma = ',';
 const tab = `  `;
 
 const _NodeList = _global.NodeList || null;
+const _Node = _global.Node || null;
 
 function noFormatter(data) {
 	return data;
@@ -70,28 +71,34 @@ function defaultFormatter({
 		const bracesInnerSpace = manyElements ? nl : repeat(' ', keys.length);
 		const bracesBeforeClose = bracesInnerSpace + (manyElements ? rootTab : '');
 
-		function renderNestedValue(val, showKeys) {
+		function renderNestedValue(val, showKeys, isNode) {
+			if (isNode) {
+				return val.tagName.toLowerCase();
+			}
 			return showKeys
-			? `${bracesInnerSpace}${keys
-				.map(key => ({k: key, v: val[key]}))
-				.map(el => ({k: stringable(el.k, noFormatter), v: stringable(el.v, noFormatter)}))
-				.map(data => ({k: defaultFormatter(data.k, manyElements ? [...parents, value] : []), v: defaultFormatter(data.v, [])}))
-				.map(f => `${f.k.replace('(','[').replace(/\)$/,']')}: ${f.v}`)
-				.join(comma+nl)
-			}${bracesBeforeClose}`
-			: `${bracesInnerSpace}${keys
-				.map(key => val[key])
-				.map(el => stringable(el, noFormatter))
-				.map(data => defaultFormatter(data, manyElements ? [...parents, value] : []))
-				.join(comma+nl)
-			}${bracesBeforeClose}`;
+				? `${bracesInnerSpace}${keys
+					.map(key => ({k: key, v: val[key]}))
+					.map(el => ({k: stringable(el.k, noFormatter), v: stringable(el.v, noFormatter)}))
+					.map(data => ({k: defaultFormatter(data.k, manyElements ? [...parents, value] : []), v: defaultFormatter(data.v, [])}))
+					.map(f => `${f.k.replace('(','[').replace(/\)$/,']')}: ${f.v}`)
+					.join(comma+nl)
+				}${bracesBeforeClose}`
+				: `${bracesInnerSpace}${keys
+					.map(key => val[key])
+					.map(el => stringable(el, noFormatter))
+					.map(data => defaultFormatter(data, manyElements ? [...parents, value] : []))
+					.join(comma+nl)
+				}${bracesBeforeClose}`;
 		}
 
 		if (value instanceof Array || (_NodeList && value instanceof _NodeList)) {
-			nestedDiplay = `[${renderNestedValue(value, false)}]`;
+			nestedDiplay = `[${renderNestedValue(value, false, false)}]`;
+		}
+		else if(_Node && value instanceof _Node) {
+			nestedDiplay = `<${renderNestedValue(value, true, true)}>`;
 		}
 		else {
-			nestedDiplay = `{${renderNestedValue(value, true)}}`;
+			nestedDiplay = `{${renderNestedValue(value, true, false)}}`;
 		}
 	}
 

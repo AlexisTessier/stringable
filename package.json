@@ -86,6 +86,7 @@
     "git-repo-info": "1.4.1",
     "github-markdown-css": "2.9.0",
     "glob": "7.1.2",
+    "jsdom": "11.5.1",
     "jsonfile": "4.0.0",
     "mkdirp": "0.5.1",
     "mustache": "2.3.0",
