@@ -25,9 +25,21 @@ const testDom = new JSDOM(`<!DOCTYPE html>
 
 global.window = testDom.window;
 
-test('Usage with a NodeList', defaultFormatterMacro, {
+/*---------------------------*/
+
+test.todo('Usage with a Node without attribute')
+test.todo('Usage with a Node with one attribute')
+test.todo('Usage with a Node with attributes')
+
+test.todo('Usage with an empty NodeList')
+test('Usage with a NodeList containing one attributeless Node instance', defaultFormatterMacro, {
 	input: testDom.window.document.querySelectorAll('span'),
 	expectedResult: '(object: NodeList => [ (object: HTMLSpanElement => <span>) ])'
 });
-
-test.todo('Usage with a NodeList - other tests')
+test.todo('Usage with a NodeList containing two attributeless Node instances');
+test.todo('Usage with a NodeList containing one attributeful Node instance - 1 attribute');
+test.todo('Usage with a NodeList containing two attributeful Node instances - 1 attribute');
+test.todo('Usage with a NodeList containing one attributeless and one attributeful Node instances - 1 attribute');
+test.todo('Usage with a NodeList containing one attributeful Node instance - 2 attributes');
+test.todo('Usage with a NodeList containing two attributeful Node instances - 2 attributes');
+test.todo('Usage with a NodeList containing one attributeless and one attributeful Node instances - 2 attributes');
