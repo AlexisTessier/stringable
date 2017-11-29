@@ -1105,7 +1105,29 @@ test('usage with literal arrow function with one parameter without braces', defa
 	},
 	expectedResult: `(function => input)`
 });
-test.todo('usage with literal arrow function with parameters - custom formatter');
+test('usage with literal arrow function with one parameter without braces', customFormatterDataMacro, {
+	input: argOne => {
+		const t = 44;
+		return t*t;
+	},
+	defaultFormatterExpectedResult: `(function => input)`,
+	expectedData: {
+		type: 'function',
+		stringifiedValue: `argOne => {
+		const t = 44;
+		return t * t;
+	}`,
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
+		constructorName: `Function`,
+		keys: null,
+		functionName: 'input',
+		isAsync: false,
+		isGenerator: false
+	}
+});
 
 test('usage with literal arrow function with one parameter without braces nor spaces', defaultFormatterMacro, {
 	input: argOne=>{
@@ -1463,7 +1485,23 @@ test('usage with instance of RegExp', defaultFormatterMacro, {
 	input: new RegExp('$^'),
 	expectedResult: `(object: RegExp => /$^/)`
 });
-test.todo('usage with instance of RegExp - custom formatter');
+test('usage with instance of RegExp', customFormatterDataMacro, {
+	input: new RegExp('$^'),
+	defaultFormatterExpectedResult: `(object: RegExp => /$^/)`,
+	expectedData: {
+		type: 'object',
+		stringifiedValue: '/$^/',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
+		constructorName: 'RegExp',
+		keys: null,
+		functionName: null,
+		isAsync: false,
+		isGenerator: false
+	}
+});
 
 /*- Object function -*/
 
@@ -1471,7 +1509,26 @@ test('usage with instance of Function', defaultFormatterMacro, {
 	input: new Function('argOne', 'return argOne'),
 	expectedResult: `(function => anonymous)`
 });
-test.todo('usage with instance of Function - custom formatter');
+test('usage with instance of Function', customFormatterDataMacro, {
+	input: new Function('argOne', 'return argOne'),
+	defaultFormatterExpectedResult: `(function => anonymous)`,
+	expectedData: {
+		type: 'function',
+		stringifiedValue: `function anonymous(argOne
+/**/) {
+return argOne
+}`,
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
+		constructorName: 'Function',
+		keys: null,
+		functionName: 'anonymous',
+		isAsync: false,
+		isGenerator: false
+	}
+});
 
 /*- Object symbol -*/
 
@@ -1526,36 +1583,84 @@ test('usage with literal empty Array', defaultFormatterMacro, {
 	input: [],
 	expectedResult: `(object: Array => [])`
 });
-test.todo('usage with literal empty Array - custom formatter');
+test('usage with literal empty Array', customFormatterDataMacro, {
+	input: [],
+	defaultFormatterExpectedResult: `(object: Array => [])`,
+	expectedData: {
+		type: 'object',
+		stringifiedValue: '',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
+		constructorName: 'Array',
+		keys: [],
+		functionName: null,
+		isAsync: false,
+		isGenerator: false
+	}
+});
 
 test('usage with literal Array containing literal string', defaultFormatterMacro, {
 	input: ['a string'],
 	expectedResult: `(object: Array => [ (string => 'a string') ])`
 });
-test.todo('usage with literal Array containing literal string - custom formatter');
+test('usage with literal Array containing literal string', customFormatterDataMacro, {
+	input: ['a string'],
+	defaultFormatterExpectedResult: `(object: Array => [ (string => 'a string') ])`,
+	expectedData: {
+		type: 'object',
+		stringifiedValue: 'a string',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
+		constructorName: 'Array',
+		keys: ['0'],
+		functionName: null,
+		isAsync: false,
+		isGenerator: false
+	}
+});
 
 test('usage with literal Array containing literal strings', defaultFormatterMacro, {
 	input: ['a string test', 'an other string'],
 	expectedResult: `(object: Array => [\n  (string => 'a string test'),\n  (string => 'an other string')\n])`
 });
-test.todo('usage with literal Array containing literal strings - custom formatter');
+test('usage with literal Array containing literal strings', customFormatterDataMacro, {
+	input: ['a string test', 'an other string'],
+	defaultFormatterExpectedResult: `(object: Array => [\n  (string => 'a string test'),\n  (string => 'an other string')\n])`,
+	expectedData: {
+		type: 'object',
+		stringifiedValue: 'a string test,an other string',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
+		constructorName: 'Array',
+		keys: ['0', '1'],
+		functionName: null,
+		isAsync: false,
+		isGenerator: false
+	}
+});
 
-test.todo('usage with literal Array containing literal number');
-test.todo('usage with literal Array containing literal number - custom formatter');
+// test.todo('usage with literal Array containing literal number');
+// test.todo('usage with literal Array containing literal number - custom formatter');
 
-test.todo('usage with literal Array containing literal numbers');
-test.todo('usage with literal Array containing literal numbers - custom formatter');
+// test.todo('usage with literal Array containing literal numbers');
+// test.todo('usage with literal Array containing literal numbers - custom formatter');
 
-test.todo('usage with literal Array containing literal boolean true');
-test.todo('usage with literal Array containing literal booleans true - custom formatter');
+// test.todo('usage with literal Array containing literal boolean true');
+// test.todo('usage with literal Array containing literal booleans true - custom formatter');
 
-test.todo('usage with literal Array containing literal boolean false');
-test.todo('usage with literal Array containing literal booleans false - custom formatter');
+// test.todo('usage with literal Array containing literal boolean false');
+// test.todo('usage with literal Array containing literal booleans false - custom formatter');
 
-test.todo('LIST ALL ARRAY POSSIBLE CONTENT');
+// test.todo('LIST ALL ARRAY POSSIBLE CONTENT');
 
-test.todo('usage with literal Array containing various type of content');
-test.todo('usage with literal Array containing various type of content- custom formatter');
+// test.todo('usage with literal Array containing various type of content');
+// test.todo('usage with literal Array containing various type of content- custom formatter');
 
 test('usage with literal Array containing literal nested Array', defaultFormatterMacro, {
 	input: [2, [3, 4], 'string'],
@@ -1587,23 +1692,75 @@ test.skip('usage with literal Array containing literal nested object', defaultFo
 });
 test.todo('usage with literal Array containing literal strings - custom formatter');
 
+const circularArray = [
+	42, [3], 'hay'
+];
+circularArray[1].push(circularArray);
+
+test('usage with literal Array containing circular references', defaultFormatterMacro, {
+	input: [2, circularArray],
+	expectedResult: [
+		`(object: Array => [`,
+		`\n  (number: integer => 2),`,
+		`\n  (object: Array => [`,
+		`\n    (number: integer => 42),`,
+		`\n    (object: Array => [`,
+		`\n      (number: integer => 3),`,
+		`\n      (object: Array: Circular)`,
+		`\n    ]),`,
+		`\n    (string => 'hay')`,
+		`\n  ])`,
+		`\n])`
+	].join('')
+});
+test.todo('usage with literal Array containing circular references - custom formatter');
+
+const circularArrayA = ['test', 41];
+const circularArrayB = [circularArrayA, 42];
+circularArrayA.push(circularArrayB);
+
+test('usage with literal Array containing circular references - other pattern', defaultFormatterMacro, {
+	input: [circularArrayA, circularArrayB],
+	expectedResult: [
+		`(object: Array => [`,
+		`\n  (object: Array => [`,
+		`\n    (string => 'test'),`,
+		`\n    (number: integer => 41),`,
+		`\n    (object: Array => [`,
+		`\n      (object: Array: Circular),`,
+		`\n      (number: integer => 42)`,
+		`\n    ])`,
+		`\n  ]),`,
+		`\n  (object: Array => [`,
+		`\n    (object: Array => [`,
+		`\n      (string => 'test'),`,
+		`\n      (number: integer => 41),`,
+		`\n      (object: Array: Circular)`,
+		`\n    ]),`,
+		`\n    (number: integer => 42)`,
+		`\n  ])`,
+		`\n])`
+	].join('')
+});
+test.todo('usage with literal Array containing circular references - other pattern - custom formatter');
+
 /*- literal object -*/
 
-test.skip('usage with literal empty Object', defaultFormatterMacro, {
+test('usage with literal empty Object', defaultFormatterMacro, {
 	input: {},
 	expectedResult: `(object => {})`
 });
 test.todo('usage with literal empty Object - custom formatter');
 
-test.skip('usage with literal Object containing string as value', defaultFormatterMacro, {
+test('usage with literal Object containing string as value', defaultFormatterMacro, {
 	input: {keyName: 'key value string'},
 	expectedResult: `(object => { [string => 'keyName']: (string => 'key value string') })`
 });
 test.todo('usage with literal Object containing string as value - custom formatter');
 
-test.skip('usage with literal Object containing strings as value', defaultFormatterMacro, {
+test('usage with literal Object containing strings as value', defaultFormatterMacro, {
 	input: {key2: 'value string', 'key value test': 'test value as string'},
-	expectedResult: `(object => {\n\t[string => 'key2']: (string => 'value string'),\n\t[string => 'key value test'']: (string => 'test value as string')\n})`
+	expectedResult: `(object => {\n  [string => 'key2']: (string => 'value string'),\n  [string => 'key value test']: (string => 'test value as string')\n})`
 });
 test.todo('usage with literal Object containing strings as value - custom formatter');
 
@@ -1651,7 +1808,16 @@ test.todo('usage with literal Object containing nested arrays - custom formatter
 
 /*- Object array -*/
 
-test.todo('usage with instance of Array');
+test('usage with instance of Array', defaultFormatterMacro, {
+	input: new Array('value', 43, 'test'),
+	expectedResult: [
+		`(object: Array => [`,
+		`\n  (string => 'value'),`,
+		`\n  (number: integer => 43),`,
+		`\n  (string => 'test')`,
+		`\n])`
+	].join('')
+});
 test.todo('usage with instance of Array - custom formatter');
 
 /*- Object -*/

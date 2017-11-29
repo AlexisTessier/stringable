@@ -28,7 +28,9 @@ function defaultFormatter({
 	functionName,
 	isAsync,
 	isGenerator
-}, deepness = 0) {
+}, parents = []) {
+	const isCircular = parents.findIndex(v => Object.is(v, value)) >= 0;
+	const deepness = parents.length;
 	const rootTab = repeat(tab, deepness);
 
 	const displayValue = !(
@@ -58,54 +60,9 @@ function defaultFormatter({
 			break;
 	}
 
-	// if (
-	// 	  stringifiedValue === null &&
-	// 	  value instanceof Object &&
-	// 	!(value instanceof Boolean) &&
-	// 	!(value instanceof Number) &&
-	// 	!(value instanceof String) &&
-	// 	!(value instanceof Function) &&
-	// 	!(value instanceof RegExp)
-	// ) {
-	// 	
-	// 	const nestedTab = `${rootTab}${tab}`;
-
-	// 	if (value instanceof Array) {
-	// 		const manyElements = value.length > 1;
-	// 		
-	// 	}
-	// 	else{
-	// 		const keys = Object.keys(value);
-	// 		const manyElements = keys.length > 1;
-	// 		const startSpace = manyElements ? `${nl}${nestedTab}` : repeat(' ', keys.length);
-	// 		const endSpace = manyElements ? nl : startSpace;
-
-	// 		for(const key in value){
-
-	// 		}
-	// 		stringifiedValue = `{${startSpace}${keys
-	// 			.map(el => ({
-	// 				key: stringable(el, formatter, deepness+1),
-	// 				value: stringable(value[el], formatter, deepness+1)
-	// 			}))
-	// 			.map(el => `[${el.key}]: ${el.value}`)
-	// 			.join(`,${nl}${nestedTab}`)
-	// 		}${endSpace}${rootTab}}`;
-	// 	}
-	// }
-
-	// if (value instanceof Array) {
-	// 	const rootTab = repeat(tab, deepness);
-	// 	const nestedTab = `${rootTab}${tab}`;
-	// 	const manyElements = value.length > 1;
-	// 	const startSpace = manyElements ? `${nl}${nestedTab}` : repeat(' ', value.length);
-	// 	const endSpace = manyElements ? nl : startSpace;
-
-	// 	stringifiedValue = `[${startSpace}${value
-	// 		.map(el => stringable(el, formatter, deepness+1))
-	// 		.join(`,${nl}${nestedTab}`)
-	// 	}${endSpace}${rootTab}]`;
-	// }
+	if (isCircular) {
+		return `${rootTab}(${type}${typeComplement}: Circular)`;
+	}
 
 	let nestedDiplay = null;
 	if (keys) {
@@ -113,17 +70,28 @@ function defaultFormatter({
 		const bracesInnerSpace = manyElements ? nl : repeat(' ', keys.length);
 		const bracesBeforeClose = bracesInnerSpace + (manyElements ? rootTab : '');
 
-		function renderNestedValue(val) {
-			return `[${bracesInnerSpace}${keys
+		function renderNestedValue(val, showKeys) {
+			return showKeys
+			? `${bracesInnerSpace}${keys
+				.map(key => ({k: key, v: val[key]}))
+				.map(el => ({k: stringable(el.k, noFormatter), v: stringable(el.v, noFormatter)}))
+				.map(data => ({k: defaultFormatter(data.k, manyElements ? [...parents, value] : []), v: defaultFormatter(data.v, [])}))
+				.map(f => `${f.k.replace('(','[').replace(/\)$/,']')}: ${f.v}`)
+				.join(comma+nl)
+			}${bracesBeforeClose}`
+			: `${bracesInnerSpace}${keys
 				.map(key => val[key])
 				.map(el => stringable(el, noFormatter))
-				.map(data => defaultFormatter(data, manyElements ? deepness+1 : 0))
+				.map(data => defaultFormatter(data, manyElements ? [...parents, value] : []))
 				.join(comma+nl)
-			}${bracesBeforeClose}]`;
+			}${bracesBeforeClose}`;
 		}
 
 		if (value instanceof Array || (_NodeList && value instanceof _NodeList)) {
-			nestedDiplay = renderNestedValue(value);
+			nestedDiplay = `[${renderNestedValue(value, false)}]`;
+		}
+		else {
+			nestedDiplay = `{${renderNestedValue(value, true)}}`;
 		}
 	}
 
