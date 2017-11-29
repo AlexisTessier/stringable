@@ -29,9 +29,9 @@ function defaultFormatter({
 	functionName,
 	isAsync,
 	isGenerator
-}, parents = []) {
-	const isCircular = parents.findIndex(v => Object.is(v, value)) >= 0;
-	const deepness = parents.length;
+}, parents = [], useNestTab = true) {
+	const isCircular = parents.findIndex(p => Object.is(p.value, value)) >= 0;
+	const deepness = parents.filter(p => p.manyElements).length;
 	const rootTab = repeat(tab, deepness);
 
 	const displayValue = !(
@@ -75,18 +75,21 @@ function defaultFormatter({
 			if (isNode) {
 				return val.tagName.toLowerCase();
 			}
+
+			const nestedParents = [...parents, {value, manyElements}];
+
 			return showKeys
 				? `${bracesInnerSpace}${keys
 					.map(key => ({k: key, v: val[key]}))
 					.map(el => ({k: stringable(el.k, noFormatter), v: stringable(el.v, noFormatter)}))
-					.map(data => ({k: defaultFormatter(data.k, manyElements ? [...parents, value] : []), v: defaultFormatter(data.v, [])}))
+					.map(data => ({k: defaultFormatter(data.k, nestedParents, manyElements), v: defaultFormatter(data.v, nestedParents, false)}))
 					.map(f => `${f.k.replace('(','[').replace(/\)$/,']')}: ${f.v}`)
 					.join(comma+nl)
 				}${bracesBeforeClose}`
 				: `${bracesInnerSpace}${keys
 					.map(key => val[key])
 					.map(el => stringable(el, noFormatter))
-					.map(data => defaultFormatter(data, manyElements ? [...parents, value] : []))
+					.map(data => defaultFormatter(data, nestedParents, manyElements))
 					.join(comma+nl)
 				}${bracesBeforeClose}`;
 		}
@@ -103,7 +106,7 @@ function defaultFormatter({
 	}
 
 	const displayedValue = displayValue ? ` => ${nestedDiplay || functionName || simpleQuoteString || stringifiedValue}` : '';
-	return `${rootTab}(${type}${typeComplement}${displayedValue})`;
+	return `${useNestTab ? rootTab : ''}(${type}${typeComplement}${displayedValue})`;
 }
 
 function repeat(chars, count) {

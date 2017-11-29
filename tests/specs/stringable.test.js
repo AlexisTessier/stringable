@@ -1672,17 +1672,20 @@ test('usage with literal Array containing literal nested Array', defaultFormatte
 });
 test.todo('usage with literal Array containing literal strings - custom formatter');
 
-test.skip('usage with literal Array containing literal nested object', defaultFormatterMacro, {
+test('usage with literal Array containing literal nested object', defaultFormatterMacro, {
 	input: [2, 'string', { key: 'value', func(){ return 5; }, ob: {obdeepkey: [42, false]}}],
 	expectedResult: [
 		`(object: Array => [`,
 		`\n  (number: integer => 2),`,
 		`\n  (string => 'string'),`,
-		`\n\t(object: Array => [`,
-		`\n\t\t(number: integer => 3),`,
-		`\n\t\t(number: integer => 4)`,
-		`\n\t]),`,
-		`\n\t(string => 'string')`,
+		`\n  (object => {`,
+		`\n    [string => 'key']: (string => 'value'),`,
+		`\n    [string => 'func']: (function => func),`,
+		`\n    [string => 'ob']: (object => { [string => 'obdeepkey']: (object: Array => [`,
+		`\n      (number: integer => 42),`,
+		`\n      (boolean => false)`,
+		`\n    ]) })`,
+		`\n  })`,
 		`\n])`
 	].join('')
 });
@@ -1746,7 +1749,23 @@ test('usage with literal empty Object', defaultFormatterMacro, {
 	input: {},
 	expectedResult: `(object => {})`
 });
-test.todo('usage with literal empty Object - custom formatter');
+test('usage with literal empty Object', customFormatterDataMacro, {
+	input: {},
+	defaultFormatterExpectedResult: `(object => {})`,
+	expectedData: {
+		type: 'object',
+		stringifiedValue: '[object Object]',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
+		constructorName: 'Object',
+		keys: [],
+		functionName: null,
+		isAsync: false,
+		isGenerator: false
+	}
+});
 
 test('usage with literal Object containing string as value', defaultFormatterMacro, {
 	input: {keyName: 'key value string'},
