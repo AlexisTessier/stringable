@@ -1210,6 +1210,7 @@ test('usage with literal generator anonymous function (object key as name)', def
 	expectedResult: '(function: generator => input)'
 });
 test('usage with literal generator anonymous function (object key as name)', customFormatterDataMacro, {
+	// eslint-disable-next-line func-names
 	input: function* (){
 		return 'hello';
 	},
@@ -1839,11 +1840,11 @@ test('usage with literal Object containing numbers as key', defaultFormatterMacr
 		42: function response(){return;}
 	},
 	expectedResult: [
-	`(object => {`,
-	`\n  [string => '4']: (number: integer => 2),`,
-	`\n  [string => '42']: (function => response),`,
-	`\n  [string => '5.9']: (string => 'hello')`,
-	`\n})`
+		`(object => {`,
+		`\n  [string => '4']: (number: integer => 2),`,
+		`\n  [string => '42']: (function => response),`,
+		`\n  [string => '5.9']: (string => 'hello')`,
+		`\n})`
 	].join('')
 });
 test.todo('usage with literal Object containing numbers as key - custom formatter');
@@ -1852,14 +1853,15 @@ test('usage with literal Object containing computed key', defaultFormatterMacro,
 	input: {
 		name: 'Will',
 		[{test: 'last name'}]: 'Smith',
+		// eslint-disable-next-line no-useless-computed-key
 		['age']: `Don't know`
 	},
 	expectedResult: [
-	`(object => {`,
-	`\n  [string => 'name']: (string => 'Will'),`,
-	`\n  [string => '[object Object]']: (string => 'Smith'),`,
-	`\n  [string => 'age']: (string => 'Don\\'t know')`,
-	`\n})`
+		`(object => {`,
+		`\n  [string => 'name']: (string => 'Will'),`,
+		`\n  [string => '[object Object]']: (string => 'Smith'),`,
+		`\n  [string => 'age']: (string => 'Don\\'t know')`,
+		`\n})`
 	].join('')
 });
 test.todo('usage with literal Object containing computed key - custom formatter');
@@ -1871,11 +1873,11 @@ test('usage with literal Object containing Symbol as key', defaultFormatterMacro
 		[Symbol('Phone number')]: 'XXXX-XXX'
 	},
 	expectedResult: [
-	`(object => {`,
-	`\n  [string => 'name']: (string => 'Will Smith'),`,
-	`\n  [symbol => Symbol()]: (number: integer => 76293),`,
-	`\n  [symbol => Symbol(Phone number)]: (string => 'XXXX-XXX')`,
-	`\n})`
+		`(object => {`,
+		`\n  [string => 'name']: (string => 'Will Smith'),`,
+		`\n  [symbol => Symbol()]: (number: integer => 76293),`,
+		`\n  [symbol => Symbol(Phone number)]: (string => 'XXXX-XXX')`,
+		`\n})`
 	].join('')
 });
 test.todo('usage with literal Object containing Symbol as key - custom formatter');
@@ -1886,10 +1888,10 @@ test('usage with literal Object containing get properties', defaultFormatterMacr
 		get name(){return 'dora'}
 	},
 	expectedResult: [
-	`(object => {`,
-	`\n  [string => 'test']: (number: integer => 2),`,
-	`\n  [string => 'name']: getter(string => 'dora')`,
-	`\n})`
+		`(object => {`,
+		`\n  [string => 'test']: (number: integer => 2),`,
+		`\n  [string => 'name']: getter(string => 'dora')`,
+		`\n})`
 	].join('')
 });
 test.todo('usage with literal Object containing get properties - custom formatter');
@@ -1900,10 +1902,10 @@ test('usage with literal Object containing set properties', defaultFormatterMacr
 		set name(val){Object.keys(val)}
 	},
 	expectedResult: [
-	`(object => {`,
-	`\n  [string => 'test']: (number: integer => 2),`,
-	`\n  [string => 'name']: setter`,
-	`\n})`
+		`(object => {`,
+		`\n  [string => 'test']: (number: integer => 2),`,
+		`\n  [string => 'name']: setter`,
+		`\n})`
 	].join('')
 });
 test.todo('usage with literal Object containing set properties - custom formatter');
