@@ -1057,7 +1057,29 @@ test('usage with literal arrow function with one parameter without braces nor sp
 	},
 	expectedResult: `(function => input)`
 });
-test.todo('usage with literal arrow function with parameters - custom formatter');
+test('usage with literal arrow function with one parameter without braces nor spaces', customFormatterDataMacro, {
+	input: argOne=>{
+		const t = 44;
+		return t*t;
+	},
+	defaultFormatterExpectedResult: `(function => input)`,
+	expectedData: {
+		type: 'function',
+		stringifiedValue: `argOne => {
+		const t = 44;
+		return t * t;
+	}`,
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
+		constructorName: `Function`,
+		keys: null,
+		functionName: 'input',
+		isAsync: false,
+		isGenerator: false
+	}
+});
 
 test('usage with literal async function', defaultFormatterMacro, {
 	input: async function anAsyncFunctionTest(){
@@ -1069,7 +1091,31 @@ test('usage with literal async function', defaultFormatterMacro, {
 		? `(function: async => anAsyncFunctionTest)`
 		: `(function => anAsyncFunctionTest)`
 });
-test.todo('usage with literal async function - custom formatter');
+
+async function anAsyncFunctionTest(){
+	const t = 44;
+	await 5;
+	return t*t;
+}
+test('usage with literal async function', customFormatterDataMacro, {
+	input: anAsyncFunctionTest,
+	defaultFormatterExpectedResult: asyncSupport
+		? `(function: async => anAsyncFunctionTest)`
+		: `(function => anAsyncFunctionTest)`,
+	expectedData: {
+		type: 'function',
+		stringifiedValue: `${anAsyncFunctionTest}`,
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
+		constructorName: asyncSupport ? `AsyncFunction` : `Function`,
+		keys: null,
+		functionName: 'anAsyncFunctionTest',
+		isAsync: asyncSupport ? true : false,
+		isGenerator: false
+	}
+});
 
 test('usage with literal async function with one parameter', defaultFormatterMacro, {
 	input: async function anAsyncFunctionTest3(argOneT){
@@ -1081,7 +1127,6 @@ test('usage with literal async function with one parameter', defaultFormatterMac
 		? `(function: async => anAsyncFunctionTest3)`
 		: `(function => anAsyncFunctionTest3)`
 });
-test.todo('usage with literal async function - custom formatter');
 
 test('usage with literal async function with parameters and default', defaultFormatterMacro, {
 	input: async function anAsyncFunctionTestWithParams(argOne, argTwo = 78){
@@ -1093,7 +1138,6 @@ test('usage with literal async function with parameters and default', defaultFor
 		? `(function: async => anAsyncFunctionTestWithParams)`
 		: `(function => anAsyncFunctionTestWithParams)`
 });
-test.todo('usage with literal async function - custom formatter');
 
 test('usage with literal async anonymous function', defaultFormatterMacro, {
 	// eslint-disable-next-line func-names
@@ -1106,7 +1150,6 @@ test('usage with literal async anonymous function', defaultFormatterMacro, {
 		? `(function: async => input)`
 		: `(function => input)`
 });
-test.todo('usage with literal async anonymous function - custom formatter');
 
 test('usage with literal async arrow function', defaultFormatterMacro, {
 	input: async () => {
@@ -1118,7 +1161,6 @@ test('usage with literal async arrow function', defaultFormatterMacro, {
 		? `(function: async => input)`
 		: `(function => input)`
 });
-test.todo('usage with literal async arrow function - custom formatter');
 
 test('usage with literal async method function', defaultFormatterMacro, {
 	async input(){
@@ -1130,7 +1172,6 @@ test('usage with literal async method function', defaultFormatterMacro, {
 		? `(function: async => input)`
 		: `(function => input)`
 });
-test.todo('usage with literal async method function - custom formatter');
 
 test('usage with literal async method function and computed name', defaultFormatterMacro, {
 	// eslint-disable-next-line no-useless-computed-key
@@ -1143,15 +1184,31 @@ test('usage with literal async method function and computed name', defaultFormat
 		? `(function: async => input)`
 		: `(function => input)`
 });
-test.todo('usage with literal async method function and computed name - custom formatter');
 
+function* aGenerator(){
+	return 'hello';
+}
 test('usage with literal generator function', defaultFormatterMacro, {
-	input: function* aGenerator(){
-		return 'hello';
-	},
+	input: aGenerator,
 	expectedResult: '(function: generator => aGenerator)'
 });
-test.todo('usage with literal generator function - custom formatter');
+test('usage with literal generator function', customFormatterDataMacro, {
+	input: aGenerator,
+	defaultFormatterExpectedResult: '(function: generator => aGenerator)',
+	expectedData: {
+		type: 'function',
+		stringifiedValue: `${aGenerator}`,
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
+		constructorName: `GeneratorFunction`,
+		keys: null,
+		functionName: 'aGenerator',
+		isAsync: false,
+		isGenerator: true
+	}
+});
 
 test('usage with literal generator anonymous function (object key as name)', defaultFormatterMacro, {
 	// eslint-disable-next-line func-names
@@ -1160,7 +1217,25 @@ test('usage with literal generator anonymous function (object key as name)', def
 	},
 	expectedResult: '(function: generator => input)'
 });
-test.todo('usage with literal generator anonymous function (object key as name) - custom formatter');
+test('usage with literal generator anonymous function (object key as name)', customFormatterDataMacro, {
+	input: function* (){
+		return 'hello';
+	},
+	defaultFormatterExpectedResult: '(function: generator => input)',
+	expectedData: {
+		type: 'function',
+		stringifiedValue: `function* () {\n\t\treturn 'hello';\n\t}`,
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
+		constructorName: `GeneratorFunction`,
+		keys: null,
+		functionName: 'input',
+		isAsync: false,
+		isGenerator: true
+	}
+});
 
 // eslint-disable-next-line func-names
 const anonymousGenerator = () => function* (){
@@ -1170,7 +1245,23 @@ test('usage with literal generator anonymous function', defaultFormatterMacro, {
 	input: anonymousGenerator(),
 	expectedResult: '(function: generator)'
 });
-test.todo('usage with literal generator anonymous function - custom formatter');
+test('usage with literal generator anonymous function', customFormatterDataMacro, {
+	input: anonymousGenerator(),
+	defaultFormatterExpectedResult: '(function: generator)',
+	expectedData: {
+		type: 'function',
+		stringifiedValue: `function* () {\n\treturn 'hello';\n}`,
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
+		constructorName: `GeneratorFunction`,
+		keys: null,
+		functionName: null,
+		isAsync: false,
+		isGenerator: true
+	}
+});
 
 /*- literal falsy values -*/
 
@@ -1582,10 +1673,11 @@ test('usage with literal Array containing literal nested Array', defaultFormatte
 test.todo('usage with literal Array containing literal strings - custom formatter');
 
 test.skip('usage with literal Array containing literal nested object', defaultFormatterMacro, {
-	input: [2, [3, 4], 'string'],
+	input: [2, 'string', { key: 'value', func(){ return 5; }, ob: {obdeepkey: [42, false]}}],
 	expectedResult: [
 		`(object: Array => [`,
-		`\n\t(number: integer => 2),`,
+		`\n  (number: integer => 2),`,
+		`\n  (string => 'string'),`,
 		`\n\t(object: Array => [`,
 		`\n\t\t(number: integer => 3),`,
 		`\n\t\t(number: integer => 4)`,
@@ -1731,6 +1823,10 @@ test.todo('usage with instance of Object - custom formatter');
 
 test.todo('usage with instance of custom class');
 test.todo('usage with instance of custom class - custom formatter');
+
+/*- complex tests -*/
+
+test.todo('usage with a very complex object containing lot of nested arrays and object with some circular references');
 
 /*- errors handling -*/
 
