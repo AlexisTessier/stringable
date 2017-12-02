@@ -19,6 +19,7 @@ const testDom = new JSDOM(`<!DOCTYPE html>
 		<h1>Hello world</h1>
 		<div class="test"></div>
 		<a class="test"></a>
+		<p class="text"></p>
 		<span></span>
 		<h6></h6>
 	</body>
@@ -33,7 +34,11 @@ test('Usage with a Node without attribute', defaultFormatterMacro, {
 	expectedResult: '(object: HTMLHeadingElement => <h6>)'
 });
 
-test.todo('Usage with a Node with one attribute')
+test('Usage with a Node with one attribute', defaultFormatterMacro, {
+	input: testDom.window.document.querySelector('p.text'),
+	expectedResult: `(object: HTMLParagraphElement => <p class: (string => 'text') >)`
+});
+
 test.todo('Usage with a Node with attributes')
 
 test.todo('Usage with an empty NodeList')

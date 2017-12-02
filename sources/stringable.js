@@ -17,6 +17,9 @@ function noFormatter(data) {
 }
 
 function getterOrSetterMarker(obj, prop, val) {
+	if (_Node && obj instanceof _Node) {
+		return val;
+	}
 	const descriptor = Object.getOwnPropertyDescriptor(obj, prop);
 	if (typeof descriptor.get === 'function') {
 		return `getter${val}`;
@@ -74,7 +77,7 @@ function defaultFormatter({
 	}
 
 	if (isCircular) {
-		return `${rootTab}(${type}${typeComplement}: Circular)`;
+		return `${rootTab}(${type}${typeComplement}: circular)`;
 	}
 
 	let nestedDiplay = null;
@@ -84,18 +87,34 @@ function defaultFormatter({
 		const bracesBeforeClose = bracesInnerSpace + (manyElements ? rootTab : '');
 
 		function renderNestedValue(val, showKeys, isNode) {
-			if (isNode) {
-				return val.tagName.toLowerCase();
-			}
+			const tagName = isNode ? val.tagName.toLowerCase() : null;
 
 			const nestedParents = [...parents, {value, manyElements}];
 
 			return showKeys
-				? `${bracesInnerSpace}${keys
-					.map(key => ({k: key, v: val[key]}))
-					.map(el => ({key: el.k, k: stringable(el.k, noFormatter), v: stringable(el.v, noFormatter)}))
-					.map(data => ({key: data.key, k: defaultFormatter(data.k, nestedParents, manyElements), v: defaultFormatter(data.v, nestedParents, false)}))
-					.map(f => `${f.k.replace('(','[').replace(/\)$/,']')}: ${getterOrSetterMarker(value, f.key, f.v)}`)
+				? `${tagName || ''}${bracesInnerSpace}${keys
+					.map(key => ({
+						key,
+						value: isNode ? val.getAttribute(key) : val[key]
+					}))
+					.map(el => Object.assign(el, {
+						useShortKey: typeof el.key === 'string' || el.key instanceof String,
+						keyData: stringable(el.key, noFormatter),
+						valueData: stringable(el.value, noFormatter)
+					}))
+					.map(el => Object.assign(el, {
+						k: defaultFormatter(el.keyData, nestedParents, manyElements),
+						v: defaultFormatter(el.valueData, nestedParents, false)
+					}))
+					.map(el => Object.assign(el, {
+						k: (()=>{
+							if (!el.useShortKey) {return el.k};
+							const numberOfTab = (el.k.length - el.k.trim().length) / tab.length;
+
+							return repeat(tab, numberOfTab)+el.key;
+						})()
+					}))
+					.map(el => `${el.k}: ${getterOrSetterMarker(value, el.key, el.v)}`)
 					.join(comma+nl)
 				}${bracesBeforeClose}`
 				: `${bracesInnerSpace}${keys
@@ -210,9 +229,14 @@ function stringable(value, formatter = defaultFormatter) {
 		!(value instanceof RegExp) &&
 		!(value instanceof Function)
 	) {
-		keys = Object.keys(value);
-		if (!_NodeList || !(value instanceof _NodeList)) {
-			keys.push(...Object.getOwnPropertySymbols(value))
+		if (_Node && value instanceof _Node) {
+			keys = value.getAttributeNames();
+		}
+		else{
+			keys = Object.keys(value);
+			if (!_NodeList || !(value instanceof _NodeList)) {
+				keys.push(...Object.getOwnPropertySymbols(value))
+			}
 		}
 	}
 
