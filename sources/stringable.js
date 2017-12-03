@@ -48,6 +48,7 @@ function defaultFormatter({
 	const isCircular = parents.findIndex(p => Object.is(p.value, value)) >= 0;
 	const deepness = parents.filter(p => p.manyElements).length;
 	const rootTab = repeat(tab, deepness);
+	const displayedTab = useNestTab ? rootTab : '';
 
 	const displayValue = !(
 		value === undefined
@@ -77,7 +78,7 @@ function defaultFormatter({
 	}
 
 	if (isCircular) {
-		return `${rootTab}(${type}${typeComplement}: circular)`;
+		return `${displayedTab}(${type}${typeComplement}: circular)`;
 	}
 
 	let nestedDiplay = null;
@@ -137,7 +138,7 @@ function defaultFormatter({
 	}
 
 	const displayedValue = displayValue ? ` => ${nestedDiplay || functionName || simpleQuoteString || stringifiedValue}` : '';
-	return `${useNestTab ? rootTab : ''}(${type}${typeComplement}${displayedValue})`;
+	return `${displayedTab}(${type}${typeComplement}${displayedValue})`;
 }
 
 function repeat(chars, count) {

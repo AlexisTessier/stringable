@@ -2183,17 +2183,93 @@ test('usage with literal Object containing nested arrays', customFormatterDataMa
 	}
 });
 
-test.skip('usage with literal Object containing nested object and circular reference', defaultFormatterMacro, {
-	input: {},
-	expectedResult: `(object => {})`
+const circularObj = {key: 43, deep: {}};
+circularObj.deep['circularRef'] = circularObj;
+const objectNestedWithCircularReference = {
+	test: 'test',
+	obj: circularObj
+}
+const objectNestedWithCircularReferenceResult = [
+	`(object => {`,
+	`  test: (string => 'test'),`,
+	`  obj: (object => {`,
+	`    key: (number: integer => 43),`,
+	`    deep: (object => { circularRef: (object: circular) })`,
+	`  })`,
+	`})`
+].join('\n')
+test('usage with literal Object containing nested object and circular reference', defaultFormatterMacro, {
+	input: objectNestedWithCircularReference,
+	expectedResult: objectNestedWithCircularReferenceResult
 });
-test.todo('usage with literal Object containing nested object and circular reference - custom formatter');
+test('usage with literal Object containing nested object and circular reference', customFormatterDataMacro, {
+	input: objectNestedWithCircularReference,
+	defaultFormatterExpectedResult: objectNestedWithCircularReferenceResult,
+	expectedData: {
+		type: 'object',
+		stringifiedValue: '[object Object]',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
+		constructorName: 'Object',
+		keys: ['test', 'obj'],
+		functionName: null,
+		isAsync: false,
+		isGenerator: false
+	}
+});
 
-test.skip('usage with literal Object containing nested object and circular reference - other pattern', defaultFormatterMacro, {
-	input: {},
-	expectedResult: `(object => {})`
+const circularObjA = {id: 2};
+const circularObjB = {id: 3, circularObjA};
+circularObjA['circularObjB'] = circularObjB;
+
+const objectNestedWithCircularReferenceOtherPattern = {
+	a: circularObjA,
+	b: circularObjB
+}
+
+const objectNestedWithCircularReferenceOtherPatternResult = [
+	`(object => {`,
+	`  a: (object => {`,
+	`    id: (number: integer => 2),`,
+	`    circularObjB: (object => {`,
+	`      id: (number: integer => 3),`,
+	`      circularObjA: (object: circular)`,
+	`    })`,
+	`  }),`,
+	`  b: (object => {`,
+	`    id: (number: integer => 3),`,
+	`    circularObjA: (object => {`,
+	`      id: (number: integer => 2),`,
+	`      circularObjB: (object: circular)`,
+	`    })`,
+	`  })`,
+	`})`
+].join('\n')
+
+test('usage with literal Object containing nested object and circular reference - other pattern', defaultFormatterMacro, {
+	input: objectNestedWithCircularReferenceOtherPattern,
+	expectedResult: objectNestedWithCircularReferenceOtherPatternResult
 });
-test.todo('usage with literal Object containing nested object and circular reference - other pattern - custom formatter');
+test('usage with literal Object containing nested object and circular reference - other pattern', customFormatterDataMacro, {
+	input: objectNestedWithCircularReferenceOtherPattern,
+	defaultFormatterExpectedResult: objectNestedWithCircularReferenceOtherPatternResult,
+	expectedData: {
+		type: 'object',
+		stringifiedValue: '[object Object]',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
+		constructorName: 'Object',
+		keys: ['a', 'b'],
+		functionName: null,
+		isAsync: false,
+		isGenerator: false
+	}
+});
+
 /*- Object array -*/
 
 test('usage with instance of Array', defaultFormatterMacro, {
@@ -2273,10 +2349,6 @@ test('usage with instance of Object', customFormatterDataMacro, {
 
 test.todo('usage with instance of custom class');
 test.todo('usage with instance of custom class - custom formatter');
-
-/*- complex tests -*/
-
-test.todo('usage with a very complex object containing lot of nested arrays and object with some circular references');
 
 /*- errors handling -*/
 
