@@ -1942,7 +1942,35 @@ test('usage with literal Object containing computed key', defaultFormatterMacro,
 		`\n})`
 	].join('')
 });
-test.todo('usage with literal Object containing computed key - custom formatter');
+test('usage with literal Object containing computed key', customFormatterDataMacro, {
+	input: {
+		test: 'Emily',
+		[{test: 2}]: 'Smith',
+		[{ra: 2}]: 'Marc',
+		// eslint-disable-next-line no-useless-computed-key
+		['draw']: new Boolean(true)
+	},
+	defaultFormatterExpectedResult: [
+		`(object => {`,
+		`\n  test: (string => 'Emily'),`,
+		`\n  [object Object]: (string => 'Marc'),`,
+		`\n  draw: (object: Boolean => true)`,
+		`\n})`
+	].join(''),
+	expectedData: {
+		type: 'object',
+		stringifiedValue: '[object Object]',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
+		constructorName: 'Object',
+		keys: ['test', '[object Object]', 'draw'],
+		functionName: null,
+		isAsync: false,
+		isGenerator: false
+	}
+});
 
 test('usage with literal Object containing Symbol as key', defaultFormatterMacro, {
 	input: {
@@ -2001,7 +2029,33 @@ test('usage with literal Object containing get properties', defaultFormatterMacr
 		`\n})`
 	].join('')
 });
-test.todo('usage with literal Object containing get properties - custom formatter');
+test('usage with literal Object containing get properties', customFormatterDataMacro, {
+	input: {
+		get age(){return 78},
+		test: 2,
+		get name(){return 'OldMan'}
+	},
+	defaultFormatterExpectedResult: [
+		`(object => {`,
+		`\n  age: getter(number: integer => 78),`,
+		`\n  test: (number: integer => 2),`,
+		`\n  name: getter(string => 'OldMan')`,
+		`\n})`
+	].join(''),
+	expectedData: {
+		type: 'object',
+		stringifiedValue: '[object Object]',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
+		constructorName: 'Object',
+		keys: ['age', 'test', 'name'],
+		functionName: null,
+		isAsync: false,
+		isGenerator: false
+	}
+});
 
 test('usage with literal Object containing set properties', defaultFormatterMacro, {
 	input: {
@@ -2015,35 +2069,119 @@ test('usage with literal Object containing set properties', defaultFormatterMacr
 		`\n})`
 	].join('')
 });
-test.todo('usage with literal Object containing set properties - custom formatter');
+test('usage with literal Object containing set properties', customFormatterDataMacro, {
+	input: {
+		test: 9,
+		set name(val){Object.keys(val)},
+		set age(val){return 42;}
+	},
+	defaultFormatterExpectedResult: [
+		`(object => {`,
+		`\n  test: (number: integer => 9),`,
+		`\n  name: setter,`,
+		`\n  age: setter`,
+		`\n})`
+	].join(''),
+	expectedData: {
+		type: 'object',
+		stringifiedValue: '[object Object]',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
+		constructorName: 'Object',
+		keys: ['test', 'name', 'age'],
+		functionName: null,
+		isAsync: false,
+		isGenerator: false
+	}
+});
+
+const objectWithNestedObject = { nested: {
+	deep: {
+		name: 'deep',
+		type: 'node',
+		depth: 2
+	},
+	hello: 'world'
+}};
+const objectWithNestedObjectResult = [
+	`(object => { nested: (object => {`,
+	`\n  deep: (object => {`,
+	`\n    name: (string => 'deep'),`,
+	`\n    type: (string => 'node'),`,
+	`\n    depth: (number: integer => 2)`,
+	`\n  }),`,
+	`\n  hello: (string => 'world')`,
+	`\n}) })`
+].join('');
 
 test('usage with literal Object containing nested object', defaultFormatterMacro, {
-	input: { nested: {
-		deep: {
-			name: 'deep',
-			type: 'node',
-			depth: 2
-		},
-		hello: 'world'
-	}},
-	expectedResult: [
-		`(object => { nested: (object => {`,
-		`\n  deep: (object => {`,
-		`\n    name: (string => 'deep'),`,
-		`\n    type: (string => 'node'),`,
-		`\n    depth: (number: integer => 2)`,
-		`\n  }),`,
-		`\n  hello: (string => 'world')`,
-		`\n}) })`
-	].join('')
+	input: objectWithNestedObject,
+	expectedResult: objectWithNestedObjectResult
 });
-test.todo('usage with literal Object containing nested object - custom formatter');
+test('usage with literal Object containing nested object', customFormatterDataMacro, {
+	input: objectWithNestedObject,
+	defaultFormatterExpectedResult: objectWithNestedObjectResult,
+	expectedData: {
+		type: 'object',
+		stringifiedValue: '[object Object]',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
+		constructorName: 'Object',
+		keys: ['nested'],
+		functionName: null,
+		isAsync: false,
+		isGenerator: false
+	}
+});
 
-test.skip('usage with literal Object containing nested arrays', defaultFormatterMacro, {
-	input: {},
-	expectedResult: `(object => {})`
+const objectWithNestedArrays = {
+	value: 43,
+	arr: [5, 'hello', [76]],
+	jo: ['up'],
+	lk: {
+		tru: ['e', 32.9]
+	}
+};
+const objectWithNestedArraysResult = [
+	`(object => {`,
+	`\n  value: (number: integer => 43),`,
+	`\n  arr: (object: Array => [`,
+	`\n    (number: integer => 5),`,
+	`\n    (string => 'hello'),`,
+	`\n    (object: Array => [ (number: integer => 76) ])`,
+	`\n  ]),`,
+	`\n  jo: (object: Array => [ (string => 'up') ]),`,
+	`\n  lk: (object => { tru: (object: Array => [`,
+	`\n    (string => 'e'),`,
+	`\n    (number: float => 32.9)`,
+	`\n  ]) })`,
+	`\n})`
+].join('');
+test('usage with literal Object containing nested arrays', defaultFormatterMacro, {
+	input: objectWithNestedArrays,
+	expectedResult: objectWithNestedArraysResult
 });
-test.todo('usage with literal Object containing nested arrays - custom formatter');
+test('usage with literal Object containing nested arrays', customFormatterDataMacro, {
+	input: objectWithNestedArrays,
+	defaultFormatterExpectedResult: objectWithNestedArraysResult,
+	expectedData: {
+		type: 'object',
+		stringifiedValue: '[object Object]',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
+		constructorName: 'Object',
+		keys: ['value', 'arr', 'jo', 'lk'],
+		functionName: null,
+		isAsync: false,
+		isGenerator: false
+	}
+});
 
 test.skip('usage with literal Object containing nested object and circular reference', defaultFormatterMacro, {
 	input: {},
@@ -2095,8 +2233,43 @@ test('usage with instance of Array - custom formatter', customFormatterDataMacro
 
 /*- Object -*/
 
-test.todo('usage with instance of Object');
-test.todo('usage with instance of Object - custom formatter');
+test('usage with instance of Object', defaultFormatterMacro, {
+	input: new Object({
+		age: 7,
+		name: 'Billy'
+	}),
+	expectedResult: [
+		`(object => {`,
+		`\n  age: (number: integer => 7),`,
+		`\n  name: (string => 'Billy')`,
+		`\n})`
+	].join('')
+});
+test('usage with instance of Object', customFormatterDataMacro, {
+	input: new Object({
+		age: 12,
+		name: 'Nancy'
+	}),
+	defaultFormatterExpectedResult: [
+		`(object => {`,
+		`\n  age: (number: integer => 12),`,
+		`\n  name: (string => 'Nancy')`,
+		`\n})`
+	].join(''),
+	expectedData: {
+		type: 'object',
+		stringifiedValue: '[object Object]',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
+		constructorName: 'Object',
+		keys: ['age', 'name'],
+		functionName: null,
+		isAsync: false,
+		isGenerator: false
+	}
+});
 
 test.todo('usage with instance of custom class');
 test.todo('usage with instance of custom class - custom formatter');

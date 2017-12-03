@@ -22,6 +22,7 @@ const testDom = new JSDOM(`<!DOCTYPE html>
 		<p class="text"></p>
 		<span></span>
 		<h6></h6>
+		<div class="multiple-attributes" data-rocket enabled data-name=false title="john" data-age=5></div>
 	</body>
 </html>`);
 
@@ -39,7 +40,19 @@ test('Usage with a Node with one attribute', defaultFormatterMacro, {
 	expectedResult: `(object: HTMLParagraphElement => <p class: (string => 'text') >)`
 });
 
-test.todo('Usage with a Node with attributes')
+test('Usage with a Node with attributes', defaultFormatterMacro, {
+	input: testDom.window.document.querySelector('div.multiple-attributes'),
+	expectedResult: [
+		'(object: HTMLDivElement => <div',
+		`  class: (string => 'multiple-attributes'),`,
+		`  data-rocket: (string => ''),`,
+		`  enabled: (string => ''),`,
+		`  data-name: (string => 'false'),`,
+		`  title: (string => 'john'),`,
+		`  data-age: (string => '5')`,
+		'>)'
+	].join('\n')
+});
 
 test.todo('Usage with an empty NodeList')
 test('Usage with a NodeList containing one attributeless Node instance', defaultFormatterMacro, {
