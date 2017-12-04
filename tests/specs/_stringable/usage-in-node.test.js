@@ -2347,6 +2347,56 @@ test('usage with instance of Object', customFormatterDataMacro, {
 	}
 });
 
+/*- Errors -*/
+
+test('usage with empty Error', defaultFormatterMacro, {
+	input: new Error(),
+	expectedResult: `(object: Error)`
+});
+test.todo('usage with empty Error - custom formatter');
+
+test('usage with Error', defaultFormatterMacro, {
+	input: new Error('error message'),
+	expectedResult: `(object: Error => error message)`
+});
+test.todo('usage with Error - custom formatter');
+
+test('usage with empty TypeError', defaultFormatterMacro, {
+	input: new TypeError(),
+	expectedResult: `(object: Error: TypeError)`
+});
+test.todo('usage with empty TypeError - custom formatter');
+
+test('usage with TypeError', defaultFormatterMacro, {
+	input: new TypeError('unvalid type'),
+	expectedResult: `(object: Error: TypeError => unvalid type)`
+});
+test.todo('usage with TypeError - custom formatter');
+
+test('usage with RangeError', defaultFormatterMacro, {
+	input: new RangeError('unvalid range message'),
+	expectedResult: `(object: Error: RangeError => unvalid range message)`
+});
+test.todo('usage with RangeError - custom formatter');
+
+class CustomError extends Error{}
+test('usage with custom Error', defaultFormatterMacro, {
+	input: new CustomError('unvalid custom error message'),
+	expectedResult: `(object: Error: CustomError => unvalid custom error message)`
+});
+test.todo('usage with custom Error - custom formatter');
+
+/*- Class -*/
+
+test.todo('usage with a native class');
+test.todo('usage with a native class - custom formatter');
+
+test.todo('usage with a class');
+test.todo('usage with a class - custom formatter');
+
+test.todo('usage with instance of native class');
+test.todo('usage with instance of native class - custom formatter');
+
 test.todo('usage with instance of custom class');
 test.todo('usage with instance of custom class - custom formatter');
 
