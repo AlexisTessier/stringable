@@ -120,6 +120,7 @@
   "dependencies": {
     "@alexistessier/msg": "1.1.0",
     "escape-quotes": "1.0.2",
-    "global": "4.3.2"
+    "global": "4.3.2",
+    "repeat-string": "1.6.1"
   }
 }

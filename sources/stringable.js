@@ -3,6 +3,8 @@
 const _global = require("global");
 
 const escapeQuotes = require('escape-quotes');
+const repeatString = require('repeat-string');
+
 const msg = require('@alexistessier/msg');
 
 const nl = `\n`;
@@ -12,15 +14,61 @@ const tab = `  `;
 const _NodeList = _global.NodeList || null;
 const _Node = _global.Node || null;
 
+function isClassFrom({stringifiedValue}) {
+	return stringifiedValue.indexOf(`class`) === 0;
+}
+
+function hasClassPrototypeAndConstructor(obj, constructorsCache){
+	const constructor = obj.constructor;
+	const result = (
+		constructor && constructor.prototype &&
+		constructorsCache.findIndex(c => c === constructor) < 0 &&
+		isClassFrom({stringifiedValue: `${constructor}`})
+	);
+
+	constructorsCache.push(constructor);
+
+	return result;
+}
+
+function getObjectKeys(obj, constructorsCache = []) {
+	let keys = [];
+
+	if (obj instanceof Array) {
+		keys = Object.keys(obj);
+	}
+	else if (_Node && obj instanceof _Node) {
+		keys = obj.getAttributeNames();
+	}
+	else{
+		keys = Object.getOwnPropertyNames(obj);
+
+		if (!_NodeList || !(obj instanceof _NodeList)) {
+			keys.push(...Object.getOwnPropertySymbols(obj))
+		}
+
+		if (hasClassPrototypeAndConstructor(obj, constructorsCache)) {
+			keys.push(...getObjectKeys(obj.constructor.prototype, constructorsCache));
+		}
+	}
+
+	return keys.filter(k => k !== 'constructor');
+}
+
 function noFormatter(data) {
 	return data;
 }
 
-function getterOrSetterMarker(obj, prop, val) {
+function getterOrSetterMarker(obj, prop, val, constructorsCache = []) {
 	if (_Node && obj instanceof _Node) {
 		return val;
 	}
-	const descriptor = Object.getOwnPropertyDescriptor(obj, prop);
+
+	let descriptor = Object.getOwnPropertyDescriptor(obj, prop);
+	if (descriptor === undefined && hasClassPrototypeAndConstructor(obj, constructorsCache)) {
+		return getterOrSetterMarker(obj.constructor.prototype, prop, val, constructorsCache)
+	}
+
 	if (typeof descriptor.get === 'function') {
 		return `getter${val}`;
 	}
@@ -43,11 +91,12 @@ function defaultFormatter({
 	keys,
 	functionName,
 	isAsync,
-	isGenerator
+	isGenerator,
+	isClass
 }, parents = [], useNestTab = true) {
 	const isCircular = parents.findIndex(p => Object.is(p.value, value)) >= 0;
 	const deepness = parents.filter(p => p.manyElements).length;
-	const rootTab = repeat(tab, deepness);
+	const rootTab = repeatString(tab, deepness);
 	const displayedTab = useNestTab ? rootTab : '';
 
 	const displayValue = !(
@@ -77,6 +126,7 @@ function defaultFormatter({
 		case 'function':
 			typeComplement += isAsync ? ': async' : '';
 			typeComplement += isGenerator ? ': generator' : '';
+			typeComplement += isClass ? ': class' : '';
 			break;
 
 		default:
@@ -90,7 +140,7 @@ function defaultFormatter({
 	let nestedDiplay = null;
 	if (keys) {
 		const manyElements = keys.length > 1;
-		const bracesInnerSpace = manyElements ? nl : repeat(' ', keys.length);
+		const bracesInnerSpace = manyElements ? nl : repeatString(' ', keys.length);
 		const bracesBeforeClose = bracesInnerSpace + (manyElements ? rootTab : '');
 
 		function renderNestedValue(val, showKeys, isNode) {
@@ -118,7 +168,7 @@ function defaultFormatter({
 							if (!el.useShortKey) {return el.k};
 							const numberOfTab = (el.k.length - el.k.trim().length) / tab.length;
 
-							return repeat(tab, numberOfTab)+el.key;
+							return repeatString(tab, numberOfTab)+el.key;
 						})()
 					}))
 					.map(el => `${el.k}: ${getterOrSetterMarker(value, el.key, el.v)}`)
@@ -148,14 +198,6 @@ function defaultFormatter({
 		displayedValue = value.message ? ` => ${value.message}` : '';
 	}
 	return `${displayedTab}(${type}${typeComplement}${displayedValue})`;
-}
-
-function repeat(chars, count) {
-	let repeated = '';
-	for(let i = 0; i < count;i++){
-		repeated+=chars;
-	}
-	return repeated;
 }
 
 function stringable(value, formatter = defaultFormatter) {
@@ -194,6 +236,7 @@ function stringable(value, formatter = defaultFormatter) {
 	let functionName = null;
 	let isAsync = false;
 	let isGenerator = false;
+	let isClass = false;
 	if (type === 'function') {
 		functionName = value.name;
 		stringifiedValue = `${value}`;
@@ -204,6 +247,12 @@ function stringable(value, formatter = defaultFormatter) {
 		if (functionName.trim().length === 0) {
 			functionName = null;
 		}
+
+		isClass = isClassFrom({stringifiedValue});
+	}
+
+	if (type === 'object' && !(value instanceof Object) && value !== null && value !== undefined) {
+		stringifiedValue = '[object]';
 	}
 
 	if (type === 'symbol'){
@@ -239,15 +288,7 @@ function stringable(value, formatter = defaultFormatter) {
 		!(value instanceof RegExp) &&
 		!(value instanceof Function)
 	) {
-		if (_Node && value instanceof _Node) {
-			keys = value.getAttributeNames();
-		}
-		else{
-			keys = Object.keys(value);
-			if (!_NodeList || !(value instanceof _NodeList)) {
-				keys.push(...Object.getOwnPropertySymbols(value))
-			}
-		}
+		keys = getObjectKeys(value);
 	}
 
 	return formatter({
@@ -263,7 +304,8 @@ function stringable(value, formatter = defaultFormatter) {
 		keys,
 		functionName,
 		isAsync,
-		isGenerator
+		isGenerator,
+		isClass
 	});
 }
 

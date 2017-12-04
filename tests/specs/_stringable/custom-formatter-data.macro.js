@@ -25,7 +25,8 @@ function customFormatterDataMacro(t, {input, defaultFormatterExpectedResult, exp
 		'keys',
 		'functionName',
 		'isAsync',
-		'isGenerator'
+		'isGenerator',
+		'isClass'
 	];
 
 	const testDataKeys = customFormatterDataKeys.filter(key => ![
@@ -58,6 +59,7 @@ function customFormatterDataMacro(t, {input, defaultFormatterExpectedResult, exp
 		t.is(data.functionName, expectedData.functionName);
 		t.is(data.isAsync, expectedData.isAsync);
 		t.is(data.isGenerator, expectedData.isGenerator);
+		t.is(data.isClass, expectedData.isClass);
 
 		return randomResult;
 	});

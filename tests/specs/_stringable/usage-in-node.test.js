@@ -32,7 +32,8 @@ test('usage with literal string', customFormatterDataMacro, {
 		keys: null,
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -55,7 +56,8 @@ test('usage with literal empty string', customFormatterDataMacro, {
 		keys: null,
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -78,7 +80,8 @@ test('usage with literal blank string', customFormatterDataMacro, {
 		keys: null,
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -101,7 +104,8 @@ test('usage with literal string containing simple quotes', customFormatterDataMa
 		keys: null,
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -124,7 +128,8 @@ test('usage with literal string containing double quotes', customFormatterDataMa
 		keys: null,
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -148,7 +153,8 @@ test('usage with literal Integer', customFormatterDataMacro, {
 		keys: null,
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -170,7 +176,8 @@ test('usage with literal negative Integer', customFormatterDataMacro, {
 		keys: null,
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -192,7 +199,8 @@ test('usage with literal positive Integer', customFormatterDataMacro, {
 		keys: null,
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -215,7 +223,8 @@ test('usage with literal Float without decimal', customFormatterDataMacro, {
 		keys: null,
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -238,7 +247,8 @@ test('usage with literal Float with only zero decimal', customFormatterDataMacro
 		keys: null,
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -260,7 +270,8 @@ test('usage with literal Float', customFormatterDataMacro, {
 		keys: null,
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -282,7 +293,8 @@ test('usage with literal negative Float', customFormatterDataMacro, {
 		keys: null,
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -304,7 +316,8 @@ test('usage with literal positive Float', customFormatterDataMacro, {
 		keys: null,
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -327,7 +340,8 @@ test('usage with literal Float without unit', customFormatterDataMacro, {
 		keys: null,
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -350,7 +364,8 @@ test('usage with literal Float without unit and zero as decimal', customFormatte
 		keys: null,
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -373,7 +388,8 @@ test('usage with literal Float without unit and lot of zero as decimal', customF
 		keys: null,
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -396,7 +412,8 @@ test('usage with literal Float with unit and lot of zero as unit and decimal', c
 		keys: null,
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -419,7 +436,8 @@ test('usage with literal Float with lot of decimal', customFormatterDataMacro, {
 		keys: null,
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -442,7 +460,8 @@ test('usage with literal NaN', customFormatterDataMacro, {
 		keys: null,
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -465,7 +484,8 @@ test('usage with computed NaN', customFormatterDataMacro, {
 		keys: null,
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -488,7 +508,8 @@ test('usage with literal Infinity', customFormatterDataMacro, {
 		keys: null,
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -511,7 +532,8 @@ test('usage with computed Infinity', customFormatterDataMacro, {
 		keys: null,
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -534,7 +556,8 @@ test('usage with literal negative Infinity', customFormatterDataMacro, {
 		keys: null,
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -557,7 +580,8 @@ test('usage with computed negative Infinity', customFormatterDataMacro, {
 		keys: null,
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -582,7 +606,8 @@ test('usage with literal boolean true', customFormatterDataMacro, {
 		keys: null,
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -605,7 +630,8 @@ test('usage with literal boolean true', customFormatterDataMacro, {
 		keys: null,
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -629,7 +655,8 @@ test('usage with literal empty RegExp', customFormatterDataMacro, {
 		keys: null,
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -651,7 +678,8 @@ test('usage with literal not empty RegExp', customFormatterDataMacro, {
 		keys: null,
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -684,7 +712,8 @@ test('usage with literal named function without parameters', customFormatterData
 		keys: null,
 		functionName: 'funcNameTestFormatter',
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -725,7 +754,8 @@ test('usage with literal named function with one parameter', customFormatterData
 		keys: null,
 		functionName: 'funcNameTestFormatter',
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -783,7 +813,8 @@ test('usage with literal named function with multiple parameters and default val
 		keys: null,
 		functionName: 'funcNameTestComplex',
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -816,7 +847,8 @@ test('usage with literal anonymous function', customFormatterDataMacro, {
 		keys: null,
 		functionName: 'input',
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -849,7 +881,8 @@ test('usage with literal anonymous function from outside', customFormatterDataMa
 		keys: null,
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -880,7 +913,8 @@ test('usage with literal method', customFormatterDataMacro, {
 		keys: null,
 		functionName: 'input',
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -913,7 +947,8 @@ test('usage with literal computed name method', customFormatterDataMacro, {
 		keys: null,
 		functionName: 'input',
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -945,7 +980,8 @@ test('usage with empty computed name method', customFormatterDataMacro, {
 		keys: null,
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -976,7 +1012,8 @@ test('usage with literal arrow function', customFormatterDataMacro, {
 		keys: null,
 		functionName: 'input',
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -1007,7 +1044,8 @@ test('usage with literal arrow function with parameters', customFormatterDataMac
 		keys: null,
 		functionName: 'input',
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -1038,7 +1076,8 @@ test('usage with literal arrow function with one parameter without braces', cust
 		keys: null,
 		functionName: 'input',
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -1069,7 +1108,8 @@ test('usage with literal arrow function with one parameter without braces nor sp
 		keys: null,
 		functionName: 'input',
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -1105,7 +1145,8 @@ test('usage with literal async function', customFormatterDataMacro, {
 		keys: null,
 		functionName: 'anAsyncFunctionTest',
 		isAsync: asyncSupport ? true : false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -1198,7 +1239,8 @@ test('usage with literal generator function', customFormatterDataMacro, {
 		keys: null,
 		functionName: 'aGenerator',
 		isAsync: false,
-		isGenerator: true
+		isGenerator: true,
+		isClass: false
 	}
 });
 
@@ -1226,7 +1268,8 @@ test('usage with literal generator anonymous function (object key as name)', cus
 		keys: null,
 		functionName: 'input',
 		isAsync: false,
-		isGenerator: true
+		isGenerator: true,
+		isClass: false
 	}
 });
 
@@ -1252,7 +1295,8 @@ test('usage with literal generator anonymous function', customFormatterDataMacro
 		keys: null,
 		functionName: null,
 		isAsync: false,
-		isGenerator: true
+		isGenerator: true,
+		isClass: false
 	}
 });
 
@@ -1276,7 +1320,8 @@ test('usage with literal null', customFormatterDataMacro, {
 		keys: null,
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -1298,7 +1343,8 @@ test('usage with literal undefined', customFormatterDataMacro, {
 		keys: null,
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -1322,7 +1368,8 @@ test('usage with instance of String', customFormatterDataMacro, {
 		keys: null,
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -1344,7 +1391,8 @@ test('usage with instance of empty String', customFormatterDataMacro, {
 		keys: null,
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -1366,7 +1414,8 @@ test('usage with instance of blank String', customFormatterDataMacro, {
 		keys: null,
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -1390,7 +1439,8 @@ test('usage with instance of Number', customFormatterDataMacro, {
 		keys: null,
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -1412,7 +1462,8 @@ test('usage with instance of Number (integer)', customFormatterDataMacro, {
 		keys: null,
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -1434,7 +1485,8 @@ test('usage with instance of Number (float)', customFormatterDataMacro, {
 		keys: null,
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -1458,7 +1510,8 @@ test('usage with instance of true Boolean', customFormatterDataMacro, {
 		keys: null,
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -1480,7 +1533,8 @@ test('usage with instance of false Boolean', customFormatterDataMacro, {
 		keys: null,
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -1504,7 +1558,8 @@ test('usage with instance of RegExp', customFormatterDataMacro, {
 		keys: null,
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -1531,7 +1586,8 @@ return argOne
 		keys: null,
 		functionName: 'anonymous',
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -1555,7 +1611,8 @@ test('usage with instance of empty Symbol', customFormatterDataMacro, {
 		keys: null,
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -1577,7 +1634,8 @@ test('usage with instance of empty Symbol', customFormatterDataMacro, {
 		keys: null,
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -1602,7 +1660,8 @@ test('usage with literal empty Array', customFormatterDataMacro, {
 		keys: [],
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -1624,7 +1683,8 @@ test('usage with literal Array containing literal string', customFormatterDataMa
 		keys: ['0'],
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -1646,7 +1706,8 @@ test('usage with literal Array containing literal strings', customFormatterDataM
 		keys: ['0', '1'],
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -1687,7 +1748,8 @@ test('usage with literal Array containing literal strings', customFormatterDataM
 		keys: ['0', '1', '2'],
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -1725,7 +1787,8 @@ test('usage with literal Array containing literal strings', customFormatterDataM
 		keys: ['0', '1', '2'],
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -1767,7 +1830,8 @@ test('usage with literal Array containing circular references', customFormatterD
 		keys: ['0', '1'],
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -1815,7 +1879,8 @@ test('usage with literal Array containing circular references - other pattern', 
 		keys: ['0', '1'],
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -1839,7 +1904,8 @@ test('usage with literal empty Object', customFormatterDataMacro, {
 		keys: [],
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -1861,7 +1927,8 @@ test('usage with literal Object containing string as value', customFormatterData
 		keys: ['keyName2'],
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -1883,7 +1950,8 @@ test('usage with literal Object containing strings as value', customFormatterDat
 		keys: ['test', 'kkkk', 'boa boa'],
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -1923,7 +1991,8 @@ test('usage with literal Object containing numbers as key', customFormatterDataM
 		keys: ['90', '8.9'],
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -1968,7 +2037,8 @@ test('usage with literal Object containing computed key', customFormatterDataMac
 		keys: ['test', '[object Object]', 'draw'],
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -2013,7 +2083,8 @@ test('usage with literal Object containing Symbol as key', customFormatterDataMa
 		keys: ['first name', symAsKey, symAsKeyNumber],
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -2053,7 +2124,8 @@ test('usage with literal Object containing get properties', customFormatterDataM
 		keys: ['age', 'test', 'name'],
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -2093,7 +2165,8 @@ test('usage with literal Object containing set properties', customFormatterDataM
 		keys: ['test', 'name', 'age'],
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -2134,7 +2207,8 @@ test('usage with literal Object containing nested object', customFormatterDataMa
 		keys: ['nested'],
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -2179,7 +2253,8 @@ test('usage with literal Object containing nested arrays', customFormatterDataMa
 		keys: ['value', 'arr', 'jo', 'lk'],
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -2216,7 +2291,8 @@ test('usage with literal Object containing nested object and circular reference'
 		keys: ['test', 'obj'],
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -2266,7 +2342,8 @@ test('usage with literal Object containing nested object and circular reference 
 		keys: ['a', 'b'],
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -2303,7 +2380,8 @@ test('usage with instance of Array - custom formatter', customFormatterDataMacro
 		keys: ['0', '1', '2', '3'],
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -2343,7 +2421,8 @@ test('usage with instance of Object', customFormatterDataMacro, {
 		keys: ['age', 'name'],
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -2364,10 +2443,11 @@ test('usage with empty Error', customFormatterDataMacro, {
 		simpleQuoteString: null,
 		doubleQuoteString: null,
 		constructorName: 'Error',
-		keys: [],
+		keys: ['stack'],
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -2386,10 +2466,11 @@ test('usage with Error', customFormatterDataMacro, {
 		simpleQuoteString: null,
 		doubleQuoteString: null,
 		constructorName: 'Error',
-		keys: [],
+		keys: ['stack', 'message'],
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -2408,10 +2489,11 @@ test('usage with empty TypeError', customFormatterDataMacro, {
 		simpleQuoteString: null,
 		doubleQuoteString: null,
 		constructorName: 'TypeError',
-		keys: [],
+		keys: ['stack'],
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -2430,10 +2512,11 @@ test('usage with TypeError', customFormatterDataMacro, {
 		simpleQuoteString: null,
 		doubleQuoteString: null,
 		constructorName: 'TypeError',
-		keys: [],
+		keys: ['stack', 'message'],
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -2452,10 +2535,11 @@ test('usage with RangeError', customFormatterDataMacro, {
 		simpleQuoteString: null,
 		doubleQuoteString: null,
 		constructorName: 'RangeError',
-		keys: [],
+		keys: ['stack', 'message'],
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -2475,26 +2559,114 @@ test('usage with custom Error', customFormatterDataMacro, {
 		simpleQuoteString: null,
 		doubleQuoteString: null,
 		constructorName: 'CustomError',
-		keys: [],
+		keys: ['stack', 'message'],
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
+	}
+});
+
+class OtherCustomError extends Error{
+	get assertion(){return true;}
+}
+test('usage with custom Error', defaultFormatterMacro, {
+	input: new OtherCustomError('unvalid other custom error message'),
+	expectedResult: `(object: Error: OtherCustomError => unvalid other custom error message)`
+});
+test('usage with custom Error', customFormatterDataMacro, {
+	input: new OtherCustomError('unvalid other custom error message'),
+	defaultFormatterExpectedResult: `(object: Error: OtherCustomError => unvalid other custom error message)`,
+	expectedData: {
+		type: 'object',
+		stringifiedValue: 'Error: unvalid other custom error message',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
+		constructorName: 'OtherCustomError',
+		keys: ['stack', 'message', 'assertion'],
+		functionName: null,
+		isAsync: false,
+		isGenerator: false,
+		isClass: false
 	}
 });
 
 /*- Class -*/
 
-test.todo('usage with a native class');
+const Stream = require('stream');
+test('usage with a native class', defaultFormatterMacro, {
+	input: Stream,
+	expectedResult: `(function => Stream)`
+});
 test.todo('usage with a native class - custom formatter');
 
-test.todo('usage with a class');
+test('usage with a class', defaultFormatterMacro, {
+	input: CustomError,
+	expectedResult: `(function: class => CustomError)`
+});
 test.todo('usage with a class - custom formatter');
 
-test.todo('usage with instance of native class');
+class SuperHero {
+	constructor(){
+		this.name = 'Will';
+		this.birth = 67;
+	}
+
+	get age(){
+		return 87 - this.birth;
+	}
+
+	set family(val){this.family = val}
+
+	talk(){return 'Hello'};
+
+	static akkaTest(){ return 'noooo'; };
+
+	get up(){return 'up'}
+	set up(val){this.up = val}
+}
+
+test('usage with a class 2', defaultFormatterMacro, {
+	input: SuperHero,
+	expectedResult: `(function: class => SuperHero)`
+});
+test.todo('usage with a class 2 - custom formatter');
+
+test('usage with instance of native class', defaultFormatterMacro, {
+	input: new Stream(),
+	expectedResult: [
+		`(object: Stream => {`,
+		`  domain: (object => null),`,
+		`  _events: (object => [object]),`,
+		`  _eventsCount: (number: integer => 0),`,
+		`  _maxListeners: (undefined)`,
+		`})`
+	].join('\n')
+});
 test.todo('usage with instance of native class - custom formatter');
 
-test.todo('usage with instance of custom class');
+test('usage with instance of custom class', defaultFormatterMacro, {
+	input: new SuperHero(),
+	expectedResult: [
+		`(object: SuperHero => {`,
+		`  name: (string => 'Will'),`,
+		`  birth: (number: integer => 67),`,
+		`  age: getter(number: integer => 20),`,
+		`  family: setter,`,
+		`  talk: (function => talk),`,
+		`  up: getter(string => 'up')`,
+		`})`
+	].join('\n')
+});
 test.todo('usage with instance of custom class - custom formatter');
+
+test.todo('usage with instance of extended class');
+test.todo('usage with instance of extended class - custom formatter');
+
+test.todo('usage with instance of extended class - deep extends');
+test.todo('usage with instance of extended class - deep extends - custom formatter');
 
 /*- errors handling -*/
 

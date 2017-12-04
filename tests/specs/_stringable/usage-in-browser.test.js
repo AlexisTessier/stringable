@@ -63,7 +63,8 @@ test('Usage with a Node without attribute', customFormatterDataMacro, {
 		keys: [],
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -85,7 +86,8 @@ test('Usage with a Node with one attribute', customFormatterDataMacro, {
 		keys: ['class'],
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -125,7 +127,8 @@ test('Usage with a Node with attributes', customFormatterDataMacro, {
 		keys: ['class', 'data-rocket', 'enabled', 'data-name', 'title', 'data-age'],
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -147,7 +150,8 @@ test('Usage with an empty NodeList', customFormatterDataMacro, {
 		keys: [],
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
 
@@ -252,6 +256,7 @@ test('Usage with a NodeList containing one attributeless and one attributeful No
 		keys: ['0', '1'],
 		functionName: null,
 		isAsync: false,
-		isGenerator: false
+		isGenerator: false,
+		isClass: false
 	}
 });
