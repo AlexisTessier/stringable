@@ -64,6 +64,12 @@ function defaultFormatter({
 	}
 
 	switch(_type){
+		case 'object':
+			typeComplement = (value instanceof Error && value.constructor !== Error)
+				? `: Error${typeComplement}`
+				: typeComplement;
+			break;
+
 		case 'number':
 			typeComplement += isInteger ? ': integer' : (isFloat ? ': float' : '');
 			break;
@@ -137,7 +143,10 @@ function defaultFormatter({
 		}
 	}
 
-	const displayedValue = displayValue ? ` => ${nestedDiplay || functionName || simpleQuoteString || stringifiedValue}` : '';
+	let displayedValue = displayValue ? ` => ${nestedDiplay || functionName || simpleQuoteString || stringifiedValue}` : '';
+	if (value instanceof Error) {
+		displayedValue = value.message ? ` => ${value.message}` : '';
+	}
 	return `${displayedTab}(${type}${typeComplement}${displayedValue})`;
 }
 

@@ -2353,38 +2353,134 @@ test('usage with empty Error', defaultFormatterMacro, {
 	input: new Error(),
 	expectedResult: `(object: Error)`
 });
-test.todo('usage with empty Error - custom formatter');
+test('usage with empty Error', customFormatterDataMacro, {
+	input: new Error(),
+	defaultFormatterExpectedResult: `(object: Error)`,
+	expectedData: {
+		type: 'object',
+		stringifiedValue: 'Error',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
+		constructorName: 'Error',
+		keys: [],
+		functionName: null,
+		isAsync: false,
+		isGenerator: false
+	}
+});
 
 test('usage with Error', defaultFormatterMacro, {
 	input: new Error('error message'),
 	expectedResult: `(object: Error => error message)`
 });
-test.todo('usage with Error - custom formatter');
+test('usage with Error', customFormatterDataMacro, {
+	input: new Error('error message'),
+	defaultFormatterExpectedResult: `(object: Error => error message)`,
+	expectedData: {
+		type: 'object',
+		stringifiedValue: 'Error: error message',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
+		constructorName: 'Error',
+		keys: [],
+		functionName: null,
+		isAsync: false,
+		isGenerator: false
+	}
+});
 
 test('usage with empty TypeError', defaultFormatterMacro, {
 	input: new TypeError(),
 	expectedResult: `(object: Error: TypeError)`
 });
-test.todo('usage with empty TypeError - custom formatter');
+test('usage with empty TypeError', customFormatterDataMacro, {
+	input: new TypeError(),
+	defaultFormatterExpectedResult: `(object: Error: TypeError)`,
+	expectedData: {
+		type: 'object',
+		stringifiedValue: 'TypeError',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
+		constructorName: 'TypeError',
+		keys: [],
+		functionName: null,
+		isAsync: false,
+		isGenerator: false
+	}
+});
 
 test('usage with TypeError', defaultFormatterMacro, {
 	input: new TypeError('unvalid type'),
 	expectedResult: `(object: Error: TypeError => unvalid type)`
 });
-test.todo('usage with TypeError - custom formatter');
+test('usage with TypeError', customFormatterDataMacro, {
+	input: new TypeError('unvalid type'),
+	defaultFormatterExpectedResult: `(object: Error: TypeError => unvalid type)`,
+	expectedData: {
+		type: 'object',
+		stringifiedValue: 'TypeError: unvalid type',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
+		constructorName: 'TypeError',
+		keys: [],
+		functionName: null,
+		isAsync: false,
+		isGenerator: false
+	}
+});
 
 test('usage with RangeError', defaultFormatterMacro, {
 	input: new RangeError('unvalid range message'),
 	expectedResult: `(object: Error: RangeError => unvalid range message)`
 });
-test.todo('usage with RangeError - custom formatter');
+test('usage with RangeError', customFormatterDataMacro, {
+	input: new RangeError('unvalid range message'),
+	defaultFormatterExpectedResult: `(object: Error: RangeError => unvalid range message)`,
+	expectedData: {
+		type: 'object',
+		stringifiedValue: 'RangeError: unvalid range message',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
+		constructorName: 'RangeError',
+		keys: [],
+		functionName: null,
+		isAsync: false,
+		isGenerator: false
+	}
+});
 
 class CustomError extends Error{}
 test('usage with custom Error', defaultFormatterMacro, {
 	input: new CustomError('unvalid custom error message'),
 	expectedResult: `(object: Error: CustomError => unvalid custom error message)`
 });
-test.todo('usage with custom Error - custom formatter');
+test('usage with custom Error', customFormatterDataMacro, {
+	input: new CustomError('unvalid custom error message'),
+	defaultFormatterExpectedResult: `(object: Error: CustomError => unvalid custom error message)`,
+	expectedData: {
+		type: 'object',
+		stringifiedValue: 'Error: unvalid custom error message',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
+		constructorName: 'CustomError',
+		keys: [],
+		functionName: null,
+		isAsync: false,
+		isGenerator: false
+	}
+});
 
 /*- Class -*/
 
