@@ -14,69 +14,68 @@ const tab = `  `;
 const _NodeList = _global.NodeList || null;
 const _Node = _global.Node || null;
 
-function isClassFrom({stringifiedValue}) {
-	return stringifiedValue.indexOf(`class`) === 0;
-}
-
-function hasClassPrototypeAndConstructor(obj, constructorsCache){
-	const constructor = obj.constructor;
-	const result = (
-		constructor && constructor.prototype &&
-		constructorsCache.findIndex(c => c === constructor) < 0 &&
-		isClassFrom({stringifiedValue: `${constructor}`})
-	);
-
-	constructorsCache.push(constructor);
-
-	return result;
-}
-
-function getObjectKeys(obj, constructorsCache = []) {
+function getObjectKeys(obj, keysFilter = getObjectKeys({}, [])) {
 	let keys = [];
 
-	if (obj instanceof Array) {
+	if (obj instanceof Array || (_NodeList && obj instanceof _NodeList)) {
 		keys = Object.keys(obj);
 	}
 	else if (_Node && obj instanceof _Node) {
 		keys = obj.getAttributeNames();
 	}
 	else{
-		keys = Object.getOwnPropertyNames(obj);
-
-		if (!_NodeList || !(obj instanceof _NodeList)) {
-			keys.push(...Object.getOwnPropertySymbols(obj))
-		}
-
-		if (hasClassPrototypeAndConstructor(obj, constructorsCache)) {
-			keys.push(...getObjectKeys(obj.constructor.prototype, constructorsCache));
-		}
+		do {
+			keys.push(
+				...Object.getOwnPropertyNames(obj),
+				...Object.getOwnPropertySymbols(obj)
+			);
+			obj = Object.getPrototypeOf(obj);
+		} while (obj);
 	}
 
-	return keys.filter(k => k !== 'constructor');
+	const uniqCache = [];
+	return keys.filter(k => {
+		const show = (
+			!keysFilter.includes(k) &&
+			!uniqCache.includes(k)
+		);
+
+		uniqCache.push(k);
+
+		return show;
+	});
 }
 
-function noFormatter(data) {
-	return data;
-}
-
-function getterOrSetterMarker(obj, prop, val, constructorsCache = []) {
+function getterOrSetterMarker(obj, property, val) {
 	if (_Node && obj instanceof _Node) {
 		return val;
 	}
 
-	let descriptor = Object.getOwnPropertyDescriptor(obj, prop);
-	if (descriptor === undefined && hasClassPrototypeAndConstructor(obj, constructorsCache)) {
-		return getterOrSetterMarker(obj.constructor.prototype, prop, val, constructorsCache)
+	let descriptor = Object.getOwnPropertyDescriptor(obj, property);
+	if (descriptor === undefined) {
+		return getterOrSetterMarker(Object.getPrototypeOf(obj), property, val)
 	}
 
-	if (typeof descriptor.get === 'function') {
+	const hasGetter = typeof descriptor.get === 'function';
+	const hasSetter = typeof descriptor.set === 'function';
+
+	if (hasGetter && hasSetter) {
+		return val;
+	}
+
+	if (hasGetter) {
 		return `getter${val}`;
 	}
 
-	if (typeof descriptor.set === 'function') {
+	if (hasSetter) {
 		return 'setter';
 	}
+
 	return val;
+}
+
+function noFormatter(data) {
+	return data;
 }
 
 function defaultFormatter({
@@ -248,7 +247,7 @@ function stringable(value, formatter = defaultFormatter) {
 			functionName = null;
 		}
 
-		isClass = isClassFrom({stringifiedValue});
+		isClass = stringifiedValue.indexOf(`class`) === 0;
 	}
 
 	if (type === 'object' && !(value instanceof Object) && value !== null && value !== undefined) {

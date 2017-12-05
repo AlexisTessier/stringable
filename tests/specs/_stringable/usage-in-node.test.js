@@ -2443,7 +2443,7 @@ test('usage with empty Error', customFormatterDataMacro, {
 		simpleQuoteString: null,
 		doubleQuoteString: null,
 		constructorName: 'Error',
-		keys: ['stack'],
+		keys: ['stack', 'name', 'message'],
 		functionName: null,
 		isAsync: false,
 		isGenerator: false,
@@ -2466,7 +2466,7 @@ test('usage with Error', customFormatterDataMacro, {
 		simpleQuoteString: null,
 		doubleQuoteString: null,
 		constructorName: 'Error',
-		keys: ['stack', 'message'],
+		keys: ['stack', 'message', 'name'],
 		functionName: null,
 		isAsync: false,
 		isGenerator: false,
@@ -2489,7 +2489,7 @@ test('usage with empty TypeError', customFormatterDataMacro, {
 		simpleQuoteString: null,
 		doubleQuoteString: null,
 		constructorName: 'TypeError',
-		keys: ['stack'],
+		keys: ['stack', 'name', 'message'],
 		functionName: null,
 		isAsync: false,
 		isGenerator: false,
@@ -2512,7 +2512,7 @@ test('usage with TypeError', customFormatterDataMacro, {
 		simpleQuoteString: null,
 		doubleQuoteString: null,
 		constructorName: 'TypeError',
-		keys: ['stack', 'message'],
+		keys: ['stack', 'message', 'name'],
 		functionName: null,
 		isAsync: false,
 		isGenerator: false,
@@ -2535,7 +2535,7 @@ test('usage with RangeError', customFormatterDataMacro, {
 		simpleQuoteString: null,
 		doubleQuoteString: null,
 		constructorName: 'RangeError',
-		keys: ['stack', 'message'],
+		keys: ['stack', 'message', 'name'],
 		functionName: null,
 		isAsync: false,
 		isGenerator: false,
@@ -2559,7 +2559,7 @@ test('usage with custom Error', customFormatterDataMacro, {
 		simpleQuoteString: null,
 		doubleQuoteString: null,
 		constructorName: 'CustomError',
-		keys: ['stack', 'message'],
+		keys: ['stack', 'message', 'name'],
 		functionName: null,
 		isAsync: false,
 		isGenerator: false,
@@ -2570,11 +2570,11 @@ test('usage with custom Error', customFormatterDataMacro, {
 class OtherCustomError extends Error{
 	get assertion(){return true;}
 }
-test('usage with custom Error', defaultFormatterMacro, {
+test('usage with custom Error 2', defaultFormatterMacro, {
 	input: new OtherCustomError('unvalid other custom error message'),
 	expectedResult: `(object: Error: OtherCustomError => unvalid other custom error message)`
 });
-test('usage with custom Error', customFormatterDataMacro, {
+test('usage with custom Error 2', customFormatterDataMacro, {
 	input: new OtherCustomError('unvalid other custom error message'),
 	defaultFormatterExpectedResult: `(object: Error: OtherCustomError => unvalid other custom error message)`,
 	expectedData: {
@@ -2585,7 +2585,7 @@ test('usage with custom Error', customFormatterDataMacro, {
 		simpleQuoteString: null,
 		doubleQuoteString: null,
 		constructorName: 'OtherCustomError',
-		keys: ['stack', 'message', 'assertion'],
+		keys: ['stack', 'message', 'assertion', 'name'],
 		functionName: null,
 		isAsync: false,
 		isGenerator: false,
@@ -2600,15 +2600,49 @@ test('usage with a native class', defaultFormatterMacro, {
 	input: Stream,
 	expectedResult: `(function => Stream)`
 });
-test.todo('usage with a native class - custom formatter');
+test('usage with a native class', customFormatterDataMacro, {
+	input: Stream,
+	defaultFormatterExpectedResult: `(function => Stream)`,
+	expectedData: {
+		type: 'function',
+		stringifiedValue: `${Stream}`,
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
+		constructorName: 'Function',
+		keys: null,
+		functionName: 'Stream',
+		isAsync: false,
+		isGenerator: false,
+		isClass: false
+	}
+});
 
 test('usage with a class', defaultFormatterMacro, {
 	input: CustomError,
 	expectedResult: `(function: class => CustomError)`
 });
-test.todo('usage with a class - custom formatter');
+test('usage with a class', customFormatterDataMacro, {
+	input: CustomError,
+	defaultFormatterExpectedResult: `(function: class => CustomError)`,
+	expectedData: {
+		type: 'function',
+		stringifiedValue: `class CustomError extends Error {}`,
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
+		constructorName: 'Function',
+		keys: null,
+		functionName: 'CustomError',
+		isAsync: false,
+		isGenerator: false,
+		isClass: true
+	}
+});
 
-class SuperHero {
+class Hero {
 	constructor(){
 		this.name = 'Will';
 		this.birth = 67;
@@ -2626,47 +2660,319 @@ class SuperHero {
 
 	get up(){return 'up'}
 	set up(val){this.up = val}
+
+	[symAsKey](){return 'lola'}
 }
 
 test('usage with a class 2', defaultFormatterMacro, {
-	input: SuperHero,
-	expectedResult: `(function: class => SuperHero)`
+	input: Hero,
+	expectedResult: `(function: class => Hero)`
 });
-test.todo('usage with a class 2 - custom formatter');
+test('usage with a class 2', customFormatterDataMacro, {
+	input: Hero,
+	defaultFormatterExpectedResult: `(function: class => Hero)`,
+	expectedData: {
+		type: 'function',
+		stringifiedValue: `${Hero}`,
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
+		constructorName: 'Function',
+		keys: null,
+		functionName: 'Hero',
+		isAsync: false,
+		isGenerator: false,
+		isClass: true
+	}
+});
+
+test('usage with an anonymous class', defaultFormatterMacro, {
+	input: class {},
+	expectedResult: `(function: class => input)`
+});
+test('usage with an anonymous class', customFormatterDataMacro, {
+	input: class {},
+	defaultFormatterExpectedResult: `(function: class => input)`,
+	expectedData: {
+		type: 'function',
+		stringifiedValue: `class {}`,
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
+		constructorName: 'Function',
+		keys: null,
+		functionName: 'input',
+		isAsync: false,
+		isGenerator: false,
+		isClass: true
+	}
+});
+
+const anonymousClass = () => class {};
+test('usage with a real anonymous class', defaultFormatterMacro, {
+	input: anonymousClass(),
+	expectedResult: `(function: class)`
+});
+test('usage with a real anonymous class', customFormatterDataMacro, {
+	input: anonymousClass(),
+	defaultFormatterExpectedResult: `(function: class)`,
+	expectedData: {
+		type: 'function',
+		stringifiedValue: `class {}`,
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
+		constructorName: 'Function',
+		keys: null,
+		functionName: null,
+		isAsync: false,
+		isGenerator: false,
+		isClass: true
+	}
+});
+
+const StreamResult = [
+	`(object: Stream => {`,
+	`  domain: (object => null),`,
+	`  _events: (object => [object]),`,
+	`  _eventsCount: (number: integer => 0),`,
+	`  _maxListeners: (undefined),`,
+	`  pipe: (function),`,
+	`  setMaxListeners: (function => setMaxListeners),`,
+	`  getMaxListeners: (function => getMaxListeners),`,
+	`  emit: (function => emit),`,
+	`  addListener: (function => addListener),`,
+	`  on: (function => addListener),`,
+	`  prependListener: (function => prependListener),`,
+	`  once: (function => once),`,
+	`  prependOnceListener: (function => prependOnceListener),`,
+	`  removeListener: (function => removeListener),`,
+	`  removeAllListeners: (function => removeAllListeners),`,
+	`  listeners: (function => listeners),`,
+	`  listenerCount: (function => listenerCount),`,
+	`  eventNames: (function => eventNames)`,
+	`})`
+].join('\n');
 
 test('usage with instance of native class', defaultFormatterMacro, {
 	input: new Stream(),
-	expectedResult: [
-		`(object: Stream => {`,
-		`  domain: (object => null),`,
-		`  _events: (object => [object]),`,
-		`  _eventsCount: (number: integer => 0),`,
-		`  _maxListeners: (undefined)`,
-		`})`
-	].join('\n')
+	expectedResult: StreamResult
 });
-test.todo('usage with instance of native class - custom formatter');
+test('usage with instance of native class', customFormatterDataMacro, {
+	input: new Stream(),
+	defaultFormatterExpectedResult: StreamResult,
+	expectedData: {
+		type: 'object',
+		stringifiedValue: `[object Object]`,
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
+		constructorName: 'Stream',
+		keys: [
+			'domain','_events','_eventsCount','_maxListeners',
+			'pipe','setMaxListeners','getMaxListeners','emit',
+			'addListener','on','prependListener','once',
+			'prependOnceListener','removeListener','removeAllListeners',
+			'listeners','listenerCount','eventNames'
+		],
+		functionName: null,
+		isAsync: false,
+		isGenerator: false,
+		isClass: false
+	}
+});
 
 test('usage with instance of custom class', defaultFormatterMacro, {
-	input: new SuperHero(),
+	input: new Hero(),
 	expectedResult: [
-		`(object: SuperHero => {`,
+		`(object: Hero => {`,
 		`  name: (string => 'Will'),`,
 		`  birth: (number: integer => 67),`,
 		`  age: getter(number: integer => 20),`,
 		`  family: setter,`,
 		`  talk: (function => talk),`,
-		`  up: getter(string => 'up')`,
+		`  up: (string => 'up'),`,
+		`  (symbol => Symbol()): (function)`,
 		`})`
 	].join('\n')
 });
-test.todo('usage with instance of custom class - custom formatter');
+test('usage with instance of custom class', customFormatterDataMacro, {
+	input: new Hero(),
+	defaultFormatterExpectedResult: [
+		`(object: Hero => {`,
+		`  name: (string => 'Will'),`,
+		`  birth: (number: integer => 67),`,
+		`  age: getter(number: integer => 20),`,
+		`  family: setter,`,
+		`  talk: (function => talk),`,
+		`  up: (string => 'up'),`,
+		`  (symbol => Symbol()): (function)`,
+		`})`
+	].join('\n'),
+	expectedData: {
+		type: 'object',
+		stringifiedValue: `[object Object]`,
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
+		constructorName: 'Hero',
+		keys: ['name', 'birth', 'age', 'family', 'talk', 'up', symAsKey],
+		functionName: null,
+		isAsync: false,
+		isGenerator: false,
+		isClass: false
+	}
+});
 
-test.todo('usage with instance of extended class');
-test.todo('usage with instance of extended class - custom formatter');
+class SuperHero extends Hero {
+	fly(){return 'bird';}
 
-test.todo('usage with instance of extended class - deep extends');
-test.todo('usage with instance of extended class - deep extends - custom formatter');
+	get superName(){return 'aSuperName'};
+
+	[symAsKeyNumber](){return 'jon'}
+
+	get down(){return 'down st';}
+	set down(val){this.down = val;}
+}
+
+test('usage with instance of extended class', defaultFormatterMacro, {
+	input: new SuperHero,
+	expectedResult: [
+		`(object: SuperHero => {`,
+		`  name: (string => 'Will'),`,
+		`  birth: (number: integer => 67),`,
+		`  fly: (function => fly),`,
+		`  superName: getter(string => 'aSuperName'),`,
+		`  down: (string => 'down st'),`,
+		`  (symbol => Symbol(number)): (function => [number]),`,
+		`  age: getter(number: integer => 20),`,
+		`  family: setter,`,
+		`  talk: (function => talk),`,
+		`  up: (string => 'up'),`,
+		`  (symbol => Symbol()): (function)`,
+		`})`
+	].join('\n')
+});
+test('usage with instance of extended class', customFormatterDataMacro, {
+	input: new SuperHero(),
+	defaultFormatterExpectedResult: [
+		`(object: SuperHero => {`,
+		`  name: (string => 'Will'),`,
+		`  birth: (number: integer => 67),`,
+		`  fly: (function => fly),`,
+		`  superName: getter(string => 'aSuperName'),`,
+		`  down: (string => 'down st'),`,
+		`  (symbol => Symbol(number)): (function => [number]),`,
+		`  age: getter(number: integer => 20),`,
+		`  family: setter,`,
+		`  talk: (function => talk),`,
+		`  up: (string => 'up'),`,
+		`  (symbol => Symbol()): (function)`,
+		`})`
+	].join('\n'),
+	expectedData: {
+		type: 'object',
+		stringifiedValue: `[object Object]`,
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
+		constructorName: 'SuperHero',
+		keys: ['name', 'birth', 'fly', 'superName', 'down', symAsKeyNumber, 'age', 'family', 'talk', 'up', symAsKey],
+		functionName: null,
+		isAsync: false,
+		isGenerator: false,
+		isClass: false
+	}
+});
+
+const aSymbolAsKey2 = Symbol();
+const aSymbolNumberAsKey2 = Symbol('number');
+const aSymbolAsKey3 = Symbol('keykey');
+
+class TheHero extends SuperHero {
+	constructor(){
+		super();
+		this.who = 'are you';
+	}
+	[aSymbolAsKey2](){return 2;}
+	[aSymbolNumberAsKey2](){return 3;}
+
+	get test(){return 42;}
+	oups(){return 'jo';}
+
+	get [aSymbolAsKey3](){
+		return 'arf';
+	}
+}
+
+test('usage with instance of extended class - deep extends', defaultFormatterMacro, {
+	input: new TheHero(),
+	expectedResult: [
+		`(object: TheHero => {`,
+		`  name: (string => 'Will'),`,
+		`  birth: (number: integer => 67),`,
+		`  who: (string => 'are you'),`,
+		`  test: getter(number: integer => 42),`,
+		`  oups: (function => oups),`,
+		`  (symbol => Symbol()): (function),`,
+		`  (symbol => Symbol(number)): (function => [number]),`,
+		`  (symbol => Symbol(keykey)): getter(string => 'arf'),`,
+		`  fly: (function => fly),`,
+		`  superName: getter(string => 'aSuperName'),`,
+		`  down: (string => 'down st'),`,
+		`  (symbol => Symbol(number)): (function => [number]),`,
+		`  age: getter(number: integer => 20),`,
+		`  family: setter,`,
+		`  talk: (function => talk),`,
+		`  up: (string => 'up'),`,
+		`  (symbol => Symbol()): (function)`,
+		`})`
+	].join('\n')
+});
+test('usage with instance of extended class - deep extends', customFormatterDataMacro, {
+	input: new TheHero(),
+	defaultFormatterExpectedResult: [
+		`(object: TheHero => {`,
+		`  name: (string => 'Will'),`,
+		`  birth: (number: integer => 67),`,
+		`  who: (string => 'are you'),`,
+		`  test: getter(number: integer => 42),`,
+		`  oups: (function => oups),`,
+		`  (symbol => Symbol()): (function),`,
+		`  (symbol => Symbol(number)): (function => [number]),`,
+		`  (symbol => Symbol(keykey)): getter(string => 'arf'),`,
+		`  fly: (function => fly),`,
+		`  superName: getter(string => 'aSuperName'),`,
+		`  down: (string => 'down st'),`,
+		`  (symbol => Symbol(number)): (function => [number]),`,
+		`  age: getter(number: integer => 20),`,
+		`  family: setter,`,
+		`  talk: (function => talk),`,
+		`  up: (string => 'up'),`,
+		`  (symbol => Symbol()): (function)`,
+		`})`
+	].join('\n'),
+	expectedData: {
+		type: 'object',
+		stringifiedValue: `[object Object]`,
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
+		constructorName: 'TheHero',
+		keys: ['name', 'birth', 'who', 'test', 'oups', aSymbolAsKey2, aSymbolNumberAsKey2, aSymbolAsKey3, 'fly', 'superName', 'down', symAsKeyNumber, 'age', 'family', 'talk', 'up', symAsKey],
+		functionName: null,
+		isAsync: false,
+		isGenerator: false,
+		isClass: false
+	}
+});
 
 /*- errors handling -*/
 
