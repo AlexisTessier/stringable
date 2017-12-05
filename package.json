@@ -1,6 +1,6 @@
 {
   "name": "stringable",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Stringify any values to got something which render well in a log",
   "main": "index.js",
   "directories": {
