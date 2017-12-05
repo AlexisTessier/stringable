@@ -1,11 +1,43 @@
-- section: Section Name
-- title: Title
-- subtitle: Subtitle
+- section: Introduction
+- title: Why ?
 - p: >
-    paragraph content
+    You need to format as string a value that you ignore the type. However, in JS, some value doesn't have
+    nice stringified version, and even sometimes, trying to stringify a value can throw an error.
+    For example, if you try to stringify a Symbol using a string template like that:
 - js: >
-    // javascript code
+    const aSymbol = Symbol('a');
+    console.log(`${aSymbol}`);
+- p: >
+    You will get an error like: "Cannot convert a Symbol value to a string". To avoid issues like this one,
+    Stringable converts any value in a string which aims to be readable, verbose, and useful in dev mode.
+- title: How to install ?
 - cli: >
-    // cli code
-- li: list element
+    npm i stringable
+- title: How to use ?
+- js: >
+    const stringable = require('stringable');
+
+
+    const loggableObject = stringable({ firstName: 'Will', lastName: 'Wheeler', age: 13 });
+
+
+    console.log(loggableObject);
+
+    // (object => {
+
+    //   firstName: (string => 'Will'),
+
+    //   lastName: (string => 'Wheeler'),
+
+    //   age: (number: integer => 13)
+
+    // })
+- p: >
+    This is a basic example. You can use stringable with any value like functions, array, Symbols and
+    even Node instance from the DOM API. Some value however, maybe worth to have a better and/or more
+    specific formatted version. Don't hesitate to open issues.
+- p: >
+    Eventually, if you don't like the default formatting of some values, you can create a variant of stringable
+    passing a custom formatter function to it (see the documentation below). The formatter will receive some data
+    about the value to format and just have to return the formated value as a string.
 - section: Documentation

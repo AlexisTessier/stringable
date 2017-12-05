@@ -115,12 +115,25 @@ function noFormatter(data) {
  *
  * @param {object} data The data object sent to the formatter.
  * @param {any} data.value The value to format.
+ * @param {string} data.type The value type from typeof operator.
+ * @param {string} data.stringifiedValue A default and not optimal stringified version of the value.
+ * @param {boolean} data.isInteger true if the value is an integer, else false.
+ * @param {boolean} data.isFloat true if the value is a float, else false.
+ * @param {string} data.simpleQuoteString If value is a string, this will be a representation of the string quotted with simple quotes.
+ * @param {string} data.doubleQuoteString If value is a string, this will be a representation of the string quotted with double quotes.
+ * @param {function} data.defaultFormatter The default formatter used by stringable.
+ * @param {string} data.constructorName The name of the value constructor.
+ * @param {string[]} data.keys The list of the value properties (or attributes names of the value is a DOM Node)
+ * @param {string} data.functionName The name of the function is the value is a function.
+ * @param {boolean} data.isAsync true if the value is an async function, else false.
+ * @param {boolean} data.isGenerator true if the value is a generator function (using the syntax function*), else false.
+ * @param {boolean} data.isClass true if the value is an es class, else false.
  *
- * @param {Array} parents=[] Used internally. An array containing the owners objects of the value (if value is a property).
- * @param {number} deepness=0 Used internally. The displayed nesting indentation level.
- * @param {boolean} useNestTab=true Used internally. If the nesting indentation must be used at this level.
+ * @param {Array} parents Used internally. An array containing the owners objects of the value (if value is a property).
+ * @param {number} deepness Used internally. The displayed nesting indentation level.
+ * @param {boolean} useNestTab Used internally. If the nesting indentation must be used at this level.
  *
- * @return {string} The formatted value as string.
+ * @return {string} The formatted value as a string.
  */
 function defaultFormatter({
 	value,
@@ -244,6 +257,14 @@ function defaultFormatter({
 	return `${displayedTab}(${type}${typeComplement}${displayedValue})`;
 }
 
+/**
+ * @description Formats a value.
+ *
+ * @param {any} value The value to format.
+ * @param {function(data: object): string} formatter The formatter to use in order to format the value. To create a custom one, look at the defaultFormatter documentation to see which data it will receive.
+ *
+ * @return {string} The value formatted using the formatter.
+ */
 function stringable(value, formatter = defaultFormatter) {
 	if (arguments.length === 0) {
 		throw new TypeError(msg(
