@@ -14,7 +14,19 @@ const tab = `  `;
 const _NodeList = _global.NodeList || null;
 const _Node = _global.Node || null;
 
-function getObjectKeys(obj, keysFilter = getObjectKeys({}, [])) {
+const plainObjectKeys = getObjectKeys({});
+
+/**
+ * @private
+ *
+ * @description List the keys of an object.
+ *
+ * @param {object|NodeList|Node} obj The object with the keys to list (including keys from parent prototypes).
+ * @param {string[]} keysFilter The keys to exclude from final result.
+ *
+ * @return {string[]} An array containing the keys of the object, or the attributes names of the Node.
+ */
+function getObjectKeys(obj, keysFilter = []) {
 	let keys = [];
 
 	if (obj instanceof Array || (_NodeList && obj instanceof _NodeList)) {
@@ -46,6 +58,17 @@ function getObjectKeys(obj, keysFilter = getObjectKeys({}, [])) {
 	});
 }
 
+/**
+ * @private
+ *
+ * @description Used in defaultFormatter. Complete the formating of an object property prefixing with a setter or getter marker.
+ *
+ * @param {object} obj The object containing the property.
+ * @param {string} property The formatted property name to complete.
+ * @param {string} val The formatted property to complete.
+ *
+ * @return {string} The complete version of formatted property.
+ */
 function getterOrSetterMarker(obj, property, val) {
 	if (_Node && obj instanceof _Node) {
 		return val;
@@ -74,10 +97,31 @@ function getterOrSetterMarker(obj, property, val) {
 	return val;
 }
 
+/**
+ * @private
+ *
+ * @description A formatter which only return the raw data. Used in the defaultFormatter.
+ *
+ * @param {object} data The data object sent to the formatter.
+ *
+ * @return {object} The same data object as input, without any transformation.
+ */
 function noFormatter(data) {
 	return data;
 }
 
+/**
+ * @description The formatter used by default when using stringable. It formats a value from data provided by stringable.
+ *
+ * @param {object} data The data object sent to the formatter.
+ * @param {any} data.value The value to format.
+ *
+ * @param {Array} parents=[] Used internally. An array containing the owners objects of the value (if value is a property).
+ * @param {number} deepness=0 Used internally. The displayed nesting indentation level.
+ * @param {boolean} useNestTab=true Used internally. If the nesting indentation must be used at this level.
+ *
+ * @return {string} The formatted value as string.
+ */
 function defaultFormatter({
 	value,
 	type,
@@ -86,15 +130,15 @@ function defaultFormatter({
 	isFloat,
 	simpleQuoteString,
 	doubleQuoteString,
+	defaultFormatter,
 	constructorName,
 	keys,
 	functionName,
 	isAsync,
 	isGenerator,
 	isClass
-}, parents = [], useNestTab = true) {
-	const isCircular = parents.findIndex(p => Object.is(p.value, value)) >= 0;
-	const deepness = parents.filter(p => p.manyElements).length;
+}, parents = [], deepness = 0, useNestTab = true) {
+	const isCircular = parents.findIndex(v => Object.is(v, value)) >= 0;
 	const rootTab = repeatString(tab, deepness);
 	const displayedTab = useNestTab ? rootTab : '';
 
@@ -145,7 +189,8 @@ function defaultFormatter({
 		function renderNestedValue(val, showKeys, isNode) {
 			const tagName = isNode ? val.tagName.toLowerCase() : null;
 
-			const nestedParents = [...parents, {value, manyElements}];
+			const nestedParents = [...parents, value];
+			const nestedDeepness = deepness + (manyElements ? 1 : 0);
 
 			return showKeys
 				? `${tagName || ''}${bracesInnerSpace}${keys
@@ -159,8 +204,8 @@ function defaultFormatter({
 						valueData: stringable(el.value, noFormatter)
 					}))
 					.map(el => Object.assign(el, {
-						k: defaultFormatter(el.keyData, nestedParents, manyElements),
-						v: defaultFormatter(el.valueData, nestedParents, false)
+						k: defaultFormatter(el.keyData, nestedParents, nestedDeepness, manyElements),
+						v: defaultFormatter(el.valueData, nestedParents, nestedDeepness, false)
 					}))
 					.map(el => Object.assign(el, {
 						k: (()=>{
@@ -176,7 +221,7 @@ function defaultFormatter({
 				: `${bracesInnerSpace}${keys
 					.map(key => val[key])
 					.map(el => stringable(el, noFormatter))
-					.map(data => defaultFormatter(data, nestedParents, manyElements))
+					.map(data => defaultFormatter(data, nestedParents, nestedDeepness, manyElements))
 					.join(comma+nl)
 				}${bracesBeforeClose}`;
 		}
@@ -287,7 +332,7 @@ function stringable(value, formatter = defaultFormatter) {
 		!(value instanceof RegExp) &&
 		!(value instanceof Function)
 	) {
-		keys = getObjectKeys(value);
+		keys = getObjectKeys(value, plainObjectKeys);
 	}
 
 	return formatter({
