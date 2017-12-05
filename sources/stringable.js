@@ -111,7 +111,124 @@ function noFormatter(data) {
 }
 
 /**
- * @description The formatter used by default when using stringable. It formats a value from data provided by stringable.
+ * @description The function you get when requiring the stringable module. Formats a value.
+ *
+ * @param {any} value The value to format.
+ * @param {function(data: object): string} formatter The formatter to use in order to format the value. To create a custom one, look at the defaultFormatter documentation to see which data it will receive.
+ *
+ * @return {string} The value formatted using the formatter.
+ */
+function stringable(value, formatter = defaultFormatter) {
+	if (arguments.length === 0) {
+		throw new TypeError(msg(
+			`You are trying to use the stringable function without any arguments.`,
+			`You must provide at least one value as first parameter.`
+		));
+	}
+
+	if (arguments.length > 2) {
+		throw new TypeError(msg(
+			`You are trying to use the stringable function with more than 2 arguments.`,
+			`The stringable function only accept 2 arguments. A value to format and a formatter function.`
+		));
+	}
+
+	if (typeof formatter !== 'function') {
+		throw new TypeError(msg(
+			`${stringable(formatter)} is not a valid stringable formatter.`,
+			`The stringable formatter argument passed as the second parameter must be a function.`
+		));
+	}
+
+	const type = typeof value;
+	let stringifiedValue = null;
+
+	let simpleQuoteString = null;
+	let doubleQuoteString = null;
+	if (type === 'string' || value instanceof String) {
+		simpleQuoteString = `'${escapeQuotes(value)}'`;
+		doubleQuoteString = `"${escapeQuotes(value, '"')}"`;
+		stringifiedValue = JSON.stringify(value);
+	}
+
+	let functionName = null;
+	let isAsync = false;
+	let isGenerator = false;
+	let isClass = false;
+	if (type === 'function') {
+		functionName = value.name;
+		stringifiedValue = `${value}`;
+
+		isAsync = stringifiedValue.indexOf(`async`) === 0;
+		isGenerator = stringifiedValue.indexOf(`function*`) === 0;
+
+		if (functionName.trim().length === 0) {
+			functionName = null;
+		}
+
+		isClass = stringifiedValue.indexOf(`class`) === 0;
+	}
+
+	if (type === 'object' && !(value instanceof Object) && value !== null && value !== undefined) {
+		stringifiedValue = '[object]';
+	}
+
+	if (type === 'symbol'){
+		stringifiedValue = `${value.toString()}`;
+	}
+
+	let isInteger = false;
+	let isFloat = false;
+	if (type === 'number' || value instanceof Number){
+		const literal = value instanceof Number ? (0+value) : value;
+
+		if(!Number.isNaN(literal) && Math.abs(literal) !== Infinity) {
+			isInteger = parseInt(literal, 10) === literal;
+			isFloat = !isInteger;
+		}
+	}
+
+	let constructorName = null;
+	if(value !== null && value !== undefined && value.constructor){
+		constructorName = value.constructor.name;
+	}
+
+	if (stringifiedValue === null){
+		stringifiedValue = `${value}`;
+	}
+
+	let keys = null;
+	if (
+		  value instanceof Object &&
+		!(value instanceof Boolean) &&
+		!(value instanceof Number) &&
+		!(value instanceof String) &&
+		!(value instanceof RegExp) &&
+		!(value instanceof Function)
+	) {
+		keys = getObjectKeys(value, plainObjectKeys);
+	}
+
+	return formatter({
+		value,
+		type,
+		stringifiedValue,
+		isInteger,
+		isFloat,
+		simpleQuoteString,
+		doubleQuoteString,
+		defaultFormatter,
+		constructorName,
+		keys,
+		functionName,
+		isAsync,
+		isGenerator,
+		isClass
+	});
+}
+
+/**
+ * @description Can't be required directly. The formatter used by default when using stringable. It formats a value from data provided by stringable.
  *
  * @param {object} data The data object sent to the formatter.
  * @param {any} data.value The value to format.
@@ -255,123 +372,6 @@ function defaultFormatter({
 		displayedValue = value.message ? ` => ${value.message}` : '';
 	}
 	return `${displayedTab}(${type}${typeComplement}${displayedValue})`;
-}
-
-/**
- * @description Formats a value.
- *
- * @param {any} value The value to format.
- * @param {function(data: object): string} formatter The formatter to use in order to format the value. To create a custom one, look at the defaultFormatter documentation to see which data it will receive.
- *
- * @return {string} The value formatted using the formatter.
- */
-function stringable(value, formatter = defaultFormatter) {
-	if (arguments.length === 0) {
-		throw new TypeError(msg(
-			`You are trying to use the stringable function without any arguments.`,
-			`You must provide at least one value as first parameter.`
-		));
-	}
-
-	if (arguments.length > 2) {
-		throw new TypeError(msg(
-			`You are trying to use the stringable function with more than 2 arguments.`,
-			`The stringable function only accept 2 arguments. A value to format and a formatter function.`
-		));
-	}
-
-	if (typeof formatter !== 'function') {
-		throw new TypeError(msg(
-			`${stringable(formatter)} is not a valid stringable formatter.`,
-			`The stringable formatter argument passed as the second parameter must be a function.`
-		));
-	}
-
-	const type = typeof value;
-	let stringifiedValue = null;
-
-	let simpleQuoteString = null;
-	let doubleQuoteString = null;
-	if (type === 'string' || value instanceof String) {
-		simpleQuoteString = `'${escapeQuotes(value)}'`;
-		doubleQuoteString = `"${escapeQuotes(value, '"')}"`;
-		stringifiedValue = JSON.stringify(value);
-	}
-
-	let functionName = null;
-	let isAsync = false;
-	let isGenerator = false;
-	let isClass = false;
-	if (type === 'function') {
-		functionName = value.name;
-		stringifiedValue = `${value}`;
-
-		isAsync = stringifiedValue.indexOf(`async`) === 0;
-		isGenerator = stringifiedValue.indexOf(`function*`) === 0;
-
-		if (functionName.trim().length === 0) {
-			functionName = null;
-		}
-
-		isClass = stringifiedValue.indexOf(`class`) === 0;
-	}
-
-	if (type === 'object' && !(value instanceof Object) && value !== null && value !== undefined) {
-		stringifiedValue = '[object]';
-	}
-
-	if (type === 'symbol'){
-		stringifiedValue = `${value.toString()}`;
-	}
-
-	let isInteger = false;
-	let isFloat = false;
-	if (type === 'number' || value instanceof Number){
-		const literal = value instanceof Number ? (0+value) : value;
-
-		if(!Number.isNaN(literal) && Math.abs(literal) !== Infinity) {
-			isInteger = parseInt(literal, 10) === literal;
-			isFloat = !isInteger;
-		}
-	}
-
-	let constructorName = null;
-	if(value !== null && value !== undefined && value.constructor){
-		constructorName = value.constructor.name;
-	}
-
-	if (stringifiedValue === null){
-		stringifiedValue = `${value}`;
-	}
-
-	let keys = null;
-	if (
-		  value instanceof Object &&
-		!(value instanceof Boolean) &&
-		!(value instanceof Number) &&
-		!(value instanceof String) &&
-		!(value instanceof RegExp) &&
-		!(value instanceof Function)
-	) {
-		keys = getObjectKeys(value, plainObjectKeys);
-	}
-
-	return formatter({
-		value,
-		type,
-		stringifiedValue,
-		isInteger,
-		isFloat,
-		simpleQuoteString,
-		doubleQuoteString,
-		defaultFormatter,
-		constructorName,
-		keys,
-		functionName,
-		isAsync,
-		isGenerator,
-		isClass
-	});
 }
 
 module.exports = stringable;
