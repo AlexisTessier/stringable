@@ -75,7 +75,7 @@
   "licenseDate": "2017-present",
   "devDependencies": {
     "@alexistessier/es-lint-config": "2.1.0",
-    "@alexistessier/node-module-starterkit-release-dep": "1.7.4",
+    "@alexistessier/node-module-starterkit-release-dep": "1.8.0",
     "ava": "0.24.0",
     "capitalize": "1.0.0",
     "concurrently": "3.5.1",
@@ -119,7 +119,7 @@
     "ttab": "0.6.0"
   },
   "dependencies": {
-    "@alexistessier/msg": "1.1.0",
+    "@alexistessier/msg": "1.1.2",
     "escape-quotes": "1.0.2",
     "global": "4.3.2",
     "repeat-string": "1.6.1"
