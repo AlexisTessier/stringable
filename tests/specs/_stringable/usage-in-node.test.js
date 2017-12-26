@@ -1639,7 +1639,6 @@ test('usage with instance of empty Symbol', customFormatterDataMacro, {
 	}
 });
 
-
 /*- literal array -*/
 
 test('usage with literal empty Array', defaultFormatterMacro, {
@@ -1877,6 +1876,66 @@ test('usage with literal Array containing circular references - other pattern', 
 		doubleQuoteString: null,
 		constructorName: 'Array',
 		keys: ['0', '1'],
+		functionName: null,
+		isAsync: false,
+		isGenerator: false,
+		isClass: false
+	}
+});
+
+test('Array with Symbol in it', defaultFormatterMacro, {
+	input: [Symbol()],
+	expectedResult: `(object: Array => [ (symbol => Symbol()) ])`
+});
+
+test('Array with Symbol in it', customFormatterDataMacro, {
+	input: [Symbol()],
+	defaultFormatterExpectedResult: `(object: Array => [ (symbol => Symbol()) ])`,
+	expectedData: {
+		type: 'object',
+		stringifiedValue: 'Symbol()',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
+		constructorName: 'Array',
+		keys: ['0'],
+		functionName: null,
+		isAsync: false,
+		isGenerator: false,
+		isClass: false
+	}
+});
+
+test('Array with Symbol and other values in it', defaultFormatterMacro, {
+	input: [true, Symbol(), 'hello'],
+	expectedResult: [
+		`(object: Array => [`,
+		`\n  (boolean => true),`,
+		`\n  (symbol => Symbol()),`,
+		`\n  (string => 'hello')`,
+		`\n])`
+	].join('')
+});
+
+test('Array with Symbol in it', customFormatterDataMacro, {
+	input: [true, Symbol(), 'hello'],
+	defaultFormatterExpectedResult: [
+		`(object: Array => [`,
+		`\n  (boolean => true),`,
+		`\n  (symbol => Symbol()),`,
+		`\n  (string => 'hello')`,
+		`\n])`
+	].join(''),
+	expectedData: {
+		type: 'object',
+		stringifiedValue: 'true,Symbol(),hello',
+		isInteger: false,
+		isFloat: false,
+		simpleQuoteString: null,
+		doubleQuoteString: null,
+		constructorName: 'Array',
+		keys: ['0', '1', '2'],
 		functionName: null,
 		isAsync: false,
 		isGenerator: false,
@@ -2345,6 +2404,13 @@ test('usage with literal Object containing nested object and circular reference 
 		isGenerator: false,
 		isClass: false
 	}
+});
+
+test('object with symbol in it', defaultFormatterMacro, {
+	input: {
+		key: Symbol()
+	},
+	expectedResult: `(object => { key: (symbol => Symbol()) })`
 });
 
 /*- Object array -*/

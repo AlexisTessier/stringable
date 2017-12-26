@@ -194,7 +194,9 @@ function stringable(value, formatter = defaultFormatter) {
 	}
 
 	if (stringifiedValue === null){
-		stringifiedValue = `${value}`;
+		stringifiedValue = value instanceof Array
+			? `${value.map(v => typeof v === 'symbol' ? v.toString() : v)}`
+			: `${value}`;
 	}
 
 	let keys = null;
