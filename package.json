@@ -75,19 +75,19 @@
   "licenseDate": "2017-present",
   "devDependencies": {
     "@alexistessier/es-lint-config": "2.1.0",
-    "@alexistessier/node-module-starterkit-release-dep": "1.8.1",
-    "ava": "0.24.0",
+    "@alexistessier/node-module-starterkit-release-dep": "1.9.0",
+    "ava": "0.25.0",
     "capitalize": "1.0.0",
     "concurrently": "3.5.1",
     "coveralls": "3.0.0",
     "dashify": "1.0.0",
-    "dependency-check": "2.9.2",
+    "dependency-check": "3.0.0",
     "documentation": "5.3.5",
-    "eslint": "4.14.0",
+    "eslint": "4.16.0",
     "git-repo-info": "1.4.1",
-    "github-markdown-css": "2.9.0",
+    "github-markdown-css": "2.10.0",
     "glob": "7.1.2",
-    "jsdom": "11.5.1",
+    "jsdom": "11.6.1",
     "jsonfile": "4.0.0",
     "mkdirp": "0.5.1",
     "mustache": "2.3.0",
@@ -98,7 +98,7 @@
     "read-yaml": "1.1.0",
     "remarkable": "1.7.1",
     "serve-here": "3.2.0",
-    "shelljs": "0.7.8"
+    "shelljs": "0.8.1"
   },
   "ava": {
     "source": [
@@ -119,7 +119,7 @@
     "ttab": "0.6.0"
   },
   "dependencies": {
-    "@alexistessier/msg": "1.1.5",
+    "@alexistessier/msg": "1.1.6",
     "escape-quotes": "1.0.2",
     "global": "4.3.2",
     "repeat-string": "1.6.1"
